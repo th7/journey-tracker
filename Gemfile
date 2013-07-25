@@ -22,6 +22,11 @@ end
 
 gem 'jquery-rails'
 
+gem "koala", "~> 1.7.0rc1"
+gem "instagram"
+gem "omniauth", "1.1.1"
+gem "omniauth-facebook", "1.4.0"
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
