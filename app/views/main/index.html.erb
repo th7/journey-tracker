@@ -1,0 +1,10 @@
+<a href="/instagram/connect">Connect with Instagram</a>
+
+<% if @user %>
+  <% @client.user_recent_media.each do |media|%>
+    <img src="<%= media.images.standard_resolution.url %>" ><br>
+    <p>Latitude: <%= media.location.latitude if media.location %></p>
+    <p>Longitude: <%= media.location.longitude if media.location %></p>
+  <% end %>
+<% end %>
+
