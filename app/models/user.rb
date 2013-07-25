@@ -1,6 +1,10 @@
 class User < ActiveRecord::Base
   attr_accessible :name, :facebook_id, :instagram_id
 
+  def facebook
+  @facebook ||= Koala::Facebook::API.new(oauth_token)
+  end
+
   def self.from_omniauth(auth)
     where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|
       user.provider = auth.provider
