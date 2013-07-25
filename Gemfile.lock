@@ -126,8 +126,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jquery-rails
-  omniauth
-  omniauth-facebook
+  omniauth-facebook (~> 1.4.0)
   pg
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)
