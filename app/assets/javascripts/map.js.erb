@@ -61,7 +61,7 @@ function initialize() {
   map = new google.maps.Map(document.getElementById(elemId), mapOptions);
   
   var renderer = new google.maps.DirectionsRenderer({
-    draggable: true,
+    draggable: true, // double check that we actually want this turned on
     markerOptions: { 
       visible: true
     },
@@ -82,21 +82,27 @@ function initialize() {
   });
 
   var currentIndex = 0;
-  // var deaccelerator = 0;
+  var deaccelerator = 0;
 
   $(window).on('scroll', function(event){
-    map.panBy(0, $(window).scrollTop() / 4);
-    // if(deaccelerator > 30){
-    //   if(currentIndex >= places.length - 1){
-    //     currentIndex = 0;
-    //   } else {
-    //     currentIndex += 1;
-    //   }
-    //   map.panTo(places[currentIndex].latLng);
-    //   deaccelerator = 0;
-    // } else {
-    //   deaccelerator += 1;
-    // }
+    // map.panBy(0, $(window).scrollTop() / 4);
+    if(deaccelerator > 2){
+      var distance = 0;
+      if(currentIndex < places.length-1) {
+        distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[currentIndex + 1].latLng);
+      } else { 
+        distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[0].latLng);
+      }
+      if(currentIndex >= places.length - 1){
+        currentIndex = 0;
+      } else {
+        currentIndex += 1;
+      }
+      map.panTo(places[currentIndex].latLng);
+      deaccelerator = 0;
+    } else {
+      deaccelerator += 1;
+    }
   });
 }
 
