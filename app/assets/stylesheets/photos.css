@@ -1,0 +1,70 @@
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.photo-container {
+  width: 500px;
+  z-index: 1000;
+  margin: 50px;
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#fcfcfc), to(#bfbfbf), color-stop(3%, #f7f7f7), color-stop(12%, #f2f2f2), color-stop(90%, #d9d9d9));
+  background-image: -webkit-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
+  background-image: -moz-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
+  background-image: -o-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
+  background-image: -ms-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
+  background-image: linear-gradient(to bottom, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
+  -webkit-box-shadow: 0 0 19px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
+  box-shadow: 0 0 19px rgba(0,0,0,0.5);
+
+}
+
+.photo {
+  width: 100%;
+}
+
+.main-svg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+html { 
+  height: 100% 
+}
+
+body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0 
+}
+
+.map-wrapper {
+  height: 100%; 
+  width: 100%;
+  margin-top: -50px;
+  /*left: 600px;*/
+  position: fixed;
+  z-index: -1000;
+}
+
+#map-canvas {
+  height: 100%; 
+  width: 100%;
+}
