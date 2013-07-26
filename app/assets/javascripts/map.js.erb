@@ -81,10 +81,22 @@ function initialize() {
     renderer.setDirections(result);
   });
 
-  var currentPlace = places[0];
+  var currentIndex = 0;
+  // var deaccelerator = 0;
 
   $(window).on('scroll', function(event){
-    map.panTo(places[1].latLng);
+    map.panBy(0, $(window).scrollTop() / 4);
+    // if(deaccelerator > 30){
+    //   if(currentIndex >= places.length - 1){
+    //     currentIndex = 0;
+    //   } else {
+    //     currentIndex += 1;
+    //   }
+    //   map.panTo(places[currentIndex].latLng);
+    //   deaccelerator = 0;
+    // } else {
+    //   deaccelerator += 1;
+    // }
   });
 }
 
