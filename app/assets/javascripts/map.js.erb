@@ -1,4 +1,4 @@
-function initialize() { 
+function initialize(inputs) { 
   google.maps.visualRefresh = true;
 
   var inputs = [
@@ -7,16 +7,52 @@ function initialize() {
       lng: 105.501166
     },
     {
-      lat: 16.238333333, 
-      lng: 107.989166667
+      lat: 18.681781,
+      lng: 105.671997
+    },
+    {
+      lat: 18.351695,
+      lng: 105.882111
     },
     {
       lat: 16.375666667, 
       lng: 107.719333333 
     },
     {
+      lat: 16.238333333, 
+      lng: 107.989166667
+    },
+    {
       lat: 11.933666667, 
       lng: 108.16
+    },
+    {
+      lat: 19.687166, 
+      lng: 105.501166
+    },
+    {
+      lat: 18.681781,
+      lng: 105.671997
+    },
+    {
+      lat: 18.351695,
+      lng: 105.882111
+    },
+    {
+      lat: 16.375666667, 
+      lng: 107.719333333 
+    },
+    {
+      lat: 18.681781,
+      lng: 105.671997
+    },
+    {
+      lat: 18.351695,
+      lng: 105.882111
+    },
+    {
+      lat: 16.375666667, 
+      lng: 107.719333333 
     }
   ];
 
@@ -27,12 +63,14 @@ function initialize() {
   for(i in inputs) {
     places.push( new Place(inputs[i].lat, inputs[i].lng) );
   }
+  console.log(places);
   var origin = places[0].latLng;
   var destination = places[places.length - 1].latLng;
   var waypoints = [];
-  for(var i=1; i < places.length - 1; i++) {
+  for(var i=1; i < places.length - 1 && i <= 8 ; i++) {
     waypoints.push( { location: places[i].latLng, stopover: true } );
   }
+  console.log(waypoints);
 
   var mapType = google.maps.MapTypeId.ROADMAP;
   var travelMode = google.maps.TravelMode.DRIVING;
@@ -61,7 +99,7 @@ function initialize() {
   map = new google.maps.Map(document.getElementById(elemId), mapOptions);
   
   var renderer = new google.maps.DirectionsRenderer({
-    draggable: true,
+    draggable: true, // double check that we actually want this turned on
     markerOptions: { 
       visible: true
     },
@@ -82,29 +120,54 @@ function initialize() {
   });
 
   var currentIndex = 0;
-  // var deaccelerator = 0;
+  var deaccelerator = 0;
 
   $(window).on('scroll', function(event){
-    map.panBy(0, $(window).scrollTop() / 4);
-    // if(deaccelerator > 30){
-    //   if(currentIndex >= places.length - 1){
-    //     currentIndex = 0;
-    //   } else {
-    //     currentIndex += 1;
-    //   }
-    //   map.panTo(places[currentIndex].latLng);
-    //   deaccelerator = 0;
-    // } else {
-    //   deaccelerator += 1;
-    // }
+    // map.panBy(0, $(window).scrollTop() / 4);
+    if(deaccelerator > 2){
+      var distance = 0;
+      if(currentIndex < places.length-1) {
+        distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[currentIndex + 1].latLng);
+      } else { 
+        distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[0].latLng);
+      }
+      if(currentIndex >= places.length - 1){
+        currentIndex = 0;
+      } else {
+        currentIndex += 1;
+      }
+      map.panTo(places[currentIndex].latLng);
+      deaccelerator = 0;
+    } else {
+      deaccelerator += 1;
+    }
   });
 }
 
 function loadScript() {
   var script = document.createElement("script");
   script.type = "text/javascript";
-  script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=initialize";
+  script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=readPhotos";
   document.body.appendChild(script);
+}
+
+function readPhotos() {
+  $photoContainers = $('.photo-container');
+  var coords = [];
+  for (var i = 0; i < $photoContainers.length; i++) {
+    $div = $($photoContainers[i]);
+
+    if ($div.data('map-index') || $div.data('map-index') == "0") {
+      var endCoord = {
+        lat: +$div.data('lat'),
+        lng: +$div.data('lng')
+      };
+
+      coords.push(endCoord);
+    }
+  }
+
+  initialize(coords);
 }
 
 $(document).ready(function() {
