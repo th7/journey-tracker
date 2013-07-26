@@ -1,0 +1,11 @@
+<h1><%= @trip.name %></h1>
+<p><a href="/instagram/connect">Connect with Instagram</a></p>
+
+<% if @photos %>
+  <% @photos.each do |photo|%>
+    <img src="<%= photo.url %>" ><br>
+    <p>Latitude: <%= photo.lat %></p>
+    <p>Longitude: <%= photo.long %></p>
+    <p>Date: <%= photo.date %></p>
+  <% end %>
+<% end %>
