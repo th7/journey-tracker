@@ -71,11 +71,13 @@ function initialize(inputs) {
   // }
   var bounds = new google.maps.LatLngBounds();
   var coords = [];
+  var points = [];
   // var iconSequence = [];
   // var icon = {
   //   path: google.maps.SymbolPath.CIRCLE
   // };
   for(i in places) {
+    points.push( new google.maps.Point(inputs[i].lng, inputs[i].lat) );
     coords.push( places[i].latLng );
     bounds.extend( places[i].latLng );
     // iconSequence.push({icon: icon});
@@ -144,6 +146,17 @@ function initialize(inputs) {
 
   var currentIndex = 0;
   var deaccelerator = 0;
+
+  for (i in places) {
+
+    var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+
+    var marker = new google.maps.Marker({
+        position: places[i].latLng,
+        // icon: 'star-on-map.png',
+        map: map
+    });
+  }
 
   // $(window).on('scroll', function(event){
   //   // map.panBy(0, $(window).scrollTop() / 4);
