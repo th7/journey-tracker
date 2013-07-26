@@ -8,7 +8,7 @@ class TripsController < ApplicationController
   def show
     @user = current_user
     @trip = Trip.find(params[:id])
-    @photos = @trip.photos
+    @photos = @trip.photos.map{ |p| PhotoPresenter.new(p)}
     session[:current_trip] = @trip.id
 
   end
