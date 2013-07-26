@@ -1,4 +1,6 @@
 class TripsController < ApplicationController
+    skip_before_filter :check_authorization, only: [:show]
+
   def index
     @trips = Trip.all
   end
