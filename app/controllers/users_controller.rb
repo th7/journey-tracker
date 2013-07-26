@@ -5,7 +5,6 @@ class UsersController < ApplicationController
 
 	def show
 		@user = User.find(params[:id])
-		@photos = Photo.order("date ASC")
 	end
 
 end

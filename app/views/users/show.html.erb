@@ -1,11 +1,2 @@
 <h1>Welcome to the profile of <%= @user.name %></h1>
-<p><a href="/instagram/connect">Connect with Instagram</a></p>
 
-<% if @user %>
-  <% @photos.each do |photo|%>
-    <img src="<%= photo.url %>" ><br>
-    <p>Latitude: <%= photo.lat %></p>
-    <p>Longitude: <%= photo.long %></p>
-    <p>Date: <%= photo.date %></p>
-  <% end %>
-<% end %>
