@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   attr_accessible :name, :facebook_id, :instagram_id
+  has_many :trips
+  has_many :photos, through: :trips
 
   def facebook
   @facebook ||= Koala::Facebook::API.new(oauth_token)
