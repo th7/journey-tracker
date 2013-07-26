@@ -1,19 +1,14 @@
 module PhotosHelper
 
-  def process(photos)
-    @photos ||= photos
-    slides = []
+  def process_photos(photos)
     next_index = 0
-    @photos.each_with_index do |photo, i|
-      item = {}
-      item.store(:url, photo.url)
+    photos.each_with_index do |photo, i|
       if photo.lat
-        item.store(:map_index, next_index)
+        photo.map_index = next_index
         next_index += 1
       end
-      slides << item
     end
-    slides
+    photos
   end
 
 end

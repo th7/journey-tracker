@@ -7,10 +7,10 @@
 
 <div class="photos-container">
   <% if @photos %>
-    <% process(@photos).each_with_index do |photo|%>
+    <% process_photos(@photos).each_with_index do |photo|%>
       <div class="slide">
-        <div class="photo-container" data-map-index="<%= photo[:map_index] %>">
-          <img src="<%= photo[:url] %>" ><br>
+        <div class="photo-container" data-map-index="<%= photo.map_index %>">
+          <img src="<%= photo.url %>" ><br>
         </div>
         <div class="caption"></div>
       </div>
