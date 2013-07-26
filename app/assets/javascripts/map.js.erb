@@ -1,0 +1,76 @@
+function initialize() { 
+  google.maps.visualRefresh = true;
+
+  var inputs = ['19.687166, 105.501166', '16.238333333, 107.989166667', '16.375666667, 107.719333333', '11.933666667, 108.16'];
+  var Place = function(latLng) {
+    this.latLng = latLng;
+  }
+  var places = [];
+  for(var i=0; i < inputs.length; i++) {
+    places.push( new Place(inputs[i]) );
+  }
+  var origin = places[0].latLng;
+  var destination = places[places.length - 1].latLng;
+  var waypoints = [];
+  for(var i=1; i < places.length - 1; i++) {
+    waypoints.push( { location: places[i].latLng, stopover: true } );
+  }
+
+  var mapType = google.maps.MapTypeId.ROADMAP;
+  var travelMode = google.maps.TravelMode.DRIVING;
+
+  var styles = [
+    {
+      stylers: [
+        { saturation: -70 },
+        { gamma: 1.5 }
+      ]
+    }
+  ];
+  var elemId = "map-canvas";
+  var mapOptions = { 
+    mapTypeId: mapType,
+    styles: styles,
+    disableDoubleClickZoom: true,
+    draggable: false,
+    keyboardShortcuts: false,
+    mapTypeControl: false,
+    panControl: false,
+    scrollwheel: false,
+    streetViewControl: false,
+    zoomControl: false
+  };
+  map = new google.maps.Map(document.getElementById(elemId), mapOptions);
+  
+  var renderer = new google.maps.DirectionsRenderer({
+    draggable: true,
+    markerOptions: { 
+      visible: true
+    },
+    polylineOptions: {
+      strokeColor: "#000000",
+      strokeWeight: 3
+    }
+  });
+  renderer.setMap(map);
+  var router = new google.maps.DirectionsService();
+  router.route({
+    origin: origin,
+    destination: destination,
+    waypoints: waypoints,
+    travelMode: travelMode
+  }, function(result, status) {
+    renderer.setDirections(result);
+  });
+}
+
+function loadScript() {
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=initialize";
+  document.body.appendChild(script);
+}
+
+$(document).ready(function() {
+  loadScript();
+});
