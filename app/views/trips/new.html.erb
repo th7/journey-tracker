@@ -1,5 +1,14 @@
 <h1>Create new trip</h1>
 <%= form_for @trip do |f| %>
 	<%= f.text_field :name %>
+  <%= f.text_field :start, :class => 'datepicker'  %>
+  <%= f.text_field :end, :class => 'datepicker'  %>
 	<%= f.submit %>
 <% end %>
+
+
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker({ dateFormat: 'dd mm yyyy' });
+  });
+</script>
