@@ -28,7 +28,7 @@ body {
   -webkit-box-shadow: 0 0 19px rgba(0,0,0,0.5);
   -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
   box-shadow: 0 0 19px rgba(0,0,0,0.5);
-
+  display: none;
 }
 
 .photo {
@@ -43,6 +43,7 @@ body {
   left: 0;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  pointer-events: none;
 }
 
 html { 
@@ -61,7 +62,7 @@ body {
   margin-top: -50px;
   /*left: 600px;*/
   position: fixed;
-  z-index: -1000;
+  z-index: 2000;
 }
 
 #map-canvas {

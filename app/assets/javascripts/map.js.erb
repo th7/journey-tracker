@@ -1,60 +1,60 @@
 function initialize(inputs) { 
   google.maps.visualRefresh = true;
 
-  var inputs = [
-    {
-      lat: 19.687166, 
-      lng: 105.501166
-    },
-    {
-      lat: 18.681781,
-      lng: 105.671997
-    },
-    {
-      lat: 18.351695,
-      lng: 105.882111
-    },
-    {
-      lat: 16.375666667, 
-      lng: 107.719333333 
-    },
-    {
-      lat: 16.238333333, 
-      lng: 107.989166667
-    },
-    {
-      lat: 11.933666667, 
-      lng: 108.16
-    },
-    {
-      lat: 19.687166, 
-      lng: 105.501166
-    },
-    {
-      lat: 18.681781,
-      lng: 105.671997
-    },
-    {
-      lat: 18.351695,
-      lng: 105.882111
-    },
-    {
-      lat: 16.375666667, 
-      lng: 107.719333333 
-    },
-    {
-      lat: 18.681781,
-      lng: 105.671997
-    },
-    {
-      lat: 18.351695,
-      lng: 105.882111
-    },
-    {
-      lat: 16.375666667, 
-      lng: 107.719333333 
-    }
-  ];
+  // var inputs = [
+  //   {
+  //     lat: 19.687166, 
+  //     lng: 105.501166
+  //   },
+  //   {
+  //     lat: 18.681781,
+  //     lng: 105.671997
+  //   },
+  //   {
+  //     lat: 18.351695,
+  //     lng: 105.882111
+  //   },
+  //   {
+  //     lat: 16.375666667, 
+  //     lng: 107.719333333 
+  //   },
+  //   {
+  //     lat: 16.238333333, 
+  //     lng: 107.989166667
+  //   },
+  //   {
+  //     lat: 11.933666667, 
+  //     lng: 108.16
+  //   },
+  //   {
+  //     lat: 19.687166, 
+  //     lng: 105.501166
+  //   },
+  //   {
+  //     lat: 18.681781,
+  //     lng: 105.671997
+  //   },
+  //   {
+  //     lat: 18.351695,
+  //     lng: 105.882111
+  //   },
+  //   {
+  //     lat: 16.375666667, 
+  //     lng: 107.719333333 
+  //   },
+  //   {
+  //     lat: 18.681781,
+  //     lng: 105.671997
+  //   },
+  //   {
+  //     lat: 18.351695,
+  //     lng: 105.882111
+  //   },
+  //   {
+  //     lat: 16.375666667, 
+  //     lng: 107.719333333 
+  //   }
+  // ];
 
   function Place(lat, lng) {
     this.latLng = new google.maps.LatLng(lat, lng);
@@ -63,14 +63,23 @@ function initialize(inputs) {
   for(i in inputs) {
     places.push( new Place(inputs[i].lat, inputs[i].lng) );
   }
-  console.log(places);
-  var origin = places[0].latLng;
-  var destination = places[places.length - 1].latLng;
-  var waypoints = [];
-  for(var i=1; i < places.length - 1 && i <= 8 ; i++) {
-    waypoints.push( { location: places[i].latLng, stopover: true } );
+  // var origin = places[7].latLng;
+  // var destination = places[10].latLng;
+  // var waypoints = [];
+  // for(var i=8; i < places.length - 1 && i <= 9 ; i++) {
+  //   waypoints.push( { location: places[i].latLng, stopover: true } );
+  // }
+  var bounds = new google.maps.LatLngBounds();
+  var coords = [];
+  // var iconSequence = [];
+  // var icon = {
+  //   path: google.maps.SymbolPath.CIRCLE
+  // };
+  for(i in places) {
+    coords.push( places[i].latLng );
+    bounds.extend( places[i].latLng );
+    // iconSequence.push({icon: icon});
   }
-  console.log(waypoints);
 
   var mapType = google.maps.MapTypeId.ROADMAP;
   var travelMode = google.maps.TravelMode.DRIVING;
@@ -85,63 +94,77 @@ function initialize(inputs) {
   ];
   var elemId = "map-canvas";
   var mapOptions = { 
+    center: coords[0],
+    zoom: 2,
     mapTypeId: mapType,
     styles: styles,
     disableDoubleClickZoom: true,
-    draggable: false,
-    keyboardShortcuts: false,
-    mapTypeControl: false,
-    panControl: false,
-    scrollwheel: false,
-    streetViewControl: false,
-    zoomControl: false
+    draggable: true,
+    keyboardShortcuts: true,
+    mapTypeControl: true,
+    panControl: true,
+    scrollwheel: true,
+    streetViewControl: true,
+    zoomControl: true
   };
   map = new google.maps.Map(document.getElementById(elemId), mapOptions);
-  
-  var renderer = new google.maps.DirectionsRenderer({
-    draggable: true, // double check that we actually want this turned on
-    markerOptions: { 
-      visible: true
-    },
-    polylineOptions: {
-      strokeColor: "#000000",
-      strokeWeight: 3
-    }
+  console.log(coords);
+  // var renderer = new google.maps.DirectionsRenderer({
+  //   draggable: true, // double check that we actually want this turned on
+  //   markerOptions: { 
+  //     visible: true
+  //   },
+  //   polylineOptions: {
+  //     strokeColor: "#000000",
+  //     strokeWeight: 3
+  //   }
+  // });
+  // renderer.setMap(map);
+  // var router = new google.maps.DirectionsService();
+  // router.route({
+  //   origin: origin,
+  //   destination: destination,
+  //   waypoints: waypoints,
+  //   travelMode: travelMode
+  // }, function(result, status) {
+  //   renderer.setDirections(result);
+  // });
+
+
+  map.fitBounds(bounds);
+  var polyline = new google.maps.Polyline({
+    path: coords,
+    strokeColor: "#000000",
+    strokeWeight: 3,
+    geodesic: false,
+    // icons: iconSequence
   });
-  renderer.setMap(map);
-  var router = new google.maps.DirectionsService();
-  router.route({
-    origin: origin,
-    destination: destination,
-    waypoints: waypoints,
-    travelMode: travelMode
-  }, function(result, status) {
-    renderer.setDirections(result);
-  });
+
+  polyline.setMap(map);
 
   var currentIndex = 0;
   var deaccelerator = 0;
 
-  $(window).on('scroll', function(event){
-    // map.panBy(0, $(window).scrollTop() / 4);
-    if(deaccelerator > 2){
-      var distance = 0;
-      if(currentIndex < places.length-1) {
-        distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[currentIndex + 1].latLng);
-      } else { 
-        distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[0].latLng);
-      }
-      if(currentIndex >= places.length - 1){
-        currentIndex = 0;
-      } else {
-        currentIndex += 1;
-      }
-      map.panTo(places[currentIndex].latLng);
-      deaccelerator = 0;
-    } else {
-      deaccelerator += 1;
-    }
-  });
+  // $(window).on('scroll', function(event){
+  //   // map.panBy(0, $(window).scrollTop() / 4);
+  //   if(deaccelerator > 2){
+  //     var distance = 0;
+  //     if(currentIndex < places.length-1) {
+  //       distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[currentIndex + 1].latLng);
+  //     } else { 
+  //       distance = google.maps.geometry.spherical.computeDistanceBetween(places[currentIndex].latLng, places[0].latLng);
+  //     }
+  //     if(currentIndex >= places.length - 1){
+  //       currentIndex = 0;
+  //     } else {
+  //       currentIndex += 1;
+  //     }
+  //     map.panTo(places[currentIndex].latLng);
+  //     deaccelerator = 0;
+  //   } else {
+  //     deaccelerator += 1;
+  //   }
+  // });
 }
 
 function loadScript() {
