@@ -7,7 +7,10 @@ gem 'rails', '3.2.13'
 
 gem 'pg'
 
-
+group :test do
+  gem 'rspec-rails', '~> 2.12'
+  gem 'shoulda-matchers', '1.5.4'
+end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

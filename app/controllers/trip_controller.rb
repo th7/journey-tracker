@@ -1,4 +1,4 @@
-class TripController < ActiveRecord
+class TripController < ApplicationController
   def index
     @trips = current_user.trips if current_user
   end
