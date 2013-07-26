@@ -85,7 +85,7 @@ function initialize() {
   // var deaccelerator = 0;
 
   $(window).on('scroll', function(event){
-    map.panBy(0, $(window).scrollTop() / 4);
+    map.panBy(0, $(window).scrollTop());
     // if(deaccelerator > 30){
     //   if(currentIndex >= places.length - 1){
     //     currentIndex = 0;
