@@ -1,25 +1,27 @@
-<% if @user == @trip_user %>
-<h1>Edit your Trip</h1>
-<%= form_for @trip do |f| %>
-  <%= f.text_field :name, :placeholder => @trip.name %>
-  <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
-  <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
-  <%= f.submit %>
-<% end %>
-<div>
-  <% if @photos %>
-    <% process_photos(@photos).each_with_index do |photo|%>
-          <img src="<%= photo.url %>" ><br>
+<div class="container">
+  <% if @user == @trip_user %>
+  <h1>Edit your Trip</h1>
+  <%= form_for @trip do |f| %>
+    <%= f.text_field :name, :placeholder => @trip.name %>
+    <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
+    <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
+    <%= f.submit %>
+  <% end %>
+  <div>
+    <% if @photos %>
+      <% process_photos(@photos).each_with_index do |photo|%>
+            <img src="<%= photo.url %>" ><br>
+      <% end %>
     <% end %>
+  </div>
+
+  <script>
+    $(function() {
+      $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
+
+    });
+  </script>
+  <% else %>
+  <h1>YOU LACK PERMISSIONS, PEON.</h1>
   <% end %>
 </div>
-
-<script>
-  $(function() {
-    $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
-
-  });
-</script>
-<% else %>
-<h1>YOU LACK PERMISSIONS, PEON.</h1>
-<% end %>
