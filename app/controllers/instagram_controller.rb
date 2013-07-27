@@ -16,16 +16,9 @@ require 'open-uri'
     client = Instagram.client(:access_token => session[:access_token])
 
     file = open("https://api.instagram.com/v1/users/#{client.user.id}/media/recent/?access_token=#{session[:access_token]}&min_timestamp=#{@trip.start.to_i-86400}&max_timestamp=#{@trip.end.to_i+86400}")
-    p "======= Client ID ========"
-    p "https://api.instagram.com/v1/users/#{client.user.id}/media/recent/?access_token=#{session[:access_token]}&min_timestamp=#{@trip.start.to_i-86400}&max_timestamp=#{@trip.end.to_i+86400}"
-    p "======= Client ID ========"
-    p client.user.id
-    p "======= Access Token ========"
-    p session[:access_token]
+
     data = file.read
     json_object = JSON.parse(data)
-    p "======= JSON ========"
-    p json_object
 
   
     json_object["data"].each do |photo|
