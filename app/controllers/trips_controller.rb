@@ -14,7 +14,18 @@ class TripsController < ApplicationController
 
   end
 
+  def edit
+    @user = current_user
+    @trip = Trip.find(params[:id])
+    @trip_user = @trip.user
+    @photos = @trip.photos
+    
+  end
+
   def destroy
+    p params
+    Trip.find(params["id"]).destroy
+    redirect_to user_path(current_user)
   end
 
   def create

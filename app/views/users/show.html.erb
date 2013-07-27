@@ -1,8 +1,18 @@
-<h1>Welcome to the profile of <%= @user.name %></h1>
-
-<h2>Check out <%= @user.name %>'s Trips:</h2>
+<% if @user == @user_on_page %>
+<h1>My Profile</h1>
+<h2>Check out my Trips:</h2>
+<%= link_to 'Create a Trip', new_trip_path %>
+<% else %>
+<h1>Welcome to the profile of <%= @user_on_page.name %></h1>
+<h2>Check out <%= @user_on_page.name %>'s Trips:</h2>
+<% end %>
 <ul>
 <% @trips.each do |trip| %>
-  <li><%= link_to trip.name, trip_path(trip) %></li>
+  <li><%= link_to trip.name, trip_path(trip) %></li> 
+  <% if @user == @user_on_page %>
+  <span>
+<%= link_to "Edit", edit_trip_path(trip)  %><%= button_to "Delete", trip, :confirm => "Are you sure you want to delete #{trip.name}>", :method => :delete %>
+</span>
+<% end %>
 <% end %>
 </ul>

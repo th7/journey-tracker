@@ -4,8 +4,9 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		@user = User.find(params[:id])
-    @trips = @user.trips
+		@user =User.find(session[:user_id])
+    @user_on_page = User.find(params[:id])
+    @trips =@user_on_page.trips
 	end
 
 end
