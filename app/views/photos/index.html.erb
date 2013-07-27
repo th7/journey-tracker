@@ -1,0 +1,21 @@
+<h1>Photos</h1>
+
+<% if @photos %>
+	<p>Photo List:</p>
+	<% @photos.each do |photo| %>
+		<%= photo.url  %><br>
+	<% end %>
+<% end %>
+
+<div class="clear"></div>
+
+<%= s3_uploader_form post: photos_url, as: "photo[image_url]" do %>
+  <%= file_field_tag :file, multiple: true %>
+<% end %>
+
+<script id="template-upload" type="text/x-tmpl">
+<div class="upload">
+  {%=o.name%}
+  <div class="progress"><div class="bar" style="width: 0%"></div></div>
+</div>
+</script>
