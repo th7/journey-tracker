@@ -2,32 +2,6 @@ var Place = function(lat, lng) {
   this.latLng = new google.maps.LatLng(lat, lng);
 };
 
-// var Worker = function() {
-//   this.queue = [];
-//   this.running = false;
-// };
-
-// Worker.prototype.addRoute = function(places) {
-//   this.queue.push(places);
-//   if (!this.running) {
-//     this.running = true;
-//     this.poll();
-//   }
-// };
-
-// Worker.prototype.process = function(places) {
-//   addRoute(places);
-// };
-
-// Worker.prototype.poll = function() {
-//   if (this.queue.length > 0) {
-//     this.process(queue.shift());
-//     setTimeout(this.poll, 200);
-//   } else {
-//     this.running = false;
-//   }
-// };
-
 var SlowWorker = {
   queue: [],
 
@@ -48,12 +22,12 @@ var SlowWorker = {
       throw 'too many waypoints'
     }
 
-    var origin = places[0].latLng;
-    var destination = places[places.length - 1].latLng;
+    var origin = places[0];
+    var destination = places[places.length - 1];
     var waypoints = [];
 
     for(var i=1; i < places.length - 1; i++) {
-      waypoints.push( { location: places[i].latLng, stopover: true } );
+      waypoints.push( { location: places[i], stopover: true } );
     }
 
     var router = new google.maps.DirectionsService();
@@ -64,7 +38,6 @@ var SlowWorker = {
       travelMode: google.maps.TravelMode.DRIVING
     };
 
-    lastPlaces = places;
     router.route(routeOptions, this.handleResult);
   },
 
@@ -118,7 +91,7 @@ var buildPlaces = function(inputs) {
   var places = [];
 
   for(i in inputs) {
-    places.push( new Place(inputs[i].lat, inputs[i].lng) );
+    places.push( new google.maps.LatLng(inputs[i].lat, inputs[i].lng) );
   }
 
   return places;
@@ -179,7 +152,7 @@ var drawPolyLine = function(places) {
       strokeColor: "#000000",
       strokeWeight: 3,
       map: map,
-      path: [places[0].latLng, places[1].latLng]
+      path: [places[0], places[1]]
   };
 
   new google.maps.Polyline(polylineOptions);
