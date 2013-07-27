@@ -1,10 +1,12 @@
 class User < ActiveRecord::Base
-  attr_accessible :name, :facebook_id, :instagram_id
+  attr_accessible :name, :uid
   has_many :trips
   has_many :photos, through: :trips
+  validates_presence_of :name, :uid, :oauth_token, :provider
+  validates_uniqueness_of :uid, :oauth_token
 
   def facebook
-  @facebook ||= Koala::Facebook::API.new(oauth_token)
+    @facebook ||= Koala::Facebook::API.new(oauth_token)
   end
 
   def self.from_omniauth(auth)
