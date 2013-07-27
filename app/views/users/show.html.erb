@@ -1,2 +1,8 @@
 <h1>Welcome to the profile of <%= @user.name %></h1>
 
+<h2>Check out <%= @user.name %>'s Trips:</h2>
+<ul>
+<% @trips.each do |trip| %>
+  <li><%= link_to trip.name, trip_path(trip) %></li>
+<% end %>
+</ul>
