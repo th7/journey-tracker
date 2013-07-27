@@ -1,189 +1,223 @@
-var Place = function(lat, lng) {
-  this.latLng = new google.maps.LatLng(lat, lng);
-};
+var gmap = {
+  map: null,
 
-var SlowWorker = {
-  queue: [],
+  overlay: null,
 
-  running: false,
+  projection: null,
 
-  enqueueAddRoute: function(places) {
-    // console.log('SlowWorker.enqueueAddRoute');
-    this.queue.push(places);
-    if (!this.running) {
-      this.running = true;
-      setTimeout(this.poll, 10);
-    }
-  },
+  SlowWorker: {
+    queue: [],
 
-  process: function(places) {
-    // console.log('SlowWorker.process');
-    if (places.length > 10) {
-      throw 'too many waypoints'
-    }
+    running: false,
 
-    var origin = places[0];
-    var destination = places[places.length - 1];
-    var waypoints = [];
-
-    for(var i=1; i < places.length - 1; i++) {
-      waypoints.push( { location: places[i], stopover: true } );
-    }
-
-    var router = new google.maps.DirectionsService();
-    var routeOptions = {
-      origin: origin,
-      destination: destination,
-      waypoints: waypoints,
-      travelMode: google.maps.TravelMode.DRIVING
-    };
-
-    router.route(routeOptions, this.handleResult);
-  },
-
-  poll: function() {
-    // console.log('SlowWorker.poll');
-    if (SlowWorker.queue.length > 0) {
-      SlowWorker.process(SlowWorker.queue[0]);
-    } else {
-      SlowWorker.running = false;
-    }
-  },
-
-  handleResult: function(result, status) {
-    var resultPlaces = SlowWorker.queue.shift();
-
-    if (SlowWorker.running) {
-      setTimeout(SlowWorker.poll, 200);
-    }
-
-    if(status == google.maps.DirectionsStatus.OK) {
-      renderRoute(result);
-    } else {
-      console.log(status);
-      drawPolyLine(resultPlaces);
-    }
-  }
-};
-
-var initialize = function(inputs) { 
-  google.maps.visualRefresh = true;
-
-  map = buildMap();
-  // renderer = buildRenderer();
-  // renderer.setMap(map);
-
-  var places = buildPlaces(inputs);
-
-  console.log(places);
-
-  for(var i=0;i<places.length;i++) {
-    if(i > 0 && i < places.length) {
-      SlowWorker.enqueueAddRoute([places[i-1], places[i]])
-    }
-  }
-
-  // var currentIndex = 0;
-  // var deaccelerator = 0;
-};
-
-var buildPlaces = function(inputs) {
-  var places = [];
-
-  for(i in inputs) {
-    places.push( new google.maps.LatLng(inputs[i].lat, inputs[i].lng) );
-  }
-
-  return places;
-};
-
-var buildMap = function() {
-  var mapType = google.maps.MapTypeId.ROADMAP;
-  var styles = [
-    {
-      stylers: [
-        { saturation: -70 },
-        { gamma: 1.5 }
-      ]
-    }
-  ];
-
-  var mapOptions = { 
-    // center: coords[0],
-    // zoom: 2,
-    mapTypeId: mapType,
-    styles: styles,
-    disableDoubleClickZoom: true,
-    draggable: true,
-    keyboardShortcuts: true,
-    mapTypeControl: true,
-    panControl: true,
-    scrollwheel: true,
-    streetViewControl: true,
-    zoomControl: true
-  };
-
-  return new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-};
-
-var buildRenderer = function() {
-  rendererOptions = {
-    draggable: true, // double check that we actually want this turned on
-    markerOptions: { 
-      visible: true
+    enqueueAddRoute: function(places) {
+      // console.log('SlowWorker.enqueueAddRoute');
+      this.queue.push(places);
+      if (!this.running) {
+        this.running = true;
+        setTimeout(this.poll, 100);
+      }
     },
-    polylineOptions: {
-      strokeColor: "#000000",
-      strokeWeight: 3
-    }
-  };
 
-  return new google.maps.DirectionsRenderer(rendererOptions);
-};
+    process: function(places) {
+      // console.log('SlowWorker.process');
+      if (places.length > 10) {
+        throw 'too many waypoints'
+      }
 
-var renderRoute = function(result) {
-  var renderer = buildRenderer();
-  renderer.setMap(map);
-  renderer.setDirections(result);
-};
+      var origin = places[0];
+      var destination = places[places.length - 1];
+      var waypoints = [];
 
-var drawPolyLine = function(places) {
-  polylineOptions = {
-      strokeColor: "#000000",
-      strokeWeight: 3,
-      map: map,
-      path: [places[0], places[1]]
-  };
+      for(var i=1; i < places.length - 1; i++) {
+        waypoints.push( { location: places[i], stopover: true } );
+      }
 
-  new google.maps.Polyline(polylineOptions);
-};
-
-function loadScript() {
-  var script = document.createElement("script");
-  script.type = "text/javascript";
-  script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=readPhotos";
-  document.body.appendChild(script);
-}
-
-function readPhotos() {
-  $photoContainers = $('.photo-container');
-  var coords = [];
-  for (var i = 0; i < $photoContainers.length; i++) {
-    $div = $($photoContainers[i]);
-
-    if ($div.data('map-index') || $div.data('map-index') == "0") {
-      var endCoord = {
-        lat: +$div.data('lat'),
-        lng: +$div.data('lng')
+      var router = new google.maps.DirectionsService();
+      var routeOptions = {
+        origin: origin,
+        destination: destination,
+        waypoints: waypoints,
+        travelMode: google.maps.TravelMode.DRIVING
       };
 
-      coords.push(endCoord);
+      router.route(routeOptions, this.handleResult);
+    },
+
+    poll: function() {
+      // console.log('SlowWorker.poll');
+      if (gmap.SlowWorker.queue.length > 0) {
+        gmap.SlowWorker.process(gmap.SlowWorker.queue[0]);
+      } else {
+        gmap.SlowWorker.running = false;
+        // mapReady();
+      }
+    },
+
+    handleResult: function(result, status) {
+      var resultPlaces = gmap.SlowWorker.queue.shift();
+
+      if (gmap.SlowWorker.running) {
+        setTimeout(gmap.SlowWorker.poll, 200);
+      }
+
+      if(status == google.maps.DirectionsStatus.OK) {
+        gmap.renderRoute(result);
+        var overlay = new google.maps.OverlayView();
+        overlay.setMap(map);
+        overlay.draw = function () { 
+          if (!this.ready) { 
+              this.ready = true; 
+              google.maps.event.trigger(this, 'ready'); 
+          } 
+        };
+        console.log(overlay);
+        var projection = overlay.getProjection();
+        console.log(projection);
+        var pxlocation = projection.fromLatLngToContainerPixel(
+          resultPlaces[0]
+        );
+        console.log(pxlocation)
+      } else {
+        console.log(status);
+        gmap.drawPolyLine(resultPlaces);
+      }
     }
+  },
+
+  buildPlaces: function(inputs) {
+    var places = [];
+
+    for(i in inputs) {
+      places.push(new google.maps.LatLng(
+        inputs[i].lat, inputs[i].lng
+        ) 
+      );
+    }
+
+    return places;
+  },
+
+  initialize: function(inputs) { 
+    google.maps.visualRefresh = true;
+
+    this.map = this.buildMap();
+
+    // renderer = buildRenderer();
+    // renderer.setMap(map);
+
+    var places = this.buildPlaces(inputs);
+
+    console.log(places);
+
+    for(var i=0;i<places.length;i++) {
+      if(i > 0 && i < places.length) {
+        this.SlowWorker.enqueueAddRoute(
+          [places[i-1], places[i]]
+        );
+      }
+    }
+
+    // var currentIndex = 0;
+    // var deaccelerator = 0;
+  },
+
+  buildMap: function() {
+    var mapType = google.maps.MapTypeId.ROADMAP;
+    var styles = [
+      {
+        stylers: [
+          { saturation: -70 },
+          { gamma: 1.5 }
+        ]
+      }
+    ];
+
+    var mapOptions = { 
+      // center: coords[0],
+      // zoom: 2,
+      mapTypeId: mapType,
+      styles: styles,
+      disableDoubleClickZoom: true,
+      draggable: true,
+      keyboardShortcuts: true,
+      mapTypeControl: true,
+      panControl: true,
+      scrollwheel: true,
+      streetViewControl: true,
+      zoomControl: true
+    };
+
+    return new google.maps.Map(
+      document.getElementById("map-canvas"), mapOptions
+    );
+  },
+
+  buildRenderer: function() {
+    rendererOptions = {
+      draggable: true, // double check that we actually want this turned on
+      markerOptions: { 
+        visible: true
+      },
+      polylineOptions: {
+        strokeColor: "#000000",
+        strokeWeight: 3
+      }
+    };
+
+    return new google.maps.DirectionsRenderer(rendererOptions);
+  },
+
+  renderRoute: function(result) {
+    var renderer = this.buildRenderer();
+    renderer.setMap(map);
+    renderer.setDirections(result);
+  },
+
+  drawPolyLine: function(places) {
+    polylineOptions = {
+        strokeColor: "#000000",
+        strokeWeight: 3,
+        map: map,
+        path: [places[0], places[1]]
+    };
+
+    new google.maps.Polyline(polylineOptions);
+  },
+
+  loadScript: function() {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    console.log("<%= ENV['GMAP_KEY'] %>")
+    script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.readPhotos";
+    document.body.appendChild(script);
+  },
+
+  readPhotos: function() {
+    $photoContainers = $('.photo-container');
+    var coords = [];
+    for (var i = 0; i < $photoContainers.length; i++) {
+      $div = $($photoContainers[i]);
+
+      if ($div.data('map-index') || $div.data('map-index') == "0") {
+        var endCoord = {
+          lat: +$div.data('lat'),
+          lng: +$div.data('lng')
+        };
+
+        coords.push(endCoord);
+      }
+    }
+
+    this.initialize(coords);
+  },
+
+  getPixelPos: function(lat, lng) {
+
   }
 
-  initialize(coords);
 }
 
 $(document).ready(function() {
-  loadScript();
+  gmap.loadScript();
 });
