@@ -30,10 +30,10 @@ var gmap = {
       draggable: true,
       keyboardShortcuts: true,
       mapTypeControl: true,
-      panControl: true,
+      panControl: false,
       scrollwheel: true,
-      streetViewControl: true,
-      zoomControl: true
+      streetViewControl: false,
+      zoomControl: false
     };
 
     return new google.maps.Map(
@@ -50,7 +50,11 @@ var gmap = {
     overlay.setMap(this.map);
     overlay.onAdd = function() {
       gmap.projection = this.getProjection();
-      mapReady();
+      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
+      google.maps.event.addListener(gmap.map, 'bounds_changed', main.update);
+      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
+      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
+      main.mapReady();
     };
     overlay.draw = function() { 
       if (!this.ready) { 
@@ -130,8 +134,9 @@ var gmap = {
 
   buildRenderer: function() {
     rendererOptions = {
-      draggable: true, // double check that we actually want this turned on
-      markerOptions: { 
+      draggable: false, // double check that we actually want this turned on
+      markerOptions: {
+        draggable: false, 
         visible: true
       },
       polylineOptions: {
@@ -209,37 +214,97 @@ var gmap = {
 
 };
 
-var mapReady = function() {
-  console.log('mapReady');
+var main = {
+  $photoContainers: null,
 
-  var photoCoords = readPhotosCoords();
+  svg: null,
 
-  for(i in photoCoords) {
-    if (i > 0) {
-      gmap.drawRoute([photoCoords[i-1], photoCoords[i]])
+  mapReady: function() {
+    console.log('mapReady');
+
+    var photoCoords = this.readPhotosCoords();
+    this.drawRoutes(photoCoords);
+    this.svg = d3.select("svg");
+  },
+
+  readPhotosCoords: function() {
+    main.$photoContainers = $('.photo-container');
+    var coords = [];
+    for (var i = 0; i < main.$photoContainers.length; i++) {
+      $div = $(main.$photoContainers[i]);
+
+      if ($div.data('lat')) {
+        var endCoord = {
+          lat: +$div.data('lat'),
+          lng: +$div.data('lng')
+        };
+
+        coords.push(endCoord);
+      }
     }
-  }
-};
 
-var readPhotosCoords = function() {
-  $photoContainers = $('.photo-container');
-  var coords = [];
-  for (var i = 0; i < $photoContainers.length; i++) {
-    $div = $($photoContainers[i]);
+    return coords;
+  },
 
-    if ($div.data('lat')) {
-      var endCoord = {
-        lat: +$div.data('lat'),
-        lng: +$div.data('lng')
-      };
-
-      coords.push(endCoord);
+  drawRoutes: function(coords) {
+    for(i in coords) {
+      if (i > 0) {
+        gmap.drawRoute([coords[i-1], coords[i]])
+      }
     }
-  }
+  },
 
-  return coords;
-};
+  update: function() {
+    var data = [];
+    for (var i = 0; i < main.$photoContainers.length; i++) {
+      $div = $(main.$photoContainers[i]);
+
+      if ($div.data('lat')) {
+        var startCoord = 
+          {"y": $div.offset().top + $div.height() / 2 - $(window).scrollTop(),
+           "x": $div.offset().left + $div.width() + 100 - $(window).scrollLeft()};
+        
+        var endCoord = 
+          gmap.getPixelPos(+$div.data('lat'), +$div.data('lng'));
+
+        data.push([startCoord, endCoord]);
+      }
+    }
+
+    var line = d3.svg.line()
+      .interpolate(main.interpolateSankey)
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; });
+
+    var path = main.svg.selectAll('path').data(data);
+
+    path.attr('d', line);
+
+    path.enter().append('path')
+        .attr('class', 'line')
+        .attr('d', line);
+
+    path.exit().remove();
+  },
+
+  // http://bl.ocks.org/mbostock/3960741
+  interpolateSankey: function(points) {
+    var x0 = points[0][0], y0 = points[0][1], x1, y1, x2,
+        path = [x0, ",", y0],
+        i = 0,
+        n = points.length;
+    while (++i < n) {
+      x1 = points[i][0], y1 = points[i][1], x2 = (x0 + x1) / 2;
+      path.push("C", x2, ",", y0, " ", x2, ",", y1, " ", x1, ",", y1);
+      x0 = x1, y0 = y1;
+    }
+    return path.join("");
+  }  
+}
+
 
 $(document).ready(function() {
   gmap.loadScript();
+
+  $(document).on('scroll', main.update);
 });
