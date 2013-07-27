@@ -1,27 +1,66 @@
 var gmap = {
+  initialize: function(inputs) {
+    console.log('gmap.initialize');
+    google.maps.visualRefresh = true;
+
+    this.map = this.buildMap();
+    gmap.overlay = gmap.buildOverlay();
+  },
+
   map: null,
 
-  overlay: null,
+  buildMap: function() {
+    console.log('gmap.buildMap');
+    var mapType = google.maps.MapTypeId.ROADMAP;
+    var styles = [
+      {
+        stylers: [
+          { saturation: -70 },
+          { gamma: 1.5 }
+        ]
+      }
+    ];
 
+    var mapOptions = { 
+      center: new google.maps.LatLng(41.85, -87.65),
+      zoom: 8,
+      mapTypeId: mapType,
+      styles: styles,
+      disableDoubleClickZoom: true,
+      draggable: true,
+      keyboardShortcuts: true,
+      mapTypeControl: true,
+      panControl: true,
+      scrollwheel: true,
+      streetViewControl: true,
+      zoomControl: true
+    };
+
+    return new google.maps.Map(
+      document.getElementById("map-canvas"), mapOptions
+    );
+  },
+
+  overlay: null,
   projection: null,
 
   buildOverlay: function() {
     console.log('gmap.buildOverlay')
     var overlay = new google.maps.OverlayView();
     overlay.setMap(this.map);
-    overlay.draw = function () { 
+    overlay.onAdd = function() {
+      gmap.projection = this.getProjection();
+      mapReady();
+    };
+    overlay.draw = function() { 
       if (!this.ready) { 
           this.ready = true; 
           google.maps.event.trigger(this, 'ready');
       } 
-      google.maps.event.trigger(gmap.overlayReady, 'ready');
+      // google.maps.event.trigger(gmap.overlayReady, 'ready');
     };
     console.log(overlay);
     return overlay;
-  },
-
-  overlayReady: function() {
-    alert('OMFG');
   },
 
   SlowWorker: {
@@ -69,7 +108,6 @@ var gmap = {
         gmap.SlowWorker.process(gmap.SlowWorker.queue[0]);
       } else {
         gmap.SlowWorker.running = false;
-        // mapReady();
       }
     },
 
@@ -88,78 +126,6 @@ var gmap = {
         gmap.drawPolyLine(resultPlaces);
       }
     }
-  },
-
-  buildLatLng: function(lat, lng) {
-    return new google.maps.LatLng(lat, lng); 
-  },
-
-  buildPlaces: function(inputs) {
-    var places = [];
-
-    for(i in inputs) {
-      places.push(new google.maps.LatLng(
-        inputs[i].lat, inputs[i].lng
-        ) 
-      );
-    }
-
-    return places;
-  },
-
-  initialize: function(inputs) {
-    console.log('gmap.initialize');
-    google.maps.visualRefresh = true;
-
-    this.map = this.buildMap();
-    this.overlay = this.buildOverlay();
-    // this.projection = this.buildProjection();
-    this.projection = this.overlay.getProjection();
-    console.log(this.overlay);
-    console.log(this.projection);
-
-
-    mapReady();
-
-    // renderer = buildRenderer();
-    // renderer.setMap(map);
-
-    
-
-    // var currentIndex = 0;
-    // var deaccelerator = 0;
-  },
-
-  buildMap: function() {
-    console.log('gmap.buildMap');
-    var mapType = google.maps.MapTypeId.ROADMAP;
-    var styles = [
-      {
-        stylers: [
-          { saturation: -70 },
-          { gamma: 1.5 }
-        ]
-      }
-    ];
-
-    var mapOptions = { 
-      // center: coords[0],
-      // zoom: 2,
-      mapTypeId: mapType,
-      styles: styles,
-      disableDoubleClickZoom: true,
-      draggable: true,
-      keyboardShortcuts: true,
-      mapTypeControl: true,
-      panControl: true,
-      scrollwheel: true,
-      streetViewControl: true,
-      zoomControl: true
-    };
-
-    return new google.maps.Map(
-      document.getElementById("map-canvas"), mapOptions
-    );
   },
 
   buildRenderer: function() {
@@ -198,17 +164,18 @@ var gmap = {
     var script = document.createElement("script");
     script.type = "text/javascript";
     console.log("<%= ENV['GMAP_KEY'] %>")
-    script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.mapLoaded";
+    script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.initialize";
     document.body.appendChild(script);
   },
 
   mapLoaded: function() {
-    console.log('gmap.mapLoaded')
-    this.initialize();
+    console.log('gmap.mapLoaded');
+    
+    // gmap.projection = gmap.overlay.getProjection();
   },
 
   getPixelPos: function(lat, lng) {
-    var pxlocation = projection.fromLatLngToContainerPixel(
+    var pxlocation = this.projection.fromLatLngToContainerPixel(
       new google.maps.LatLng(
           lat, lng
         )
@@ -220,7 +187,7 @@ var gmap = {
     pxlocations = [];
     for (i in coords) {
       pxlocations.push(
-        this.getPixelPos(this.projection, coords[i].lat, coords[i].lng)
+        this.getPixelPos(coords[i].lat, coords[i].lng)
       );
     }
     return pxlocations;
@@ -240,7 +207,7 @@ var gmap = {
     this.SlowWorker.enqueueAddRoute(places);
   }
 
-}
+};
 
 var mapReady = function() {
   console.log('mapReady');
@@ -260,7 +227,7 @@ var readPhotosCoords = function() {
   for (var i = 0; i < $photoContainers.length; i++) {
     $div = $($photoContainers[i]);
 
-    if ($div.data('map-index') || $div.data('map-index') == "0") {
+    if ($div.data('lat')) {
       var endCoord = {
         lat: +$div.data('lat'),
         lng: +$div.data('lng')
