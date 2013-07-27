@@ -9,6 +9,7 @@ JourneyTracker::Application.routes.draw do
   match 'instagram/connect', to: 'instagram#connect'
   match 'auth/failure', to: redirect('/')
   match 'signout', to: 'sessions#destroy', as: 'signout'
+  match 'facebook/connect', to: 'sessions#fetch_photos'
 
 
 end

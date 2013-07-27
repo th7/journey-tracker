@@ -1,19 +1,14 @@
 <h1><%= @trip.name %></h1>
-<p><a href="/instagram/connect">Connect with Instagram</a></p>
+<p><a href="/instagram/connect">Fetch Photos From Instagram</a></p>
+<p><a href="/facebook/connect">Fetch Photos From Facebook</a></p>
 
-<div class="map-wrapper">
-  <%= render "main/map" %>
-</div>
 
-<div class="photos-container">
+Removed map for simplicity
+
+<div>
   <% if @photos %>
     <% process_photos(@photos).each_with_index do |photo|%>
-      <div class="slide">
-        <div class="photo-container" data-map-index="<%= photo.map_index %>" data-lat="<%= photo.lat %>" data-lng="<%= photo.long %>">
           <img src="<%= photo.url %>" ><br>
-        </div>
-        <div class="caption"></div>
-      </div>
     <% end %>
   <% end %>
 </div>
