@@ -47,3 +47,7 @@ gem "omniauth-facebook", "1.4.0"
 
 # To use debugger
 # gem 'debugger'
+
+gem 's3_direct_upload'
+
+

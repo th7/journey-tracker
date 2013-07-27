@@ -9,12 +9,12 @@
 
 <div class="clear"></div>
 
-<%= s3_uploader_form post: photos_url, as: "photo[image_url]" do %>
+<%= s3_uploader_form callback_url: photos_url, callback_param: "photo[image_url]", max_file_size: 10.megabytes, id: "myS3Uploader" do %>
   <%= file_field_tag :file, multiple: true %>
 <% end %>
 
 <script id="template-upload" type="text/x-tmpl">
-<div class="upload">
+<div id="file-{%=o.unique_id%}" class="upload">
   {%=o.name%}
   <div class="progress"><div class="bar" style="width: 0%"></div></div>
 </div>
