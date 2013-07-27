@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :photos, through: :trips
 
   def facebook
-  @facebook ||= Koala::Facebook::API.new(oauth_token)
+    @facebook ||= Koala::Facebook::API.new(oauth_token)
   end
 
   def self.from_omniauth(auth)
