@@ -7,6 +7,8 @@ gem 'rails', '3.2.13'
 
 gem 'pg'
 
+
+
 group :test do
   gem 'rspec-rails', '~> 2.12'
   gem 'shoulda-matchers', '1.5.4'
