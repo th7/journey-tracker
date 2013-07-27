@@ -29,8 +29,6 @@ class TripsController < ApplicationController
   end
 
   def create
-    p "========= DATE FORM ================"
-    p params
     @user = current_user
     new_trip = @user.trips.create(params[:trip])
     redirect_to trip_path(new_trip)
