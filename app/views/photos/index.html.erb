@@ -2,9 +2,12 @@
 
 <% if @photos %>
 	<p>Photo List:</p>
-	<% @photos.each do |photo| %>
-		<%= photo.url  %><br>
-	<% end %>
+	<p>Trip ID in session: <%= session[:current_trip] %></p>
+	<ul>
+		<% @photos.each do |photo| %>
+			<li><%= link_to photo.url, photo.url,:target => "_blank" %> - Trip: <%= photo.trip_id %></li>
+		<% end %>
+	</ul>
 <% end %>
 
 <div class="clear"></div>
@@ -12,6 +15,7 @@
 <p>Note: jpg or jpeg format only</p>
 
 <%= s3_uploader_form callback_url: photos_url, callback_param: "photo[image_url]", max_file_size: 15.megabytes, id: "myS3Uploader" do %>
+	<%= hidden_field_tag  "Content-Type", "" %>
   <%= file_field_tag :file, multiple: true %>
 <% end %>
 

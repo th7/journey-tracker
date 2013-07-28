@@ -10,7 +10,7 @@ require 'uri'
   def get_exif_data(photo)
   	image = MiniMagick::Image.open(photo.url)
   	image["EXIF:BitsPerSample"]
-  # 	EXIFR::JPEG.new(image).gps.latitude
+  	# EXIFR::JPEG.new(image).gps.latitude
 		# EXIFR::JPEG.new(image).gps.longitude
 		# EXIFR::JPEG.new(image).date_time
 
