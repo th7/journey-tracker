@@ -49,5 +49,5 @@ gem "omniauth-facebook", "1.4.0"
 # gem 'debugger'
 
 gem 's3_direct_upload'
-
-
+gem 'exifr'
+gem 'mini_magick'

@@ -11,9 +11,10 @@ class PhotosController < ApplicationController
 		p params["url"]
 		p params["filetype"]
 
-		if ["image/jpeg","image/jpg","image/png","image/gif"].include?(params["filetype"])
+		if ["image/jpeg","image/jpg"].include?(params["filetype"])
 			new_photo = @user.photos.find_or_initialize_by_url(url: params["url"])
 			new_photo.save
+			get_exif_data(new_photo)
 		end
 
 		redirect_to photos_path
