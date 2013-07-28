@@ -11,7 +11,8 @@
   <% if @photos %>
     <% process_photos(@photos).each_with_index do |photo|%>
       <div class="photo-container" data-lat="<%= photo.lat %>" data-lng="<%= photo.long %>">
-          <img src="<%= photo.url %>" ><br>
+          <%= image_tag photo.url, class: 'photo'%>
+          
       </div>
     <% end %>
   <% end %>

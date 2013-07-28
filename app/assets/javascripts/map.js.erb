@@ -51,7 +51,7 @@ var gmap = {
     overlay.onAdd = function() {
       gmap.projection = this.getProjection();
       // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
-      google.maps.event.addListener(gmap.map, 'bounds_changed', main.update);
+      // google.maps.event.addListener(gmap.map, 'bounds_changed', main.update);
       // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
       // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
       main.mapReady();
@@ -159,7 +159,8 @@ var gmap = {
         strokeColor: "#000000",
         strokeWeight: 3,
         map: this.map,
-        path: [places[0], places[1]]
+        path: [places[0], places[1]],
+        geodesic: true
     };
 
     new google.maps.Polyline(polylineOptions);
@@ -210,6 +211,12 @@ var gmap = {
     }
 
     this.SlowWorker.enqueueAddRoute(places);
+  },
+
+  pan: function(lat, lng) {
+    gmap.map.panTo(
+      new google.maps.LatLng(lat, lng)
+    );
   }
 
 };
@@ -256,20 +263,105 @@ var main = {
 
   update: function() {
     var data = [];
+    $window = $(window);
+
+    var windowTop = $window.scrollTop();
+    var windowLeft = $window.scrollLeft();
+    var windowHeight = $window.height();
+    var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
+    var hideTop = windowTop - windowHeight * 0.5;
+
+    var $prevPhoto = null;
+    var $nextPhoto = null;
+
+    var prevOffset = -100000000;
+    var nextOffset = +100000000;
+
     for (var i = 0; i < main.$photoContainers.length; i++) {
       $div = $(main.$photoContainers[i]);
+      $img = $div.find('img');
 
+      var imgTop = $img.offset().top;
+      var imgLeft = $img.offset().left;
+      var imgHeight = $img.height();
+      var imgWidth = $img.width();
+      // debugger;
       if ($div.data('lat')) {
-        var startCoord = 
-          {"y": $div.offset().top + $div.height() / 2 - $(window).scrollTop(),
-           "x": $div.offset().left + $div.width() + 100 - $(window).scrollLeft()};
-        
-        var endCoord = 
-          gmap.getPixelPos(+$div.data('lat'), +$div.data('lng'));
+        var divOffset = (imgTop + imgHeight / 2) - (windowTop + windowHeight / 2);
+        if (divOffset < 0 && divOffset > prevOffset) {
+          prevOffset = divOffset;
+          $prevPhoto = $div;
+          // debugger;
+        } else if (divOffset > 0 && divOffset < nextOffset) {
+          nextOffset = divOffset;
+          $nextPhoto = $div;
+          // debugger;
+        }
+        if (imgTop + imgHeight / 2 > hideTop && imgTop + imgHeight / 2 < hideBottom) {
+          var startCoord = 
+            {"y": imgTop + imgHeight / 2 - windowTop,
+             "x": imgLeft + imgWidth - windowLeft};
+          
+          var endCoord = 
+            gmap.getPixelPos(+$div.data('lat'), +$div.data('lng'));
 
-        data.push([startCoord, endCoord]);
+          data.push([startCoord, endCoord]);
+        }
       }
     }
+
+    if (!$prevPhoto && !$nextPhoto) {
+      // debugger;
+    }
+
+    if(!$prevPhoto && $nextPhoto) {
+      // debugger;
+      gmap.pan(+$nextPhoto.data('lat'), +$nextPhoto.data('lng'))
+    } else if (!$nextPhoto && $prevPhoto) {
+      // debugger;
+      gmap.pan(+$prevPhoto.data('lat'), +$prevPhoto.data('lng'))
+    } else {
+      // debugger;
+      var offsetDiff = prevOffset - nextOffset;
+      var mod = prevOffset / offsetDiff;
+      console.log(mod);
+
+      var prevLat = $prevPhoto.data('lat');
+      var nextLat = $nextPhoto.data('lat');
+      var latDiff = nextLat - prevLat;
+      console.log(latDiff);
+      if (Math.abs(latDiff) > 180) {
+        latDiff = 360 - Math.abs(latDiff)
+      }
+      // if (latDiff < -180) {
+      //   latDiff = 360 + latDiff;
+      // } else if (latDiff > 180) {
+      //   latDiff = 360 - latDiff;
+      // }
+
+      var newLat = prevLat + latDiff * mod;
+
+
+      var prevLng = $prevPhoto.data('lng');
+      var nextLng = $nextPhoto.data('lng');
+      var lngDiff = nextLng - prevLng;
+      console.log(lngDiff);
+      if (Math.abs(lngDiff) > 180) {
+        lngDiff = 360 - Math.abs(lngDiff)
+      }
+      // if (lngDiff < -180) {
+      //   lngDiff = 360 + lngDiff;
+      // } else if (lngDiff > 180) {
+      //   lngDiff = 360 - lngDiff;
+      // }
+      var newLng = prevLng + lngDiff * mod;
+
+
+      gmap.pan(newLat, newLng);
+    }
+    
+    
+
 
     var line = d3.svg.line()
       .interpolate(main.interpolateSankey)
