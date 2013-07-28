@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-
+require 'open-uri'
 	def index
 		@user = current_user
 		@trip = Trip.find(session[:current_trip])
@@ -24,4 +24,6 @@ class PhotosController < ApplicationController
 	def show
 	end
 
+
+ 
 end

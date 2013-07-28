@@ -1,5 +1,5 @@
 class Photo < ActiveRecord::Base
-  attr_accessible :caption, :url, :lat, :long, :date, :color1, :color2, :color3, :color4
+  attr_accessible :caption, :url, :trip_id, :lat, :long, :date, :color1, :color2, :color3, :color4
   belongs_to :trip
 
   before_save :get_photo_colors
