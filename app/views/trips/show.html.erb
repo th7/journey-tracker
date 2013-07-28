@@ -10,10 +10,8 @@
 <div class="photos-wrapper">
   <% if @photos %>
     <% process_photos(@photos).each_with_index do |photo|%>
-      <div class="photo-container" data-lat="<%= photo.lat %>" data-lng="<%= photo.long %>">
-          <%= image_tag photo.url, class: 'photo'%>
-          
-      </div>
+        <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long}%>
+        <br>
     <% end %>
   <% end %>
 </div>

@@ -51,7 +51,7 @@ var gmap = {
     overlay.onAdd = function() {
       gmap.projection = this.getProjection();
       // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
-      // google.maps.event.addListener(gmap.map, 'bounds_changed', main.update);
+      google.maps.event.addListener(gmap.map, 'bounds_changed', main.update);
       // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
       // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
       main.mapReady();
@@ -142,7 +142,8 @@ var gmap = {
       polylineOptions: {
         strokeColor: "#000000",
         strokeWeight: 3
-      }
+      },
+      preserveViewport: true
     };
 
     return new google.maps.DirectionsRenderer(rendererOptions);
@@ -217,12 +218,16 @@ var gmap = {
     gmap.map.panTo(
       new google.maps.LatLng(lat, lng)
     );
+  },
+
+  zoom: function(zoom) {
+    gmap.map.setZoom(zoom);
   }
 
 };
 
 var main = {
-  $photoContainers: null,
+  $photos: null,
 
   svg: null,
 
@@ -235,15 +240,15 @@ var main = {
   },
 
   readPhotosCoords: function() {
-    main.$photoContainers = $('.photo-container');
+    main.$photos = $('.photo');
     var coords = [];
-    for (var i = 0; i < main.$photoContainers.length; i++) {
-      $div = $(main.$photoContainers[i]);
+    for (var i = 0; i < main.$photos.length; i++) {
+      $img = $(main.$photos[i]);
 
-      if ($div.data('lat')) {
+      if ($img.data('lat')) {
         var endCoord = {
-          lat: +$div.data('lat'),
-          lng: +$div.data('lng')
+          lat: +$img.data('lat'),
+          lng: +$img.data('lng')
         };
 
         coords.push(endCoord);
@@ -259,6 +264,29 @@ var main = {
         gmap.drawRoute([coords[i-1], coords[i]])
       }
     }
+  },
+
+  resize: function() {
+    console.log('main.resize');
+    var $window = $(window);
+    var $document= $(document);
+    var maxHeight = $window.height() * 0.9;
+    var scrollMod = $window.scrollTop() / ($document.height() - $window.height());
+    for (i=0; i<main.$photos.length; i++) {
+      var $photo = $(main.$photos[i]);
+      $photo.css('max-height', maxHeight);
+      $photo.css('margin-top', maxHeight * 0.04);
+      $photo.css('margin-bottom', maxHeight * 0.04);
+      if ($photo.height() > $photo.width()) {
+        $photo.css('width', 'auto');
+        $photo.css('height', '');
+      } else {
+        $photo.css('height', 'auto');
+        $photo.css('width', '');
+      }
+    }
+    var newScrollTop = scrollMod * ($document.height() - $window.height());
+    $window.scrollTop(newScrollTop);
   },
 
   update: function() {
@@ -277,24 +305,24 @@ var main = {
     var prevOffset = -100000000;
     var nextOffset = +100000000;
 
-    for (var i = 0; i < main.$photoContainers.length; i++) {
-      $div = $(main.$photoContainers[i]);
-      $img = $div.find('img');
+    for (var i = 0; i < main.$photos.length; i++) {
+      $img = 
+      $img = $(main.$photos[i]);
 
       var imgTop = $img.offset().top;
       var imgLeft = $img.offset().left;
       var imgHeight = $img.height();
       var imgWidth = $img.width();
       // debugger;
-      if ($div.data('lat')) {
+      if ($img.data('lat')) {
         var divOffset = (imgTop + imgHeight / 2) - (windowTop + windowHeight / 2);
         if (divOffset < 0 && divOffset > prevOffset) {
           prevOffset = divOffset;
-          $prevPhoto = $div;
+          $prevPhoto = $img;
           // debugger;
         } else if (divOffset > 0 && divOffset < nextOffset) {
           nextOffset = divOffset;
-          $nextPhoto = $div;
+          $nextPhoto = $img;
           // debugger;
         }
         if (imgTop + imgHeight / 2 > hideTop && imgTop + imgHeight / 2 < hideBottom) {
@@ -303,66 +331,45 @@ var main = {
              "x": imgLeft + imgWidth - windowLeft};
           
           var endCoord = 
-            gmap.getPixelPos(+$div.data('lat'), +$div.data('lng'));
+            gmap.getPixelPos(+$img.data('lat'), +$img.data('lng'));
 
           data.push([startCoord, endCoord]);
         }
       }
     }
 
-    if (!$prevPhoto && !$nextPhoto) {
-      // debugger;
-    }
-
     if(!$prevPhoto && $nextPhoto) {
-      // debugger;
       gmap.pan(+$nextPhoto.data('lat'), +$nextPhoto.data('lng'))
     } else if (!$nextPhoto && $prevPhoto) {
-      // debugger;
       gmap.pan(+$prevPhoto.data('lat'), +$prevPhoto.data('lng'))
     } else {
-      // debugger;
       var offsetDiff = prevOffset - nextOffset;
-      var mod = prevOffset / offsetDiff;
-      console.log(mod);
+      var linearMod = prevOffset / offsetDiff;
+      var mod = 1 / (1 + Math.pow(Math.E, (-15*(linearMod-0.5))));
 
       var prevLat = $prevPhoto.data('lat');
       var nextLat = $nextPhoto.data('lat');
       var latDiff = nextLat - prevLat;
-      console.log(latDiff);
+    
       if (Math.abs(latDiff) > 180) {
         latDiff = 360 - Math.abs(latDiff)
       }
-      // if (latDiff < -180) {
-      //   latDiff = 360 + latDiff;
-      // } else if (latDiff > 180) {
-      //   latDiff = 360 - latDiff;
-      // }
 
       var newLat = prevLat + latDiff * mod;
-
 
       var prevLng = $prevPhoto.data('lng');
       var nextLng = $nextPhoto.data('lng');
       var lngDiff = nextLng - prevLng;
-      console.log(lngDiff);
+  
       if (Math.abs(lngDiff) > 180) {
         lngDiff = 360 - Math.abs(lngDiff)
       }
-      // if (lngDiff < -180) {
-      //   lngDiff = 360 + lngDiff;
-      // } else if (lngDiff > 180) {
-      //   lngDiff = 360 - lngDiff;
-      // }
-      var newLng = prevLng + lngDiff * mod;
 
+      var newLng = prevLng + lngDiff * mod;
 
       gmap.pan(newLat, newLng);
     }
     
-    
-
-
     var line = d3.svg.line()
       .interpolate(main.interpolateSankey)
       .x(function(d) { return d.x; })
@@ -399,4 +406,8 @@ $(document).ready(function() {
   gmap.loadScript();
 
   $(document).on('scroll', main.update);
+  $(window).on('load', main.resize);
+  $(window).on('resize', main.resize);
+
+  // main.resize();
 });
