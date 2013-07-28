@@ -14,8 +14,8 @@ class PhotosController < ApplicationController
 
 		if ["image/jpeg","image/jpg"].include?(params["filetype"])
 			new_photo = @trip.photos.find_or_initialize_by_url(url: params["url"])
-			new_photo.save
 			# get_exif_data(new_photo)
+			new_photo.save
 		end
 
 		redirect_to photos_path
