@@ -306,25 +306,24 @@ var main = {
     var nextOffset = +100000000;
 
     for (var i = 0; i < main.$photos.length; i++) {
-      $img = 
       $img = $(main.$photos[i]);
 
       var imgTop = $img.offset().top;
       var imgLeft = $img.offset().left;
       var imgHeight = $img.height();
       var imgWidth = $img.width();
-      // debugger;
+
       if ($img.data('lat')) {
         var divOffset = (imgTop + imgHeight / 2) - (windowTop + windowHeight / 2);
+        
         if (divOffset < 0 && divOffset > prevOffset) {
           prevOffset = divOffset;
           $prevPhoto = $img;
-          // debugger;
         } else if (divOffset > 0 && divOffset < nextOffset) {
           nextOffset = divOffset;
           $nextPhoto = $img;
-          // debugger;
         }
+
         if (imgTop + imgHeight / 2 > hideTop && imgTop + imgHeight / 2 < hideBottom) {
           var startCoord = 
             {"y": imgTop + imgHeight / 2 - windowTop,
@@ -333,11 +332,19 @@ var main = {
           var endCoord = 
             gmap.getPixelPos(+$img.data('lat'), +$img.data('lng'));
 
-          data.push([startCoord, endCoord]);
+          if (startCoord.x < endCoord.x) {
+            data.push([startCoord, endCoord]);
+          }
         }
       }
     }
 
+    main.panBetween($prevPhoto, prevOffset, $nextPhoto, nextOffset);
+
+    main.drawLines(data);
+  },
+
+  panBetween: function($prevPhoto, prevOffset, $nextPhoto, nextOffset) {
     if(!$prevPhoto && $nextPhoto) {
       gmap.pan(+$nextPhoto.data('lat'), +$nextPhoto.data('lng'))
     } else if (!$nextPhoto && $prevPhoto) {
@@ -369,7 +376,9 @@ var main = {
 
       gmap.pan(newLat, newLng);
     }
-    
+  },
+
+  drawLines: function(data) {
     var line = d3.svg.line()
       .interpolate(main.interpolateSankey)
       .x(function(d) { return d.x; })
