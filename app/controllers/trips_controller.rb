@@ -17,6 +17,7 @@ class TripsController < ApplicationController
   def edit
     @user = current_user
     @trip = Trip.find(params[:id])
+    session[:current_trip] = @trip.id
     @trip_user = @trip.user
     @photos = @trip.photos
     
@@ -37,5 +38,17 @@ class TripsController < ApplicationController
   def new
     @trip = Trip.new
   end
-
+ 
+ def update
+  p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+  params["photos"].each do |photo| 
+  p photo[1]['id']
+   if photo[1]["id"] == "0"
+    pic = Photo.find(photo[0].to_i)
+    pic.trip_id = 0
+    pic.save!
+  end
+  end
+  redirect_to edit_trip_path
+ end
 end

@@ -7,13 +7,23 @@
     <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
     <%= f.submit %>
   <% end %>
+  <p><a href="/instagram/connect">Fetch Photos From Instagram</a></p>
+<p><a href="/facebook/connect">Fetch Photos From Facebook</a></p>
+
   <div>
-    <% if @photos %>
-      <% process_photos(@photos).each_with_index do |photo|%>
+    <%= form_tag trip_path, method: "PUT"  do |f| %>
+        <% @photos.each do |photo|%>    
             <img src="<%= photo.url %>" ><br>
-      <% end %>
+            <span> <%= photo.caption%> | <%= photo.lat  %> | <%= photo.long  %>
+                <%= fields_for "photos[#{photo.id}]", photo do |p| %>
+                    <%= p.hidden_field 'url', value: photo.url %>
+                    <%= p.check_box 'id' %>
+                <% end %>
+            </span>
+        <% end %>
+        <%= submit_tag 'Submit'  %>
     <% end %>
-  </div>
+</div>
 
   <script>
     $(function() {
