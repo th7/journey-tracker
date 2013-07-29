@@ -171,16 +171,6 @@ var gmap = {
     return pxlocation;
   },
 
-  getPixelPositions: function(coords) {
-    pxlocations = [];
-    for (i in coords) {
-      pxlocations.push(
-        this.getPixelPos(coords[i].lat, coords[i].lng)
-      );
-    }
-    return pxlocations;
-  },
-
   drawRoute: function(coords) {
     places = [];
     for (i in coords) {
