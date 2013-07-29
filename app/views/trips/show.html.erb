@@ -1,0 +1,12 @@
+<h1><%= @trip.name %></h1>
+
+
+Removed map for simplicity
+
+<div>
+  <% if @photos %>
+    <% process_photos(@photos).each_with_index do |photo|%>
+          <img src="<%= photo.url %>" ><br>
+    <% end %>
+  <% end %>
+</div>
