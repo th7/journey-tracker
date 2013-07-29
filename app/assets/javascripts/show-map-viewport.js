@@ -1,35 +1,60 @@
+var Photo = function(elem) {
+  this.$elem = $(elem);
+  this.lat = +this.$elem.data('lat');
+  this.lng = +this.$elem.data('lng');
+  this.coords = {lat: this.lat, lng: this.lng};
+};
+
+Photo.prototype.resize = function(maxHeight, maxWidth) {
+  var photoHW = this.$elem.height() / this.$elem.width();
+
+  if (photoHW > maxHeight / maxWidth) {
+    this.$elem.css('width', 'auto');
+    this.$elem.css('height', maxHeight);
+  } else {
+    this.$elem.css('height', 'auto');
+    this.$elem.css('width', maxWidth);
+  }
+};
+
 var ViewPort = {
   initialize: function() {
+    this.$window = $(window);
     $(document).on('scroll', ViewPort.update);
-    $(window).on('load', ViewPort.resize);
-    $(window).on('resize', ViewPort.resize);
+    this.$window.on('load', ViewPort.resize);
+    this.$window.on('resize', ViewPort.resize);
     this.svg = d3.select("svg");
     ViewPort.$photos = $('.photo');
+    for (var i = 0; i < ViewPort.$photos.length; i++) {
+      ViewPort.photos.push(new Photo(ViewPort.$photos[i]));
+    }
+    this.initialized = true;
   },
 
   $photos: null,
-
+  photos: [],
   svg: null,
+  $window: null,
+  initialized: false,
 
   onMapReady: function() {
-    this.drawRoutes(this.readPhotosCoords());
+    if (this.initialized) {
+      this.drawRoutes(this.readPhotosCoords());
+    } else {
+      console.log('onMapReady before intialized, retrying in 100ms');
+      setTimeout(onMapReady, 100);
+    }
   },
 
   readPhotosCoords: function() {
     var coords = [];
-    for (var i = 0; i < ViewPort.$photos.length; i++) {
-      $img = $(ViewPort.$photos[i]);
+    for (var i = 0; i < ViewPort.photos.length; i++) {
+      img = ViewPort.photos[i];
 
-      if ($img.data('lat')) {
-        var endCoord = {
-          lat: +$img.data('lat'),
-          lng: +$img.data('lng')
-        };
-
-        coords.push(endCoord);
+      if (img.lat > 0) {
+        coords.push(img.coords);
       }
     }
-
     return coords;
   },
 
@@ -42,36 +67,33 @@ var ViewPort = {
   },
 
   resize: function() {
-    var $window = $(window);
-    var $document= $(document);
-    var maxHeight = $window.height() * 0.9;
-    var maxWidth = $window.width() * 0.5;
-    var scrollMod = $window.scrollTop() / ($document.height() - $window.height());
+    if (!this.$window) {
+      this.$window = $(window);
+    }
+    // var $window = $(window);
+    // var $document= $(document);
+    var maxHeight = this.$window.height() * 0.9;
+    var maxWidth = this.$window.width() * 0.5;
+    // var scrollMod = $window.scrollTop() / ($document.height() - $window.height());
     var windowHW = maxHeight / maxWidth;
 
     for (i=0; i<ViewPort.$photos.length; i++) {
-      var $photo = $(ViewPort.$photos[i]);
-      var photoHW = $photo.height() / $photo.width();
-
-      if (photoHW > windowHW) {
-        $photo.css('width', 'auto');
-        $photo.css('height', maxHeight);
-      } else {
-        $photo.css('height', 'auto');
-        $photo.css('width', maxWidth);
-      }
+      ViewPort.photos[i].resize(maxHeight, maxWidth);
     }
-    var newScrollTop = scrollMod * ($document.height() - $window.height());
-    $window.scrollTop(newScrollTop);
+    // var newScrollTop = scrollMod * ($document.height() - $window.height());
+    // $window.scrollTop(newScrollTop);
   },
 
   update: function() {
+    if (!this.$window) {
+      this.$window = $(window);
+    }
     var data = [];
-    $window = $(window);
+    // this.$window = $(window);
 
-    var windowTop = $window.scrollTop();
-    var windowLeft = $window.scrollLeft();
-    var windowHeight = $window.height();
+    var windowTop = this.$window.scrollTop();
+    var windowLeft = this.$window.scrollLeft();
+    var windowHeight = this.$window.height();
     var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
     var hideTop = windowTop - windowHeight * 0.5;
 
