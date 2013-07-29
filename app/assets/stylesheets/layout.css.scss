@@ -1,11 +1,5 @@
-$bg-img: 'http://maps.googleapis.com/maps/api/staticmap?zoom=2&size=640x640&scale=2&maptype=roadmap&style=feature:all|saturation:-70|gamma:1.5&style=feature:all|element:labels|visibility:off&visual_refresh=true&sensor=false';
-/* $bg-img: 'http://maps.googleapis.com/maps/api/staticmap?zoom=4&size=640x640&scale=2&maptype=roadmap&style=feature:all|saturation:-70|gamma:1.5&style=feature:all|element:labels|visibility:off&visual_refresh=true&markers=color:blue|Chicago,IL|San+Francisco,CA&sensor=false'; */
-$black: #222;
-$white: #eee;
-$nav-color: #1E6D72;
-$light-nav-color: #1FB5BE;
-
-
+@import "variables";
+@import "mixins";
 
 /* ------ Globals ------- */
 a {
@@ -15,12 +9,15 @@ a {
 h1 {
 	font-size: 72px;
 }
-@mixin shadow {
-  -webkit-box-shadow: 0 0 19px rgba(0,0,0,0.5);
-  -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
-  box-shadow: 0 0 19px rgba(0,0,0,0.5);
-}
 
+ul {
+	list-style-type: none;
+	padding: 0;
+}
+li {
+	margin: 12px 0;
+	background-color: transparent;
+}
 /* ------ Layout -------- */
 body {
 	background-image: url($bg-img);
@@ -30,7 +27,7 @@ body {
 nav {
   width: 100%;
   height: 20px;
-  background: $light-nav-color;
+  background: $light-nav;
 	line-height: 20px;
 	font-size: 12px;
 	color: $white;
@@ -51,14 +48,14 @@ nav a {
 }
 
 /* ------- Index ------- */
-.index-container {
+.narrow-container {
 	width: 30%;
 	margin: auto;
 }
-.index-container a {
+.narrow-container a {
 	display: block;
 	font-size: 32px;
-	background: $light-nav-color;
+	background: $light-nav;
 	color: $white;
 	border-radius: 12px;
 	padding: 18px;
@@ -67,5 +64,3 @@ nav a {
 		@include shadow;
 	}
 }
-
-

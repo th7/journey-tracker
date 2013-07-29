@@ -1,0 +1,24 @@
+@import "variables";
+@import "mixins";
+
+/* ------ Trips index page ------ */
+.narrow-container li a {
+	display: block;
+	font-size: 32px;
+	background: $white;
+	color: $nav;
+	border-radius: 12px;
+	padding: 18px;
+	text-align: center;
+	&:hover {
+		@include shadow;
+	}
+}
+
+/* ------ Trips edit page ------ */
+.container {
+	padding: 10px;
+	width: 800px;
+	margin: auto;
+	font-size: 18px;
+}
