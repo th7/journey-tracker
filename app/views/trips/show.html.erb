@@ -1,12 +1,20 @@
 <h1><%= @trip.name %></h1>
 
 
-Removed map for simplicity
+<div class="map-wrapper">
+  <div id="map-canvas"></div>
+</div>
 
-<div>
+<div class="photos-wrapper">
   <% if @photos %>
     <% process_photos(@photos).each_with_index do |photo|%>
-          <img src="<%= photo.url %>" ><br>
+        <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long}%>
+        <br>
     <% end %>
   <% end %>
 </div>
+<<<<<<< HEAD
+
+<svg class="main-svg"></svg>
+=======
+>>>>>>> master
