@@ -18,12 +18,14 @@ class TripInstagramSessionController < ApplicationController
     data = file.read
     json_object = JSON.parse(data)
     json_object["data"].each do |photo|
-      temp_photo = @trip.photos.find_or_initialize_by_url(caption: photo["caption"]["text"],
+      p "-------PHOTO CAPTION---------"
+     p photo['caption']
+      temp_photo = @trip.photos.find_or_initialize_by_url(
         date: photo["created_time"].to_i,
-        url: photo['images']['standard_resolution']['url'],
-        trip_id: @trip.id)
+        url: photo['images']['standard_resolution']['url'])
         temp_photo.update_attributes(lat: photo["location"]["latitude"],
           long: photo["location"]["longitude"]) if photo["location"]
+        temp_photo.update_attributes(caption: photo["caption"]["text"]) if photo["caption"]
         temp_photo.save!
     end
     session[:current_trip] = nil
