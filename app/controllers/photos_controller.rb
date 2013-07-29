@@ -31,5 +31,14 @@ require 'open-uri'
     redirect_to edit_trip_path(@trip.id)
   end
 
- 
+	def test
+		p "================== OH MY GOD =============="
+		p params
+		p "==========================================="
+	end
+
+	def testview
+		
+	end
+
 end
