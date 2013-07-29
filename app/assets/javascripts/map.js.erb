@@ -160,6 +160,9 @@ var gmap = {
     script.type = "text/javascript";
     script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.initialize";
     document.body.appendChild(script);
+    $(document).on('scroll', main.update);
+    $(window).on('load', main.resize);
+    $(window).on('resize', main.resize);
   },
 
   getPixelPos: function(lat, lng) {
