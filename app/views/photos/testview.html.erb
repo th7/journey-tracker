@@ -1,0 +1,73 @@
+
+<%= s3_uploader_form callback_url: photos_url, callback_param: "photo[image_url]", id: "myS3Uploader" do %>
+	<%= hidden_field_tag  "Content-Type", "" %>
+  <%= file_field_tag :file, multiple: true %>
+<% end %>
+
+	<input type="file" multiple id="uploader">
+
+
+	<div id="preview"></div>
+	<script>
+
+	var inputElement = document.getElementById("uploader");
+	inputElement.addEventListener("change", handleFiles, false);
+	function handleFiles() {
+	  var fileList = this.files; /* now you can work with the file list */
+	  
+	  for (var i = 0; i < fileList.length; i++){
+			var reader = new FileReader();  
+			reader.onload = fileOnLoad;
+			reader.readAsDataURL(fileList[i]);	  
+	  }
+	}
+
+	var fileOnLoad = function(e) {
+	  var $preview = $('#preview')
+	  var $img = ($preview.append("<img>").children().last());
+		$img.attr('src', e.target.result);
+		var $canvas = ($preview.append("<canvas></canvas>").children().last());
+		var img = $img[0]
+		var canvas = $canvas[0]
+
+		var MAX_WIDTH = 100;
+		var MAX_HEIGHT = 900;
+		var width = img.width;
+		var height = img.height;
+		 
+		if (width > height) {
+		  if (width > MAX_WIDTH) {
+		    height *= MAX_WIDTH / width;
+		    width = MAX_WIDTH;
+		  }
+		} else {
+		  if (height > MAX_HEIGHT) {
+		    width *= MAX_HEIGHT / height;
+		    height = MAX_HEIGHT;
+		  }
+		}
+		canvas.width = width;
+		canvas.height = height;
+
+
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, width, height);
+
+		var dataUrl = canvas.toDataURL("image/jpeg",1.0);
+		console.log(dataUrl);
+
+		var fd = new FormData();
+		fd.append("name", "paul");
+		fd.append("image", dataUrl);
+		fd.append("key", "××××××××××××");
+
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "https://viaggio.s3.amazonaws.com/");
+		xhr.send(fd);
+
+
+	};
+	
+
+	</script>
+
