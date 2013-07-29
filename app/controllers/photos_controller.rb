@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-
+require 'open-uri'
 	def index
 		@user = current_user
 		@trip = Trip.find(session[:current_trip])
@@ -23,7 +23,13 @@ class PhotosController < ApplicationController
 
 	def show
 	end
-
+  
+  def destroy
+    Photo.find(params['id']).destroy
+    @trip = Trip.find(session[:current_trip])
+    
+    redirect_to edit_trip_path(@trip.id)
+  end
 
 	def test
 		p "================== OH MY GOD =============="
