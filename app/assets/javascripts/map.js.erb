@@ -235,7 +235,6 @@ var main = {
   },
 
   resize: function() {
-    // console.log('main.resize');
     var $window = $(window);
     var $document= $(document);
     var maxHeight = $window.height() * 0.9;
@@ -379,14 +378,3 @@ var main = {
     return path.join("");
   }  
 }
-
-
-$(document).ready(function() {
-  gmap.loadScript();
-
-  $(document).on('scroll', main.update);
-  $(window).on('load', main.resize);
-  $(window).on('resize', main.resize);
-
-  // main.resize();
-});

@@ -13,8 +13,15 @@
     <% end %>
   <% end %>
 </div>
-<<<<<<< HEAD
 
 <svg class="main-svg"></svg>
-=======
->>>>>>> master
+
+<script>
+	$(document).ready(function() {
+	  gmap.loadScript();
+
+	  $(document).on('scroll', main.update);
+	  $(window).on('load', main.resize);
+	  $(window).on('resize', main.resize);
+	});
+</script>
