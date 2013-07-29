@@ -8,15 +8,15 @@
 </head>
 <body>
 
-<div id="user_nav">
-  <span id='nav_span'>
-    <span id='title_link'><%= link_to 'Viagg.io', root_url %></span>
+<nav>
+  <!-- <span id='nav_span'> -->
+    <div id='title_link'><%= link_to 'Viagg.io', root_url %></div>
     <% if @user %>
-      <span id='username_link'>Signed in as <%=link_to @user.name, user_path(@user) %>!
-      <%= link_to "Sign out", signout_path, id: "sign_out" %></span>
+      <div id='username_link'>Signed in as <%=link_to @user.name, user_path(@user) %> |
+      <%= link_to "Sign out", signout_path, id: "sign_out" %></div>
     <% end %>
-  </span>
-</div>
+  <!-- </span> -->
+</nav>
 
 
   <%= yield %>
