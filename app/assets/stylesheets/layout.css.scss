@@ -15,22 +15,10 @@ a {
 h1 {
 	font-size: 72px;
 }
-
-@mixin gradient-teal {
-  /* Safari 4-5, Chrome 1-9 */
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from($nav-color), to($light-nav-color));
-
-  /* Safari 5.1, Chrome 10+ */
-  background: -webkit-linear-gradient(top, $light-nav-color, $nav-color);
-
-  /* Firefox 3.6+ */
-  background: -moz-linear-gradient(top, $light-nav-color, $nav-color);
-
-  /* IE 10 */
-  background: -ms-linear-gradient(top, $light-nav-color, $nav-color);
-
-  /* Opera 11.10+ */
-  background: -o-linear-gradient(top, $light-nav-color, $nav-color);
+@mixin shadow {
+  -webkit-box-shadow: 0 0 19px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
+  box-shadow: 0 0 19px rgba(0,0,0,0.5);
 }
 
 /* ------ Layout -------- */
@@ -76,7 +64,7 @@ nav a {
 	padding: 18px;
 	text-align: center;
 	&:hover {
-		@include gradient-teal;
+		@include shadow;
 	}
 }
 
