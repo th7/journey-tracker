@@ -22,7 +22,7 @@ Photo.prototype.width = function() {
 };
 
 Photo.prototype.resize = function(maxHeight, maxWidth) {
-  var photoHW = this.$elem.height() / this.$elem.width();
+  var photoHW = this.height() / this.width();
 
   if (photoHW > maxHeight / maxWidth) {
     this.$elem.css('width', 'auto');
@@ -34,7 +34,7 @@ Photo.prototype.resize = function(maxHeight, maxWidth) {
 };
 
 Photo.prototype.vertOffset = function(windowCenter) {
-  return (this.top() + this.height() / 2) - windowCenter;  
+  return (this.top() + this.height() / 2) - windowCenter;
 };
 
 Photo.prototype.lineStartCoords = function(windowTop, windowLeft) {
