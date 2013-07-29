@@ -12,7 +12,10 @@
 <% if @chosen_photos %>
 <h2>Previously Selected Photos</h2>
 <% @chosen_photos.each do |photo| %>
+  <div class='single_photo'>
   <img src="<%= photo.url %>" ><br>
+  <%= link_to "Delete", photo_path(photo), method: "DELETE"  %>
+  </div>
 <% end %>
 <% end %>
 

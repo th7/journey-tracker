@@ -23,7 +23,13 @@ require 'open-uri'
 
 	def show
 	end
-
+  
+  def destroy
+    Photo.find(params['id']).destroy
+    @trip = Trip.find(session[:current_trip])
+    
+    redirect_to edit_trip_path(@trip.id)
+  end
 
  
 end

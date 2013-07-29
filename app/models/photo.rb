@@ -5,7 +5,7 @@ class Photo < ActiveRecord::Base
   before_save :get_photo_colors
 
   validates_presence_of :url
-  validates_uniqueness_of :url
+  # validates_uniqueness_of :url
 
 
   def get_photo_colors

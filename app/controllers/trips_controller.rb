@@ -19,7 +19,9 @@ class TripsController < ApplicationController
     @trip = Trip.find(params[:id])
     session[:current_trip] = @trip.id
     @trip_user = @trip.user
-    @photos =Trip.json_storage(@trip.id)["data"] if Trip.json_storage(@trip.id)
+    @photos = Trip.json_storage(@trip.id)["data"] if Trip.json_storage(@trip.id)
+    p @photos
+    # WHY THE HELL DOES ^ MAKE THE JSON RETRIEVAL STILL WORK??
     @chosen_photos = @trip.photos if @trip.photos
     
    
@@ -54,6 +56,7 @@ class TripsController < ApplicationController
   if params['trip']['start']
     @trip.start = params['trip']['start']
     @trip.end = params['trip']['end']
+    @trip.name = params['trip']['name']
     @trip.save!
     redirect_to "/instagram/connect"
   else
