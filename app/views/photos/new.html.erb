@@ -1,0 +1,59 @@
+<h1>Upload new photo to Imgur</h1>
+
+<div>DROP!<button onclick="document.querySelector('input').click()">Or click</button></div>
+<input style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files[0])">
+
+
+<script>
+
+    /* Drag'n drop stuff */
+    window.ondragover = function(e) {e.preventDefault()}
+    window.ondrop = function(e) {e.preventDefault(); uploadImage(e.dataTransfer.files[0]); }
+    self.uploadImage = function(file) {
+
+		/* Is the file an image? */
+        if (!file || !file.type.match(/image.*/)) return;
+
+        /* It is! */
+        document.body.className = "uploading";
+
+        /* Lets build a FormData object*/
+        var fd = new FormData(); // I wrote about it: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+        fd.append("image", file); // Append the file
+        var xhr = new XMLHttpRequest(); // Create the XHR (Cross-Domain XHR FTW!!!) Thank you sooooo much imgur.com
+        xhr.open("POST", "https://api.imgur.com/3/image.json"); // Boooom!
+        xhr.onload = function () {
+            var response1 = JSON.parse(xhr.responseText);
+            var response = JSON.parse(xhr.responseText).data.link;
+            alert(response);
+            document.querySelector("#link").href = response;
+            document.querySelector("#link").show();
+
+        }
+        // Ok, I don't handle the errors. An exercice for the reader.
+        xhr.setRequestHeader('Authorization', 'Client-ID 410a62cc1627046');
+
+        /* And now, we send the formdata */
+        xhr.send(fd);
+    };
+
+
+</script>
+
+
+<style>
+    div { border: 10px solid black; text-align: center; line-height: 100px; width: 200px; margin: auto; font-size: 40px; display: inline-block;}
+    #link, p , div {display: none}
+    div {display: inline-block;}
+    .uploading div {display: none}
+    .uploaded div {display: none}
+    .uploading p {display: inline}
+    .uploaded #link {display: inline}
+    em {position: absolute; bottom: 0; right: 0}
+</style>
+
+<p>Uploading...</p>
+<a id="link" href="#">It's online!!!</a>
+
+
+

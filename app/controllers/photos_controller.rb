@@ -1,9 +1,12 @@
 class PhotosController < ApplicationController
-require 'open-uri'
 	def index
 		@user = current_user
 		@trip = Trip.find(session[:current_trip])
 		@photos = @trip.photos
+	end
+
+	def new
+		@trip = Trip.find(session[:current_trip])
 	end
 
 	def create
