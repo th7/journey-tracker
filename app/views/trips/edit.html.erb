@@ -1,0 +1,54 @@
+<div class="container">
+  <% if @user == @trip_user %>
+  <h1>Edit your Trip</h1>
+  <%= form_for @trip do |f| %>
+    <%= f.text_field :name, :placeholder => @trip.name %>
+    <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
+    <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
+    <%= f.submit %>
+  <% end %>
+  <p><a href="/instagram/connect">Fetch Photos From Instagram</a></p>
+<p><a href="/facebook/connect">Fetch Photos From Facebook</a></p>
+<% if @chosen_photos %>
+<h2>Previously Selected Photos</h2>
+<% @chosen_photos.each do |photo| %>
+  <div class='single_photo'>
+  <img src="<%= photo.url %>" ><br>
+  <%= link_to "Delete", photo_path(photo), method: "DELETE"  %>
+  </div>
+<% end %>
+<% end %>
+
+<% if @photos %>
+  <div id='edit_form'>
+    <h2>Choose other Photos</h2><br>
+    <%= form_tag trip_path, method: "PUT"  do |f| %>
+        <% @photos.each_with_index do |photo, index|%> 
+        <div class='single_photo'>  
+            <img src="<%= photo["images"]["standard_resolution"]["url"] %>" ><br>
+            <span> <%= photo["caption"]["text"]%>  </span>
+                <%= fields_for "photos[#{index}]", photo do |p| %>
+                    <%= p.hidden_field 'url', value: photo["images"]["standard_resolution"]["url"] %>
+                    <%= p.hidden_field 'caption', value: photo["caption"]["text"] %>
+                    <%= p.hidden_field 'date', value: photo["created_time"] %>
+                    <%= p.hidden_field 'date', value: photo["created_time"] %>
+                    <%= p.hidden_field 'location', value: photo["location"] %>
+                    <%= check_box_tag "trip[photo_ids][]", index %>
+                <% end %>
+            </div>
+        <% end %>
+        <%= hidden_field_tag 'trip_id', @trip.id  %>
+        <%= submit_tag 'Submit'  %>
+    <% end %>
+</div>
+<% end %>
+  <script>
+    $(function() {
+      $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
+
+    });
+  </script>
+  <% else %>
+  <h1>YOU LACK PERMISSIONS, PEON.</h1>
+  <% end %>
+</div>

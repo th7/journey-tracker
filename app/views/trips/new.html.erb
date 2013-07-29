@@ -1,0 +1,13 @@
+<div class="container">
+	<h1>Create new trip</h1>
+	<%= form_for @trip do |f| %>
+		<%= f.label :name %>
+		<%= f.text_field :name %>
+		<%= f.label :start  %>
+	  <%= f.text_field :start, :class => 'datepicker'  %>
+	  <%= f.label :end  %>
+	  <%= f.text_field :end, :class => 'datepicker'  %>
+		<%= f.submit %>
+	<% end %>
+
+</div>

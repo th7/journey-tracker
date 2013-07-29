@@ -1,11 +1,9 @@
-<a href="/instagram/connect">Connect with Instagram</a>
-
+<h1>Welcome to Journey Tracker</h1>
 <% if @user %>
-  <% @photos.each do |photo|%>
-    <img src="<%= photo.url %>" ><br>
-    <p>Latitude: <%= photo.lat %></p>
-    <p>Longitude: <%= photo.long %></p>
-    <p>Date: <%= photo.date %></p>
-  <% end %>
+<h2><%= link_to "Create a Trip!", new_trip_path %></h2>
+<p><%= link_to "Or check out all trips", trips_path  %></p>
+<p><%= link_to "Or check out all users", users_path  %></p>
+<% else %>
+<%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
 <% end %>
 
