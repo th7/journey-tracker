@@ -5,6 +5,22 @@ var Photo = function(elem) {
   this.coords = {lat: this.lat, lng: this.lng};
 };
 
+Photo.prototype.top = function() {
+  return this.$elem.offset().top;
+};
+
+Photo.prototype.left = function() {
+  return this.$elem.offset().left;
+};
+
+Photo.prototype.height = function() {
+  return this.$elem.height();
+};
+
+Photo.prototype.width = function() {
+  return this.$elem.width();
+};
+
 Photo.prototype.resize = function(maxHeight, maxWidth) {
   var photoHW = this.$elem.height() / this.$elem.width();
 
@@ -17,33 +33,44 @@ Photo.prototype.resize = function(maxHeight, maxWidth) {
   }
 };
 
+Photo.prototype.vertOffset = function(windowCenter) {
+  return (this.top() + this.height() / 2) - windowCenter;  
+};
+
+Photo.prototype.lineStartCoords = function(windowTop, windowLeft) {
+  return {y: this.top() + this.height() / 2 - windowTop,
+             x: this.left() + this.width() - windowLeft}
+};
+
+Photo.prototype.showLine = function(windowTop, windowHeight) {
+  var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
+  var hideTop = windowTop - windowHeight * 0.5;
+  if (this.top() + this.height() / 2 > hideTop && this.top() + this.height() / 2 < hideBottom) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 var ViewPort = {
+  photos: [],
+  svg: null,
+  $window: null,
+
   initialize: function() {
     this.$window = $(window);
     $(document).on('scroll', ViewPort.update);
     this.$window.on('load', ViewPort.resize);
     this.$window.on('resize', ViewPort.resize);
     this.svg = d3.select("svg");
-    ViewPort.$photos = $('.photo');
-    for (var i = 0; i < ViewPort.$photos.length; i++) {
-      ViewPort.photos.push(new Photo(ViewPort.$photos[i]));
+    $photos = $('.photo');
+    for (var i = 0; i < $photos.length; i++) {
+      ViewPort.photos.push(new Photo($photos[i]));
     }
-    this.initialized = true;
   },
 
-  $photos: null,
-  photos: [],
-  svg: null,
-  $window: null,
-  initialized: false,
-
   onMapReady: function() {
-    if (this.initialized) {
-      this.drawRoutes(this.readPhotosCoords());
-    } else {
-      console.log('onMapReady before intialized, retrying in 100ms');
-      setTimeout(onMapReady, 100);
-    }
+    this.drawRoutes(this.readPhotosCoords());
   },
 
   readPhotosCoords: function() {
@@ -77,7 +104,7 @@ var ViewPort = {
     // var scrollMod = $window.scrollTop() / ($document.height() - $window.height());
     var windowHW = maxHeight / maxWidth;
 
-    for (i=0; i<ViewPort.$photos.length; i++) {
+    for (i=0; i<ViewPort.photos.length; i++) {
       ViewPort.photos[i].resize(maxHeight, maxWidth);
     }
     // var newScrollTop = scrollMod * ($document.height() - $window.height());
@@ -89,46 +116,41 @@ var ViewPort = {
       this.$window = $(window);
     }
     var data = [];
-    // this.$window = $(window);
 
     var windowTop = this.$window.scrollTop();
     var windowLeft = this.$window.scrollLeft();
     var windowHeight = this.$window.height();
-    var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
-    var hideTop = windowTop - windowHeight * 0.5;
 
-    var $prevPhoto = null;
-    var $nextPhoto = null;
+    // var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
+    // var hideTop = windowTop - windowHeight * 0.5;
+    var windowCenter = windowTop + windowHeight / 2
+
+    var prevPhoto = null;
+    var nextPhoto = null;
 
     var prevOffset = -100000000;
     var nextOffset = +100000000;
 
-    for (var i = 0; i < ViewPort.$photos.length; i++) {
-      $img = $(ViewPort.$photos[i]);
+    for (var i = 0; i < ViewPort.photos.length; i++) {
+      img = ViewPort.photos[i];
 
-      var imgTop = $img.offset().top;
-      var imgLeft = $img.offset().left;
-      var imgHeight = $img.height();
-      var imgWidth = $img.width();
-
-      if ($img.data('lat')) {
-        var divOffset = (imgTop + imgHeight / 2) - (windowTop + windowHeight / 2);
+      if (img.lat > 0) {
+        // var imgTop = img.top();
+        // var imgHeight = img.height();
+        var imgOffset = img.vertOffset(windowCenter);
         
-        if (divOffset < 0 && divOffset > prevOffset) {
-          prevOffset = divOffset;
-          $prevPhoto = $img;
-        } else if (divOffset > 0 && divOffset < nextOffset) {
-          nextOffset = divOffset;
-          $nextPhoto = $img;
+        if (imgOffset < 0 && imgOffset > prevOffset) {
+          prevOffset = imgOffset;
+          prevPhoto = img;
+        } else if (imgOffset > 0 && imgOffset < nextOffset) {
+          nextOffset = imgOffset;
+          nextPhoto = img;
         }
 
-        if (imgTop + imgHeight / 2 > hideTop && imgTop + imgHeight / 2 < hideBottom) {
-          var startCoord = 
-            {"y": imgTop + imgHeight / 2 - windowTop,
-             "x": imgLeft + imgWidth - windowLeft};
+        if (img.showLine(windowTop, windowHeight)) {
+          var startCoord = img.lineStartCoords(windowTop, windowLeft);
           
-          var endCoord = 
-            gmap.getPixelPos(+$img.data('lat'), +$img.data('lng'));
+          var endCoord = gmap.getPixelPos(img.lat, img.lng);
 
           if (startCoord.x < endCoord.x) {
             data.push([startCoord, endCoord]);
@@ -137,23 +159,23 @@ var ViewPort = {
       }
     }
 
-    ViewPort.panBetween($prevPhoto, prevOffset, $nextPhoto, nextOffset);
+    ViewPort.panBetween(prevPhoto, prevOffset, nextPhoto, nextOffset);
 
     ViewPort.drawLines(data);
   },
 
-  panBetween: function($prevPhoto, prevOffset, $nextPhoto, nextOffset) {
-    if(!$prevPhoto && $nextPhoto) {
-      gmap.pan(+$nextPhoto.data('lat'), +$nextPhoto.data('lng'))
-    } else if (!$nextPhoto && $prevPhoto) {
-      gmap.pan(+$prevPhoto.data('lat'), +$prevPhoto.data('lng'))
+  panBetween: function(prevPhoto, prevOffset, nextPhoto, nextOffset) {
+    if(!prevPhoto && nextPhoto) {
+      gmap.pan(nextPhoto.lat, nextPhoto.lng)
+    } else if (!nextPhoto && prevPhoto) {
+      gmap.pan(prevPhoto.lat, prevPhoto.lng)
     } else {
       var offsetDiff = prevOffset - nextOffset;
       var linearMod = prevOffset / offsetDiff;
       var mod = 1 / (1 + Math.pow(Math.E, (-15*(linearMod-0.5))));
 
-      var prevLat = $prevPhoto.data('lat');
-      var nextLat = $nextPhoto.data('lat');
+      var prevLat = prevPhoto.lat;
+      var nextLat = nextPhoto.lat;
       var latDiff = nextLat - prevLat;
     
       if (Math.abs(latDiff) > 180) {
@@ -162,8 +184,8 @@ var ViewPort = {
 
       var newLat = prevLat + latDiff * mod;
 
-      var prevLng = $prevPhoto.data('lng');
-      var nextLng = $nextPhoto.data('lng');
+      var prevLng = prevPhoto.lng;
+      var nextLng = nextPhoto.lng;
       var lngDiff = nextLng - prevLng;
   
       if (Math.abs(lngDiff) > 180) {
