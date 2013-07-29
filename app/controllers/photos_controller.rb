@@ -22,6 +22,7 @@ require 'open-uri'
 	end
 
 	def show
+		@photo = Photo.find(params[:id])
 	end
   
   def destroy

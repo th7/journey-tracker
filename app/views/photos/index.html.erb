@@ -5,7 +5,7 @@
 	<p>Trip ID in session: <%= session[:current_trip] %></p>
 	<ul>
 		<% @photos.each do |photo| %>
-			<li><%= link_to photo.url, photo.url,:target => "_blank" %> - Trip: <%= photo.trip_id %></li>
+			<li><%= link_to photo.url, photo_path(photo),:target => "_blank" %> - Trip: <%= photo.trip_id %></li>
 		<% end %>
 	</ul>
 <% end %>
