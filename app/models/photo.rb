@@ -11,9 +11,9 @@ class Photo < ActiveRecord::Base
   validates_uniqueness_of :url
 
   def get_photo_colors
-    Miro.options[:color_count] = 4
+    Miro.options[:color_count] = 6
     colors = Miro::DominantColors.new(self.url).to_hex
-    @palette = self.build_palette(color1: colors[0], color2: colors[1], color3: colors[2], color4: colors[3])
+    @palette = self.build_palette(color1: colors[0], color2: colors[1], color3: colors[2], color4: colors[3], color5: colors[4], color6: colors[5])
     @palette.save
   end
 

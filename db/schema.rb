@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(:version => 20130728191913) do
     t.string   "color2"
     t.string   "color3"
     t.string   "color4"
+    t.string   "color5"
+    t.string   "color6"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

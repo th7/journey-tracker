@@ -6,6 +6,8 @@ class CreatePalettes < ActiveRecord::Migration
       t.string :color2
       t.string :color3
       t.string :color4
+      t.string :color5
+      t.string :color6
       t.timestamps
     end
   end
