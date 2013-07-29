@@ -15,10 +15,22 @@ body {
   stroke-width: 1.5px;
 }
 
+.photos-wrapper {
+  max-width: 50%;
+  /*width: 500px;*/
+  margin: 0 3%;
+}
+
 .photo-container {
-  width: 500px;
+  /*max-height: 100%;*/
+  /*display: none;*/
+}
+
+.photo {
+  max-width: 100%;
+  /*height: auto;*/
   z-index: 1000;
-  margin: 50px;
+  margin: 2% 0;
   background-image: -webkit-gradient(linear, center top, center bottom, from(#fcfcfc), to(#bfbfbf), color-stop(3%, #f7f7f7), color-stop(12%, #f2f2f2), color-stop(90%, #d9d9d9));
   background-image: -webkit-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
   background-image: -moz-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
@@ -28,11 +40,8 @@ body {
   -webkit-box-shadow: 0 0 19px rgba(0,0,0,0.5);
   -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
   box-shadow: 0 0 19px rgba(0,0,0,0.5);
-  /*display: none;*/
-}
-
-.photo {
-  width: 100%;
+  /*width: 100%;*/
+  /*width: 100%;*/
 }
 
 .main-svg {
@@ -44,6 +53,7 @@ body {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   pointer-events: none;
+  z-index: 500;
 }
 
 html { 
@@ -58,11 +68,13 @@ body {
 
 .map-wrapper {
   height: 100%; 
-  width: 100%;
-  margin-top: -50px;
+  width: 150%;
+  /*margin-top: -50px;*/
   /*left: 600px;*/
   position: fixed;
-  z-index: 2000;
+  top: 0;
+  left: 0;
+  z-index: -2000;
 }
 
 #map-canvas {

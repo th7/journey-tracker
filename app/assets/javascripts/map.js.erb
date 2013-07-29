@@ -1,27 +1,70 @@
 var gmap = {
+  initialize: function(inputs) {
+    console.log('gmap.initialize');
+    google.maps.visualRefresh = true;
+
+    this.map = this.buildMap();
+    gmap.overlay = gmap.buildOverlay();
+  },
+
   map: null,
 
-  overlay: null,
+  buildMap: function() {
+    console.log('gmap.buildMap');
+    var mapType = google.maps.MapTypeId.ROADMAP;
+    var styles = [
+      {
+        stylers: [
+          { saturation: -70 },
+          { gamma: 1.5 }
+        ]
+      }
+    ];
 
+    var mapOptions = { 
+      center: new google.maps.LatLng(41.85, -87.65),
+      zoom: 8,
+      mapTypeId: mapType,
+      styles: styles,
+      disableDoubleClickZoom: true,
+      draggable: true,
+      keyboardShortcuts: true,
+      mapTypeControl: true,
+      panControl: false,
+      scrollwheel: true,
+      streetViewControl: false,
+      zoomControl: false
+    };
+
+    return new google.maps.Map(
+      document.getElementById("map-canvas"), mapOptions
+    );
+  },
+
+  overlay: null,
   projection: null,
 
   buildOverlay: function() {
     console.log('gmap.buildOverlay')
     var overlay = new google.maps.OverlayView();
     overlay.setMap(this.map);
-    overlay.draw = function () { 
+    overlay.onAdd = function() {
+      gmap.projection = this.getProjection();
+      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
+      google.maps.event.addListener(gmap.map, 'bounds_changed', main.update);
+      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
+      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
+      main.mapReady();
+    };
+    overlay.draw = function() { 
       if (!this.ready) { 
           this.ready = true; 
           google.maps.event.trigger(this, 'ready');
       } 
-      google.maps.event.trigger(gmap.overlayReady, 'ready');
+      // google.maps.event.trigger(gmap.overlayReady, 'ready');
     };
     console.log(overlay);
     return overlay;
-  },
-
-  overlayReady: function() {
-    alert('OMFG');
   },
 
   SlowWorker: {
@@ -69,7 +112,6 @@ var gmap = {
         gmap.SlowWorker.process(gmap.SlowWorker.queue[0]);
       } else {
         gmap.SlowWorker.running = false;
-        // mapReady();
       }
     },
 
@@ -90,88 +132,18 @@ var gmap = {
     }
   },
 
-  buildLatLng: function(lat, lng) {
-    return new google.maps.LatLng(lat, lng); 
-  },
-
-  buildPlaces: function(inputs) {
-    var places = [];
-
-    for(i in inputs) {
-      places.push(new google.maps.LatLng(
-        inputs[i].lat, inputs[i].lng
-        ) 
-      );
-    }
-
-    return places;
-  },
-
-  initialize: function(inputs) {
-    console.log('gmap.initialize');
-    google.maps.visualRefresh = true;
-
-    this.map = this.buildMap();
-    this.overlay = this.buildOverlay();
-    // this.projection = this.buildProjection();
-    this.projection = this.overlay.getProjection();
-    console.log(this.overlay);
-    console.log(this.projection);
-
-
-    mapReady();
-
-    // renderer = buildRenderer();
-    // renderer.setMap(map);
-
-    
-
-    // var currentIndex = 0;
-    // var deaccelerator = 0;
-  },
-
-  buildMap: function() {
-    console.log('gmap.buildMap');
-    var mapType = google.maps.MapTypeId.ROADMAP;
-    var styles = [
-      {
-        stylers: [
-          { saturation: -70 },
-          { gamma: 1.5 }
-        ]
-      }
-    ];
-
-    var mapOptions = { 
-      // center: coords[0],
-      // zoom: 2,
-      mapTypeId: mapType,
-      styles: styles,
-      disableDoubleClickZoom: true,
-      draggable: true,
-      keyboardShortcuts: true,
-      mapTypeControl: true,
-      panControl: true,
-      scrollwheel: true,
-      streetViewControl: true,
-      zoomControl: true
-    };
-
-    return new google.maps.Map(
-      document.getElementById("map-canvas"), mapOptions
-    );
-  },
-
   buildRenderer: function() {
     rendererOptions = {
-      draggable: true, // double check that we actually want this turned on
-      markerOptions: { 
+      draggable: false, // double check that we actually want this turned on
+      markerOptions: {
+        draggable: false, 
         visible: true
       },
       polylineOptions: {
         strokeColor: "#000000",
         strokeWeight: 3
-      }
+      },
+      preserveViewport: true
     };
 
     return new google.maps.DirectionsRenderer(rendererOptions);
@@ -188,7 +160,8 @@ var gmap = {
         strokeColor: "#000000",
         strokeWeight: 3,
         map: this.map,
-        path: [places[0], places[1]]
+        path: [places[0], places[1]],
+        geodesic: true
     };
 
     new google.maps.Polyline(polylineOptions);
@@ -198,17 +171,18 @@ var gmap = {
     var script = document.createElement("script");
     script.type = "text/javascript";
     console.log("<%= ENV['GMAP_KEY'] %>")
-    script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.mapLoaded";
+    script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.initialize";
     document.body.appendChild(script);
   },
 
   mapLoaded: function() {
-    console.log('gmap.mapLoaded')
-    this.initialize();
+    console.log('gmap.mapLoaded');
+    
+    // gmap.projection = gmap.overlay.getProjection();
   },
 
   getPixelPos: function(lat, lng) {
-    var pxlocation = projection.fromLatLngToContainerPixel(
+    var pxlocation = this.projection.fromLatLngToContainerPixel(
       new google.maps.LatLng(
           lat, lng
         )
@@ -220,7 +194,7 @@ var gmap = {
     pxlocations = [];
     for (i in coords) {
       pxlocations.push(
-        this.getPixelPos(this.projection, coords[i].lat, coords[i].lng)
+        this.getPixelPos(coords[i].lat, coords[i].lng)
       );
     }
     return pxlocations;
@@ -238,41 +212,213 @@ var gmap = {
     }
 
     this.SlowWorker.enqueueAddRoute(places);
+  },
+
+  pan: function(lat, lng) {
+    gmap.map.panTo(
+      new google.maps.LatLng(lat, lng)
+    );
+  },
+
+  zoom: function(zoom) {
+    gmap.map.setZoom(zoom);
   }
 
+};
+
+var main = {
+  $photos: null,
+
+  svg: null,
+
+  mapReady: function() {
+    console.log('mapReady');
+
+    var photoCoords = this.readPhotosCoords();
+    this.drawRoutes(photoCoords);
+    this.svg = d3.select("svg");
+  },
+
+  readPhotosCoords: function() {
+    main.$photos = $('.photo');
+    var coords = [];
+    for (var i = 0; i < main.$photos.length; i++) {
+      $img = $(main.$photos[i]);
+
+      if ($img.data('lat')) {
+        var endCoord = {
+          lat: +$img.data('lat'),
+          lng: +$img.data('lng')
+        };
+
+        coords.push(endCoord);
+      }
+    }
+
+    return coords;
+  },
+
+  drawRoutes: function(coords) {
+    for(i in coords) {
+      if (i > 0) {
+        gmap.drawRoute([coords[i-1], coords[i]])
+      }
+    }
+  },
+
+  resize: function() {
+    // console.log('main.resize');
+    var $window = $(window);
+    var $document= $(document);
+    var maxHeight = $window.height() * 0.9;
+    var maxWidth = $window.width() * 0.5;
+    var scrollMod = $window.scrollTop() / ($document.height() - $window.height());
+    var windowHW = maxHeight / maxWidth;
+
+    for (i=0; i<main.$photos.length; i++) {
+      var $photo = $(main.$photos[i]);
+      var photoHW = $photo.height() / $photo.width();
+
+      if (photoHW > windowHW) {
+        $photo.css('width', 'auto');
+        $photo.css('height', maxHeight);
+      } else {
+        $photo.css('height', 'auto');
+        $photo.css('width', maxWidth);
+      }
+    }
+    var newScrollTop = scrollMod * ($document.height() - $window.height());
+    $window.scrollTop(newScrollTop);
+  },
+
+  update: function() {
+    var data = [];
+    $window = $(window);
+
+    var windowTop = $window.scrollTop();
+    var windowLeft = $window.scrollLeft();
+    var windowHeight = $window.height();
+    var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
+    var hideTop = windowTop - windowHeight * 0.5;
+
+    var $prevPhoto = null;
+    var $nextPhoto = null;
+
+    var prevOffset = -100000000;
+    var nextOffset = +100000000;
+
+    for (var i = 0; i < main.$photos.length; i++) {
+      $img = $(main.$photos[i]);
+
+      var imgTop = $img.offset().top;
+      var imgLeft = $img.offset().left;
+      var imgHeight = $img.height();
+      var imgWidth = $img.width();
+
+      if ($img.data('lat')) {
+        var divOffset = (imgTop + imgHeight / 2) - (windowTop + windowHeight / 2);
+        
+        if (divOffset < 0 && divOffset > prevOffset) {
+          prevOffset = divOffset;
+          $prevPhoto = $img;
+        } else if (divOffset > 0 && divOffset < nextOffset) {
+          nextOffset = divOffset;
+          $nextPhoto = $img;
+        }
+
+        if (imgTop + imgHeight / 2 > hideTop && imgTop + imgHeight / 2 < hideBottom) {
+          var startCoord = 
+            {"y": imgTop + imgHeight / 2 - windowTop,
+             "x": imgLeft + imgWidth - windowLeft};
+          
+          var endCoord = 
+            gmap.getPixelPos(+$img.data('lat'), +$img.data('lng'));
+
+          if (startCoord.x < endCoord.x) {
+            data.push([startCoord, endCoord]);
+          }
+        }
+      }
+    }
+
+    main.panBetween($prevPhoto, prevOffset, $nextPhoto, nextOffset);
+
+    main.drawLines(data);
+  },
+
+  panBetween: function($prevPhoto, prevOffset, $nextPhoto, nextOffset) {
+    if(!$prevPhoto && $nextPhoto) {
+      gmap.pan(+$nextPhoto.data('lat'), +$nextPhoto.data('lng'))
+    } else if (!$nextPhoto && $prevPhoto) {
+      gmap.pan(+$prevPhoto.data('lat'), +$prevPhoto.data('lng'))
+    } else {
+      var offsetDiff = prevOffset - nextOffset;
+      var linearMod = prevOffset / offsetDiff;
+      var mod = 1 / (1 + Math.pow(Math.E, (-15*(linearMod-0.5))));
+
+      var prevLat = $prevPhoto.data('lat');
+      var nextLat = $nextPhoto.data('lat');
+      var latDiff = nextLat - prevLat;
+    
+      if (Math.abs(latDiff) > 180) {
+        latDiff = 360 - Math.abs(latDiff)
+      }
+
+      var newLat = prevLat + latDiff * mod;
+
+      var prevLng = $prevPhoto.data('lng');
+      var nextLng = $nextPhoto.data('lng');
+      var lngDiff = nextLng - prevLng;
+  
+      if (Math.abs(lngDiff) > 180) {
+        lngDiff = 360 - Math.abs(lngDiff)
+      }
+
+      var newLng = prevLng + lngDiff * mod;
+
+      gmap.pan(newLat, newLng);
+    }
+  },
+
+  drawLines: function(data) {
+    var line = d3.svg.line()
+      .interpolate(main.interpolateSankey)
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; });
+
+    var path = main.svg.selectAll('path').data(data);
+
+    path.attr('d', line);
+
+    path.enter().append('path')
+        .attr('class', 'line')
+        .attr('d', line);
+
+    path.exit().remove();
+  },
+
+  // http://bl.ocks.org/mbostock/3960741
+  interpolateSankey: function(points) {
+    var x0 = points[0][0], y0 = points[0][1], x1, y1, x2,
+        path = [x0, ",", y0],
+        i = 0,
+        n = points.length;
+    while (++i < n) {
+      x1 = points[i][0], y1 = points[i][1], x2 = (x0 + x1) / 2;
+      path.push("C", x2, ",", y0, " ", x2, ",", y1, " ", x1, ",", y1);
+      x0 = x1, y0 = y1;
+    }
+    return path.join("");
+  }  
 }
 
-var mapReady = function() {
-  console.log('mapReady');
-
-  var photoCoords = readPhotosCoords();
-
-  for(i in photoCoords) {
-    if (i > 0) {
-      gmap.drawRoute([photoCoords[i-1], photoCoords[i]])
-    }
-  }
-};
-
-var readPhotosCoords = function() {
-  $photoContainers = $('.photo-container');
-  var coords = [];
-  for (var i = 0; i < $photoContainers.length; i++) {
-    $div = $($photoContainers[i]);
-
-    if ($div.data('map-index') || $div.data('map-index') == "0") {
-      var endCoord = {
-        lat: +$div.data('lat'),
-        lng: +$div.data('lng')
-      };
-
-      coords.push(endCoord);
-    }
-  }
-
-  return coords;
-};
 
 $(document).ready(function() {
   gmap.loadScript();
+
+  $(document).on('scroll', main.update);
+  $(window).on('load', main.resize);
+  $(window).on('resize', main.resize);
+
+  // main.resize();
 });
