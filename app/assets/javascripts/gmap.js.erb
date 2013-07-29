@@ -1,5 +1,9 @@
 var gmap = {
 
+  map: null,
+  overlay: null,
+  projection: null,
+
   initialize: function() {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -14,7 +18,6 @@ var gmap = {
     gmap.overlay = gmap.buildOverlay();
   },
 
-  map: null,
 
   buildMap: function() {
     var mapType = google.maps.MapTypeId.ROADMAP;
@@ -47,8 +50,6 @@ var gmap = {
     );
   },
 
-  overlay: null,
-  projection: null,
 
   buildOverlay: function() {
     var overlay = new google.maps.OverlayView();
@@ -65,6 +66,23 @@ var gmap = {
       } 
     };
     return overlay;
+  },
+
+  buildRenderer: function() {
+    rendererOptions = {
+      draggable: false,
+      markerOptions: {
+        draggable: false, 
+        visible: true
+      },
+      polylineOptions: {
+        strokeColor: "#000000",
+        strokeWeight: 3
+      },
+      preserveViewport: true
+    };
+
+    return new google.maps.DirectionsRenderer(rendererOptions);
   },
 
   SlowWorker: {
@@ -128,22 +146,6 @@ var gmap = {
     }
   },
 
-  buildRenderer: function() {
-    rendererOptions = {
-      draggable: false,
-      markerOptions: {
-        draggable: false, 
-        visible: true
-      },
-      polylineOptions: {
-        strokeColor: "#000000",
-        strokeWeight: 3
-      },
-      preserveViewport: true
-    };
-
-    return new google.maps.DirectionsRenderer(rendererOptions);
-  },
 
   renderRoute: function(result) {
     var renderer = this.buildRenderer();
@@ -196,4 +198,3 @@ var gmap = {
   }
 
 };
-
