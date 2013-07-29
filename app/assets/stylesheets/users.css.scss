@@ -1,0 +1,6 @@
+@import "variables";
+@import "mixins";
+
+.user-container {
+	@include narrow-container;
+}

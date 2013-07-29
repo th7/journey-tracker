@@ -3,3 +3,32 @@
   -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
   box-shadow: 0 0 19px rgba(0,0,0,0.5);
 }
+
+@mixin narrow-container {
+	width: 30%;
+	margin: auto;
+	a {
+		display: block;
+		font-size: 32px;
+		background: $nav;
+		color: $white;
+		border-radius: 12px;
+		padding: 18px;
+		text-align: center;
+		&:hover {
+			@include shadow;
+		}
+	}
+	li a {
+		display: block;
+		font-size: 32px;
+		background: $white;
+		color: $nav;
+		border-radius: 12px;
+		padding: 18px;
+		text-align: center;
+		&:hover {
+			@include shadow;
+		}
+	}
+}
