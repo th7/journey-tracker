@@ -97,18 +97,14 @@ var ViewPort = {
     if (!this.$window) {
       this.$window = $(window);
     }
-    // var $window = $(window);
-    // var $document= $(document);
+
     var maxHeight = this.$window.height() * 0.9;
     var maxWidth = this.$window.width() * 0.5;
-    // var scrollMod = $window.scrollTop() / ($document.height() - $window.height());
     var windowHW = maxHeight / maxWidth;
 
     for (i=0; i<ViewPort.photos.length; i++) {
       ViewPort.photos[i].resize(maxHeight, maxWidth);
     }
-    // var newScrollTop = scrollMod * ($document.height() - $window.height());
-    // $window.scrollTop(newScrollTop);
   },
 
   update: function() {
@@ -120,9 +116,6 @@ var ViewPort = {
     var windowTop = this.$window.scrollTop();
     var windowLeft = this.$window.scrollLeft();
     var windowHeight = this.$window.height();
-
-    // var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
-    // var hideTop = windowTop - windowHeight * 0.5;
     var windowCenter = windowTop + windowHeight / 2
 
     var prevPhoto = null;
@@ -135,8 +128,6 @@ var ViewPort = {
       img = ViewPort.photos[i];
 
       if (img.lat > 0) {
-        // var imgTop = img.top();
-        // var imgHeight = img.height();
         var imgOffset = img.vertOffset(windowCenter);
         
         if (imgOffset < 0 && imgOffset > prevOffset) {
