@@ -13,7 +13,7 @@
 <% @photos.each do |photo| %>
   <div class='single_photo'>
   <img src="<%= photo.url %>" ><br>
-  <%= link_to "Delete", photo_path(photo), method: "DELETE"  %>
+  <span><%=photo.caption%> | <%=photo.lat%> | <%=photo.long%> | <%=Time.at(photo.date)%><%= link_to "Delete", photo_path(photo), method: "DELETE"  %></span>
   </div>
 <% end %>
 

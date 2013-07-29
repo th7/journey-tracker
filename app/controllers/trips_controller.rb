@@ -17,6 +17,8 @@ class TripsController < ApplicationController
   def edit
     @trip = Trip.find(params[:id])
     session[:current_trip] = @trip.id
+    @user =current_user
+    # The above is to ensure the user name appears in the header bar
     if @trip.user != current_user
       flash[:error] = "You don't have permissions to edit that trip"
       redirect_to root_path
