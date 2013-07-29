@@ -24,4 +24,15 @@ class PhotosController < ApplicationController
 	def show
 	end
 
+
+	def test
+		p "================== OH MY GOD =============="
+		p params
+		p "==========================================="
+	end
+
+	def testview
+		
+	end
+
 end
