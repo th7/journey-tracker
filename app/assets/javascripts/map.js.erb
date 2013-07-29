@@ -267,22 +267,24 @@ var main = {
   },
 
   resize: function() {
-    console.log('main.resize');
+    // console.log('main.resize');
     var $window = $(window);
     var $document= $(document);
     var maxHeight = $window.height() * 0.9;
+    var maxWidth = $window.width() * 0.5;
     var scrollMod = $window.scrollTop() / ($document.height() - $window.height());
+    var windowHW = maxHeight / maxWidth;
+
     for (i=0; i<main.$photos.length; i++) {
       var $photo = $(main.$photos[i]);
-      $photo.css('max-height', maxHeight);
-      $photo.css('margin-top', maxHeight * 0.04);
-      $photo.css('margin-bottom', maxHeight * 0.04);
-      if ($photo.height() > $photo.width()) {
+      var photoHW = $photo.height() / $photo.width();
+
+      if (photoHW > windowHW) {
         $photo.css('width', 'auto');
-        $photo.css('height', '');
+        $photo.css('height', maxHeight);
       } else {
         $photo.css('height', 'auto');
-        $photo.css('width', '');
+        $photo.css('width', maxWidth);
       }
     }
     var newScrollTop = scrollMod * ($document.height() - $window.height());
