@@ -1,6 +1,5 @@
 var gmap = {
   initialize: function(inputs) {
-    console.log('gmap.initialize');
     google.maps.visualRefresh = true;
 
     this.map = this.buildMap();
@@ -10,7 +9,6 @@ var gmap = {
   map: null,
 
   buildMap: function() {
-    console.log('gmap.buildMap');
     var mapType = google.maps.MapTypeId.ROADMAP;
     var styles = [
       {
@@ -45,15 +43,11 @@ var gmap = {
   projection: null,
 
   buildOverlay: function() {
-    console.log('gmap.buildOverlay')
     var overlay = new google.maps.OverlayView();
     overlay.setMap(this.map);
     overlay.onAdd = function() {
       gmap.projection = this.getProjection();
-      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
       google.maps.event.addListener(gmap.map, 'bounds_changed', main.update);
-      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
-      // google.maps.event.addListener(gmap.map, 'zoom_changed', main.update);
       main.mapReady();
     };
     overlay.draw = function() { 
@@ -61,9 +55,7 @@ var gmap = {
           this.ready = true; 
           google.maps.event.trigger(this, 'ready');
       } 
-      // google.maps.event.trigger(gmap.overlayReady, 'ready');
     };
-    console.log(overlay);
     return overlay;
   },
 
@@ -73,7 +65,6 @@ var gmap = {
     running: false,
 
     enqueueAddRoute: function(places) {
-      // console.log('SlowWorker.enqueueAddRoute');
       this.queue.push(places);
       if (!this.running) {
         this.running = true;
@@ -82,7 +73,6 @@ var gmap = {
     },
 
     process: function(places) {
-      // console.log('SlowWorker.process');
       if (places.length > 10) {
         throw 'too many waypoints'
       }
@@ -107,7 +97,6 @@ var gmap = {
     },
 
     poll: function() {
-      // console.log('SlowWorker.poll');
       if (gmap.SlowWorker.queue.length > 0) {
         gmap.SlowWorker.process(gmap.SlowWorker.queue[0]);
       } else {
@@ -116,7 +105,6 @@ var gmap = {
     },
 
     handleResult: function(result, status) {
-      // console.log('SlowWorker.handleResult');
       var resultPlaces = gmap.SlowWorker.queue.shift();
 
       if (gmap.SlowWorker.running) {
@@ -134,7 +122,7 @@ var gmap = {
 
   buildRenderer: function() {
     rendererOptions = {
-      draggable: false, // double check that we actually want this turned on
+      draggable: false,
       markerOptions: {
         draggable: false, 
         visible: true
@@ -170,15 +158,11 @@ var gmap = {
   loadScript: function() {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    console.log("<%= ENV['GMAP_KEY'] %>")
     script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.initialize";
     document.body.appendChild(script);
-  },
-
-  mapLoaded: function() {
-    console.log('gmap.mapLoaded');
-    
-    // gmap.projection = gmap.overlay.getProjection();
+    $(document).on('scroll', main.update);
+    $(window).on('load', main.resize);
+    $(window).on('resize', main.resize);
   },
 
   getPixelPos: function(lat, lng) {
@@ -190,18 +174,7 @@ var gmap = {
     return pxlocation;
   },
 
-  getPixelPositions: function(coords) {
-    pxlocations = [];
-    for (i in coords) {
-      pxlocations.push(
-        this.getPixelPos(coords[i].lat, coords[i].lng)
-      );
-    }
-    return pxlocations;
-  },
-
   drawRoute: function(coords) {
-    console.log('gmap.drawRoute');
     places = [];
     for (i in coords) {
       places.push(
@@ -232,8 +205,6 @@ var main = {
   svg: null,
 
   mapReady: function() {
-    console.log('mapReady');
-
     var photoCoords = this.readPhotosCoords();
     this.drawRoutes(photoCoords);
     this.svg = d3.select("svg");
@@ -267,7 +238,6 @@ var main = {
   },
 
   resize: function() {
-    // console.log('main.resize');
     var $window = $(window);
     var $document= $(document);
     var maxHeight = $window.height() * 0.9;
@@ -411,14 +381,3 @@ var main = {
     return path.join("");
   }  
 }
-
-
-$(document).ready(function() {
-  gmap.loadScript();
-
-  $(document).on('scroll', main.update);
-  $(window).on('load', main.resize);
-  $(window).on('resize', main.resize);
-
-  // main.resize();
-});
