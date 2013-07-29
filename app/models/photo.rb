@@ -8,7 +8,7 @@ class Photo < ActiveRecord::Base
   after_save :get_photo_colors
 
   validates_presence_of :url
-  validates_uniqueness_of :url
+  # validates_uniqueness_of :url
 
   def get_photo_colors
     Miro.options[:color_count] = 6
