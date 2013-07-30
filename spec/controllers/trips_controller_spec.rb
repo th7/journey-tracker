@@ -191,7 +191,7 @@ describe TripsController do
       end
       it 'assigns a new trip' do
         get :new
-        expect(assigns(:trip)).to eq Trip.new
+        expect(assigns(:trip)).to be_kind_of(Trip)
       end
     end
   end
