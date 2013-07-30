@@ -1,8 +1,5 @@
-<div class="container">
-	<h1>All Trips!</h1>
-
-	<%= link_to "Create New Trip", new_trip_path %>
-
+<div class="trips-container">
+	<h1>All Trips</h1>
 
 	<% if @trips %>
 	<ul>
@@ -10,6 +7,8 @@
 			<li><%= link_to trip.name, trip_path(trip) %></li>
 		<% end %>
 	</ul>
+
+	<%= link_to "Create a New Trip", new_trip_path %>
 
 	<% end %>
 </div>

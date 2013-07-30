@@ -17,18 +17,11 @@ body {
 
 .photos-wrapper {
   max-width: 50%;
-  /*width: 500px;*/
   margin: 0 3%;
-}
-
-.photo-container {
-  /*max-height: 100%;*/
-  /*display: none;*/
 }
 
 .photo {
   max-width: 100%;
-  /*height: auto;*/
   z-index: 1000;
   margin: 2% 0;
   background-image: -webkit-gradient(linear, center top, center bottom, from(#fcfcfc), to(#bfbfbf), color-stop(3%, #f7f7f7), color-stop(12%, #f2f2f2), color-stop(90%, #d9d9d9));
@@ -40,8 +33,6 @@ body {
   -webkit-box-shadow: 0 0 19px rgba(0,0,0,0.5);
   -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
   box-shadow: 0 0 19px rgba(0,0,0,0.5);
-  /*width: 100%;*/
-  /*width: 100%;*/
 }
 
 .main-svg {
@@ -54,30 +45,4 @@ body {
   -webkit-box-sizing: border-box;
   pointer-events: none;
   z-index: 500;
-}
-
-html { 
-  height: 100% 
-}
-
-body { 
-  height: 100%; 
-  margin: 0; 
-  padding: 0 
-}
-
-.map-wrapper {
-  height: 100%; 
-  width: 150%;
-  /*margin-top: -50px;*/
-  /*left: 600px;*/
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -2000;
-}
-
-#map-canvas {
-  height: 100%; 
-  width: 100%;
 }
