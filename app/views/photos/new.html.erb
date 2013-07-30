@@ -1,33 +1,36 @@
 <h1>Upload new photo to Imgur</h1>
 
 <div>DROP!<button onclick="document.querySelector('input').click()">Or click</button></div>
-<input style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files[0])">
+<input style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files)">
 
 
 <script>
 
     /* Drag'n drop stuff */
     window.ondragover = function(e) {e.preventDefault()}
-    window.ondrop = function(e) {e.preventDefault(); uploadImage(e.dataTransfer.files[0]); }
-    self.uploadImage = function(file) {
+    window.ondrop = function(e) {e.preventDefault(); uploadImage(e.dataTransfer.files); }
+    self.uploadImage = function(files) {
 
-		/* Is the file an image? */
-        if (!file || !file.type.match(/image.*/)) return;
+    	for (var i=0; i<files.length; i++){
 
-        /* It is! */
-        document.body.className = "uploading";
+    		console.log(i);
+				/* Is the file an image? */
+        if (!files[i] || !files[i].type.match(/image.*/)) return;
+
+        // /* It is! */
+        // document.body.className = "uploading";
 
         /* Lets build a FormData object*/
         var fd = new FormData(); // I wrote about it: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
-        fd.append("image", file); // Append the file
+        fd.append("image", files[i]); // Append the files[i]
         var xhr = new XMLHttpRequest(); // Create the XHR (Cross-Domain XHR FTW!!!) Thank you sooooo much imgur.com
         xhr.open("POST", "https://api.imgur.com/3/image.json"); // Boooom!
         xhr.onload = function () {
-            var response1 = JSON.parse(xhr.responseText);
             var response = JSON.parse(xhr.responseText).data.link;
-            alert(response);
-            document.querySelector("#link").href = response;
-            document.querySelector("#link").show();
+            $("#results").append("<p>"+response+"</p>");
+            
+            // ATTENTION!!!!!!!
+            // looks like this is running into itself. Wait for the response before calling the next file in the queue
 
         }
         // Ok, I don't handle the errors. An exercice for the reader.
@@ -35,25 +38,16 @@
 
         /* And now, we send the formdata */
         xhr.send(fd);
+      };
+
     };
 
 
 </script>
 
 
-<style>
-    div { border: 10px solid black; text-align: center; line-height: 100px; width: 200px; margin: auto; font-size: 40px; display: inline-block;}
-    #link, p , div {display: none}
-    div {display: inline-block;}
-    .uploading div {display: none}
-    .uploaded div {display: none}
-    .uploading p {display: inline}
-    .uploaded #link {display: inline}
-    em {position: absolute; bottom: 0; right: 0}
-</style>
+<div id="results"><p>Here's the results:</p></div>
 
-<p>Uploading...</p>
-<a id="link" href="#">It's online!!!</a>
 
 
 
