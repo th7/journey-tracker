@@ -7,7 +7,7 @@
 
 <div class="photos-wrapper">
   <% if @photos %>
-    <% process_photos(@photos).each_with_index do |photo|%>
+    <% @photos.each do |photo|%>
         <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long}%>
         <br>
     <% end %>
