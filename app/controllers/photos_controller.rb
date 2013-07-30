@@ -16,9 +16,10 @@ class PhotosController < ApplicationController
 		# {"url"=>"http://i.imgur.com/5drf5AG.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>"N", "lon"=>"E", "action"=>"create", "controller"=>"photos"}
 		# {"url"=>"http://i.imgur.com/cabjMk2.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>["21", "1.77", "0"], "lon"=>["105", "50.91", "0"], "action"=>"create", "controller"=>"photos"}
 		# {"url"=>"http://i.imgur.com/fHHpwBj.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>["21", "1.77", "0"], "lon"=>["105", "50.91", "0"], "latRef"=>"N", "lonRef"=>"E", "action"=>"create", "controller"=>"photos"}
-
-		new_photo = @trip.photos.find_or_initialize_by_url(url: params["url"].gsub!(/(\.)([^\.]*)\z/,'h\1\2'), date: params["date_created"].to_i)
-		new_photo.save
+		# DateTime.strptime("2013:05:04 09:56:14","%Y:%m:%d %T").to_i
+		
+		new_photo = @trip.photos.find_or_initialize_by_url(url: params["url"].gsub!(/(\.)([^\.]*)\z/,'h\1\2'))
+		new_photo.update_attributes(date: DateTime.strptime(params["date"],"%Y:%m:%d %T").to_i)
 
 		if params["lon"]
 			new_photo.set_gps_as_decimal(params["lat"],params["latRef"])
