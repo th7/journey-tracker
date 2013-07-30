@@ -18,10 +18,7 @@
 
 <script>
 	$(document).ready(function() {
-	  gmap.loadScript();
-
-	  $(document).on('scroll', main.update);
-	  $(window).on('load', main.resize);
-	  $(window).on('resize', main.resize);
+	  gmap.initialize();
+    ViewPort.initialize();
 	});
 </script>

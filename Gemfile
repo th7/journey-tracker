@@ -9,11 +9,14 @@ gem 'pg'
 
 
 
-group :test do
+group :development, :test do
+  gem 'jasmine'
   gem 'rspec-rails', '~> 2.12'
   gem 'shoulda-matchers', '1.5.4'
-  gem 'jasmine'
+  gem 'capybara'
 end
+
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -48,5 +51,5 @@ gem "omniauth-facebook", "1.4.0"
 # To use debugger
 # gem 'debugger'
 gem 'miro'
-gem 's3_direct_upload'#, :git => 'https://github.com/pomartel/s3_direct_upload.git'
+gem 's3_direct_upload', :git => 'https://github.com/pomartel/s3_direct_upload.git'
 gem 'exifr'

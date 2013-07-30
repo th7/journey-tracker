@@ -5,11 +5,11 @@ JourneyTracker::Application.routes.draw do
   resources :trips
   resources :photos
   match 'auth/:provider/callback', to: 'sessions#create'
-  match 'instagram/callback', to: 'trips#callback'
-  match 'instagram/connect', to: 'trips#connect'
+  match 'instagram/callback', to: 'trip_instagram_session#create'
+  match 'instagram/connect', to: 'trip_instagram_session#new'
   match 'auth/failure', to: redirect('/')
   match 'signout', to: 'sessions#destroy', as: 'signout'
-  match 'facebook/connect', to: 'sessions#fetch_photos'
+  match 'facebook/connect', to: 'trip_facebook_session#fetch_photos'
   match "/test" => "photos#test", :via => :post
   match "/test" => "photos#testview", :via => :get
 

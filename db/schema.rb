@@ -13,6 +13,18 @@
 
 ActiveRecord::Schema.define(:version => 20130728191913) do
 
+  create_table "palettes", :force => true do |t|
+    t.integer  "photo_id"
+    t.string   "color1"
+    t.string   "color2"
+    t.string   "color3"
+    t.string   "color4"
+    t.string   "color5"
+    t.string   "color6"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "photos", :force => true do |t|
     t.integer  "trip_id"
     t.string   "caption"
@@ -22,10 +34,6 @@ ActiveRecord::Schema.define(:version => 20130728191913) do
     t.float    "long"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "color1"
-    t.string   "color2"
-    t.string   "color3"
-    t.string   "color4"
   end
 
   create_table "trips", :force => true do |t|

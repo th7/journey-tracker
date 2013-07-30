@@ -4,9 +4,13 @@ rvm:
 env:
   - DB=postgresql
 script:
-  - bundle exec rspec spec
+  - bundle exec rake spec
+  - bundle exec rake jasmine:ci
 before_script:
   - bundle exec rake db:create RAILS_ENV=test
   - bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 bundler_args: --binstubs=./bundler_stubs

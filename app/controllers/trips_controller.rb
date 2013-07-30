@@ -9,32 +9,29 @@ class TripsController < ApplicationController
   def show
     @user = current_user
     @trip = Trip.find(params[:id])
-    @photos = @trip.photos.map{ |p| PhotoPresenter.new(p)}.sort {|a,b| a.date <=> b.date}
+    @photos = @trip.photos.sort {|a,b| a.date <=> b.date}
     session[:current_trip] = @trip.id
-    # render layout: false
   end
 
   def edit
-    @user = current_user
-    @trip = Trip.find(params[:id])
-    session[:current_trip] = @trip.id
-    @trip_user = @trip.user
-    @photos = Trip.json_storage(@trip.id)["data"] if Trip.json_storage(@trip.id)
-    p @photos
-    # WHY THE HELL DOES ^ MAKE THE JSON RETRIEVAL STILL WORK??
-    @chosen_photos = @trip.photos if @trip.photos
-    
-   
+    @trip = current_user.trips.find_by_id(params[:id])
+    if @trip
+      session[:current_trip] = @trip.id
+    else
+      flash[:error] = "You don't have permissions to edit that trip"
+      redirect_to root_path
+    end
   end
 
   def destroy
-    Trip.find(params["id"]).destroy
+    trip = current_user.trips.find_by_id(params[:id])
+    trip.destroy if trip
     redirect_to user_path(current_user)
   end
 
   def create
     @user = current_user
-    new_trip = @user.trips.create(params[:trip])
+    new_trip = current_user.trips.create(params[:trip])
     session[:current_trip] = new_trip.id
     redirect_to edit_trip_path(new_trip)
   end
@@ -57,19 +54,14 @@ class TripsController < ApplicationController
     @trip.start = params['trip']['start']
     @trip.end = params['trip']['end']
     @trip.name = params['trip']['name']
-    @trip.save!
-    redirect_to "/instagram/connect"
-  else
-    
-  if params["trip"]["photo_ids"]
-  params["trip"]["photo_ids"].each do |photo_id|
-    temp_photo = @trip.photos.find_or_initialize_by_url(caption: params["photos"][photo_id]["caption"], date: params["photos"][photo_id]["date"].to_i, url:params["photos"][photo_id]['url'], trip_id: @trip.id)
-      temp_photo.update_attributes(lat: params["photos"][photo_id]["location"]["latitude"], long: params["photos"][photo_id]["location"]["longitude"]) if params["photos"][photo_id]["location"]
-      temp_photo.save!
+    @trip.save! 
   end
-end
+  @trip.photos.each do |photo|
+    if photo.date > @trip.end.to_i || photo.date < @trip.start.to_i
+      photo.destroy
+    end
+  end
   redirect_to edit_trip_path
-end
  end
 
 def connect
@@ -88,10 +80,22 @@ def connect
     file = open("https://api.instagram.com/v1/users/#{client.user.id}/media/recent/?access_token=#{session[:access_token]}&min_timestamp=#{@trip.start.to_i-86400}&max_timestamp=#{@trip.end.to_i+86400}")
     data = file.read
     json_object = JSON.parse(data)
-    Trip.json_storage(@trip.id, json_object)
+    json_object["data"].each do |photo|
+      temp_photo = @trip.photos.find_or_initialize_by_url(caption: photo["caption"]["text"],
+        date: photo["created_time"].to_i,
+        url: photo['images']['standard_resolution']['url'],
+        trip_id: @trip.id)
+        temp_photo.update_attributes(lat: photo["location"]["latitude"],
+          long: photo["location"]["longitude"]) if photo["location"]
+        temp_photo.save!
+    end
     session[:current_trip] = nil
     redirect_to edit_trip_path(@trip)
   end
-
+  
+  def load_trip
+    @trip = Trip.find(params[:id] || params[:trip_id] || session[:current_trip])
+    session[:current_trip_id] = @trip.id
+  end
 
 end

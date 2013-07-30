@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :name, :uid, :oauth_token
+  attr_accessible :name, :uid, :oauth_token, :provider
   has_many :trips
   has_many :photos, through: :trips
   validates_presence_of :name, :uid, :oauth_token, :provider
