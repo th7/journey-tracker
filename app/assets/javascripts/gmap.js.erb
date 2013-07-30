@@ -1,0 +1,200 @@
+var gmap = {
+
+  map: null,
+  overlay: null,
+  projection: null,
+
+  initialize: function() {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.onScriptLoad";
+    document.body.appendChild(script);
+  },
+
+  onScriptLoad: function(inputs) {
+    google.maps.visualRefresh = true;
+
+    this.map = this.buildMap();
+    gmap.overlay = gmap.buildOverlay();
+  },
+
+
+  buildMap: function() {
+    var mapType = google.maps.MapTypeId.ROADMAP;
+    var styles = [
+      {
+        stylers: [
+          { saturation: -70 },
+          { gamma: 1.5 }
+        ]
+      }
+    ];
+
+    var mapOptions = { 
+      center: new google.maps.LatLng(41.85, -87.65),
+      zoom: 8,
+      mapTypeId: mapType,
+      styles: styles,
+      disableDoubleClickZoom: true,
+      draggable: true,
+      keyboardShortcuts: true,
+      mapTypeControl: true,
+      panControl: false,
+      scrollwheel: true,
+      streetViewControl: false,
+      zoomControl: false
+    };
+
+    return new google.maps.Map(
+      document.getElementById("map-canvas"), mapOptions
+    );
+  },
+
+
+  buildOverlay: function() {
+    var overlay = new google.maps.OverlayView();
+    overlay.setMap(this.map);
+    overlay.onAdd = function() {
+      gmap.projection = this.getProjection();
+      google.maps.event.addListener(gmap.map, 'bounds_changed', ViewPort.update);
+      ViewPort.onMapReady();
+    };
+    overlay.draw = function() { 
+      if (!this.ready) { 
+          this.ready = true; 
+          google.maps.event.trigger(this, 'ready');
+      } 
+    };
+    return overlay;
+  },
+
+  buildRenderer: function() {
+    rendererOptions = {
+      draggable: false,
+      markerOptions: {
+        draggable: false, 
+        visible: true
+      },
+      polylineOptions: {
+        strokeColor: "#000000",
+        strokeWeight: 3
+      },
+      preserveViewport: true
+    };
+
+    return new google.maps.DirectionsRenderer(rendererOptions);
+  },
+
+  SlowWorker: {
+    queue: [],
+
+    running: false,
+
+    enqueueAddRoute: function(places) {
+      this.queue.push(places);
+      if (!this.running) {
+        this.running = true;
+        setTimeout(this.poll, 100);
+      }
+    },
+
+    process: function(places) {
+      if (places.length > 10) {
+        throw 'too many waypoints'
+      }
+
+      var origin = places[0];
+      var destination = places[places.length - 1];
+      var waypoints = [];
+
+      for(var i=1; i < places.length - 1; i++) {
+        waypoints.push( { location: places[i], stopover: true } );
+      }
+
+      var router = new google.maps.DirectionsService();
+      var routeOptions = {
+        origin: origin,
+        destination: destination,
+        waypoints: waypoints,
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+
+      router.route(routeOptions, this.handleResult);
+    },
+
+    poll: function() {
+      if (gmap.SlowWorker.queue.length > 0) {
+        gmap.SlowWorker.process(gmap.SlowWorker.queue[0]);
+      } else {
+        gmap.SlowWorker.running = false;
+      }
+    },
+
+    handleResult: function(result, status) {
+      var resultPlaces = gmap.SlowWorker.queue.shift();
+
+      if (gmap.SlowWorker.running) {
+        setTimeout(gmap.SlowWorker.poll, 200);
+      }
+
+      if(status == google.maps.DirectionsStatus.OK) {
+        gmap.renderRoute(result);
+      } else {
+        console.log('getting route failed with status: ' + status);
+        gmap.drawPolyLine(resultPlaces);
+      }
+    }
+  },
+
+
+  renderRoute: function(result) {
+    var renderer = this.buildRenderer();
+    renderer.setMap(this.map);
+    renderer.setDirections(result);
+  },
+
+  drawPolyLine: function(places) {
+    polylineOptions = {
+        strokeColor: "#000000",
+        strokeWeight: 3,
+        map: this.map,
+        path: [places[0], places[1]],
+        geodesic: true
+    };
+
+    new google.maps.Polyline(polylineOptions);
+  },
+
+  getPixelPos: function(lat, lng) {
+    var pxlocation = this.projection.fromLatLngToContainerPixel(
+      new google.maps.LatLng(
+          lat, lng
+        )
+    );
+    return pxlocation;
+  },
+
+  drawRoute: function(coords) {
+    places = [];
+    for (i in coords) {
+      places.push(
+        new google.maps.LatLng(
+          coords[i].lat, coords[i].lng
+        )
+      );
+    }
+
+    this.SlowWorker.enqueueAddRoute(places);
+  },
+
+  pan: function(lat, lng) {
+    gmap.map.panTo(
+      new google.maps.LatLng(lat, lng)
+    );
+  },
+
+  zoom: function(zoom) {
+    gmap.map.setZoom(zoom);
+  }
+
+};
