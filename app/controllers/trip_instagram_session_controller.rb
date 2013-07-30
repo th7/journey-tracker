@@ -17,7 +17,12 @@ class TripInstagramSessionController < ApplicationController
     file = open("https://api.instagram.com/v1/users/#{client.user.id}/media/recent/?access_token=#{session[:access_token]}&min_timestamp=#{@trip.start.to_i-86400}&max_timestamp=#{@trip.end.to_i+86400}")
     data = file.read
     json_object = JSON.parse(data)
+
+    p "======= JSON BITCH ======"
+    p json_object
+
     json_object["data"].each do |photo|
+
       p "-------PHOTO CAPTION---------"
      p photo['caption']
       temp_photo = @trip.photos.find_or_initialize_by_url(
