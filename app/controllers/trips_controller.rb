@@ -40,29 +40,15 @@ class TripsController < ApplicationController
     @trip = Trip.new
   end
  
- def update
-  
-  if params["trip_id"]
-    @trip = Trip.find(params["trip_id"].to_i)
-    session[:current_trip] = @trip.id
+def update
+  trip = current_user.trips.find_by_id(params[:trip][:id])
+  if trip
+    trip.update_attributes(params[:trip]) 
+    redirect_to edit_trip_path(trip)
   else
-    @trip = Trip.find(session[:current_trip])
-    session[:current_trip] = @trip.id
+    redirect_to root_path
   end
-
-  if params['trip']['start']
-    @trip.start = params['trip']['start']
-    @trip.end = params['trip']['end']
-    @trip.name = params['trip']['name']
-    @trip.save! 
-  end
-  @trip.photos.each do |photo|
-    if photo.date > @trip.end.to_i || photo.date < @trip.start.to_i
-      photo.destroy
-    end
-  end
-  redirect_to edit_trip_path
- end
+end
 
 def connect
     if session[:user_id]

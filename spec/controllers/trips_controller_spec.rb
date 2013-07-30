@@ -124,7 +124,7 @@ describe TripsController do
 
   describe '#destroy' do
     before(:each) do
-      @to_delete = @test_user.trips.create(@test_trip_params);
+      @to_delete = @test_user.trips.create(@test_trip_params)
     end
 
     context 'when user is logged in' do
@@ -192,6 +192,47 @@ describe TripsController do
       it 'assigns a new trip' do
         get :new
         expect(assigns(:trip)).to be_kind_of(Trip)
+      end
+    end
+  end
+
+  describe '#update' do
+    before(:each) do
+      @to_update = @test_user.trips.create(@test_trip_params)
+      @new_name = 'this is a new name'
+    end
+
+    context 'when user is logged in' do
+      before(:each) do
+        session[:user_id] = @test_user.id
+        post :update, trip: {id: @to_update.id, name: @new_name} 
+      end
+
+      it 'updates the correct trip' do
+        expect(@test_user.trips.find_by_id(@to_update.id).name).to eq @new_name
+      end
+    end
+
+    context 'when imposter user is logged in' do
+      before(:each) do
+        session.clear
+        session[:user_id] = @imposter_user.id
+        post :update, trip: {id: @to_update.id, name: @new_name}
+      end
+
+      it 'does not update the trip' do
+        expect(@test_user.trips.find_by_id(@to_update.id).name).to_not eq @new_name
+      end
+    end
+
+    context 'when user is not logged in' do
+      before(:each) do
+        session.clear
+        post :update, trip: {id: @to_update.id, name: @new_name}
+      end
+
+      it 'does not update the trip' do
+        expect(@test_user.trips.find_by_id(@to_update.id).name).to_not eq @new_name
       end
     end
   end

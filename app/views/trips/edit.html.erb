@@ -4,6 +4,7 @@
     <%= f.text_field :name, :placeholder => @trip.name %>
     <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
     <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
+    <%= hidden_field(:trip, :id) %>
     <%= f.submit %>
   <% end %>
   <p><a href="/instagram/connect">Fetch Photos From Instagram</a></p>
