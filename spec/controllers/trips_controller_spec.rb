@@ -9,6 +9,8 @@ describe TripsController do
 
     @test_user = User.create(name: 'test', uid: 1, oauth_token: 1, provider: 1)
 
+    @imposter_user = User.create(name: 'imposter', uid: 2, oauth_token: 2, provider: 1)
+
     @test_trip_params = {name: "STUFF", start: Time.now, end: Time.now}
     @test_trip = @test_user.trips.create(@test_trip_params)
 
@@ -19,8 +21,13 @@ describe TripsController do
     @test_trip.photos << @test_photos
   end
 
+  before(:each) do
+    session.clear
+    @current_user = nil
+  end
+
   describe '#index' do
-    context 'user is logged in' do
+    context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
       end
@@ -33,7 +40,7 @@ describe TripsController do
       end
     end
 
-    context 'user is not logged in' do
+    context 'when user is not logged in' do
       before(:each) do
         session.clear
       end
@@ -48,7 +55,7 @@ describe TripsController do
   end
 
   describe '#show' do
-    context 'user is logged in' do
+    context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
         get :show, id: @test_trip.id
@@ -63,7 +70,7 @@ describe TripsController do
       end
     end
 
-    context 'user is not logged in' do
+    context 'when user is not logged in' do
       before(:each) do
         session.clear
         get :show, id: @test_trip.id
@@ -79,8 +86,45 @@ describe TripsController do
     end
   end
 
+  describe '#edit' do
+    context 'when user is logged in' do
+      before(:each) do
+        session[:user_id] = @test_user.id
+        get :edit, id: @test_trip.id
+      end
+
+      it 'assigns the correct trip' do
+        expect(assigns(:trip)).to eq @test_trip
+      end
+    end
+
+    context 'when imposter user is logged in' do
+      before(:each) do
+        session.clear
+        @current_user = nil
+        session[:user_id] = @imposter_user.id
+        get :edit, id: @test_trip.id
+      end
+
+      it 'does not assign the trip' do
+        expect(assigns(:trip)).to eq nil
+      end
+    end
+
+    context 'when user is not logged in' do
+      before(:each) do
+        session.clear
+        get :edit, id: @test_trip.id
+      end
+
+      it 'does not assign the trip' do
+        expect(assigns(:trip)).to eq nil
+      end
+    end
+  end
+
   describe '#create' do
-    context 'user is logged in' do
+    context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
       end
@@ -90,7 +134,7 @@ describe TripsController do
       end
     end
 
-    context 'user is not logged in' do
+    context 'when user is not logged in' do
       before(:each) do
         session.clear
       end
