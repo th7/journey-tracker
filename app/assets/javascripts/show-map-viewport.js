@@ -98,7 +98,7 @@ var ViewPort = {
 
     var maxHeight = this.$window.height() * 0.9;
     var maxWidth = this.$window.width() * 0.5;
-    var windowHW = maxHeight / maxWidth;
+    // var windowHW = maxHeight / maxWidth;
 
     for (i=0; i<ViewPort.photos.length; i++) {
       ViewPort.photos[i].resize(maxHeight, maxWidth);

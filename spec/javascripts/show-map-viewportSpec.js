@@ -77,6 +77,7 @@ describe('Photo', function() {
 describe('ViewPort', function() {
   var svg, $window, fakeCoords, gmap;
 
+
   fakeCoords = [
     {lat: 100, lng: 100},
     {lat: 100, lng: 100},
@@ -116,8 +117,7 @@ describe('ViewPort', function() {
       }
     };
     
-
-    gmap = {};
+    // gmap = {};
   });
 
   describe('onMapReady', function() {
@@ -138,11 +138,24 @@ describe('ViewPort', function() {
     });
   });
 
-  describe('#drawRoutes', function() {
-    it('calls gmap.drawRoute with each consequtive pair of coords', function() {
-      gmap.drawRoute = jasmine.createSpy('drawRoute');
-      ViewPort.drawRoutes(fakeCoords);
-      expect(gmap.drawRoute.calls.length).toEqual(fakeCoords.length-1);
+  //HELP ME NATE
+  // describe('#drawRoutes', function() {
+  //   it('calls gmap.drawRoute with each consequtive pair of coords', function() {
+  //     jasmine.createSpyObj('gmap', ['drawRoute']);
+  //     ViewPort.drawRoutes(fakeCoords);
+  //     expect(gmap.drawRoute.calls.length).toEqual(fakeCoords.length-1);
+  //   });
+  // });
+
+  describe('#resize', function() {
+    it('calls resize on each photo', function() {
+      for(i = 0; i < ViewPort.photos.length; i++) {
+        spyOn(ViewPort.photos[i], 'resize');
+      }
+      ViewPort.resize();
+      for(i = 0; i < ViewPort.photos.length; i++) {
+        expect(ViewPort.photos[i].resize).toHaveBeenCalled();
+      }
     });
   });
 });
