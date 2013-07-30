@@ -9,13 +9,11 @@
 <body>
 
 <nav>
-  <!-- <span id='nav_span'> -->
-    <div id='title_link'><%= link_to 'Viagg.io', root_url %></div>
-    <% if @user %>
-      <div id='username_link'>Signed in as <%=link_to @user.name, user_path(@user) %> |
-      <%= link_to "Sign out", signout_path, id: "sign_out" %></div>
-    <% end %>
-  <!-- </span> -->
+  <div id='title_link'><%= link_to 'Viagg.io', root_url %></div>
+  <% if @user %>
+    <div id='username_link'>Signed in as <%=link_to @user.name, user_path(@user) %> |
+    <%= link_to "Sign out", signout_path, id: "sign_out" %></div>
+  <% end %>
 </nav>
 
 
