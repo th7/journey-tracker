@@ -11,7 +11,6 @@ class TripsController < ApplicationController
     @trip = Trip.find(params[:id])
     @photos = @trip.photos.sort {|a,b| a.date <=> b.date}
     session[:current_trip] = @trip.id
-    # render layout: false
   end
 
   def edit
