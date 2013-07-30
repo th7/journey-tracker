@@ -12,6 +12,13 @@
     window.ondrop = function(e) {e.preventDefault(); uploadImage(e.dataTransfer.files); }
     self.uploadImage = function(files,numRemaining) {
 
+          date_created = null;
+          lat = null;
+          lon = null;
+          latRef = null;
+          lonRef = null;
+          response = null;
+
       if(numRemaining>=0){
 
         console.log(numRemaining);
@@ -23,9 +30,11 @@
         fr = new FileReader;
         fr.onloadend = function() {
           var exif = EXIF.readFromBinaryFile(new BinaryFile(this.result));  
-          console.log(exif.DateTimeDigitized);
-          console.log(exif.GPSLatitude);
-          console.log(exif.GPSLongitude);
+          date_created = (exif.DateTimeDigitized);
+          lat = (exif.GPSLatitude);
+          lon = (exif.GPSLongitude);
+          latRef = (exif.GPSLatitudeRef);
+          lonRef = (exif.GPSLongitudeRef);
         };
         fr.readAsBinaryString(file);
 
@@ -39,7 +48,7 @@
         var xhr = new XMLHttpRequest(); // Create the XHR (Cross-Domain XHR FTW!!!) Thank you sooooo much imgur.com
         xhr.open("POST", "https://api.imgur.com/3/image.json"); // Boooom!
         xhr.onload = function () {
-            var response = JSON.parse(xhr.responseText).data.link;
+            response = JSON.parse(xhr.responseText).data.link;
             $("#results").append("<p>"+response+"</p>");
         }
         xhr.setRequestHeader('Authorization', 'Client-ID 410a62cc1627046');
@@ -60,10 +69,21 @@
         xhr.addEventListener("load", transferComplete, false);
         function transferComplete(evt) {
           alert("The transfer is complete.");
-          uploadImage(files,numRemaining-1)
+          console.log("posting...")
+          $.ajax({
+            url: "/photos",
+            type: "post",
+            data: {url: response,
+                  date: date_created,
+                  lat: lat,
+                  lon: lon,
+                  latRef: latRef,
+                  lonRef: lonRef
+            }
+          });
+          uploadImage(files,numRemaining-1);
         }
       };
-
     };
 
 

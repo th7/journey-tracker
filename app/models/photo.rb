@@ -17,12 +17,23 @@ class Photo < ActiveRecord::Base
     @palette.save
   end
 
-  def get_exif_data(photo)
-  	# image = MiniMagick::Image.open(photo.url)
-  	# image["EXIF:BitsPerSample"]
-  	# EXIFR::JPEG.new(image).gps.latitude
-		# EXIFR::JPEG.new(image).gps.longitude
-		# EXIFR::JPEG.new(image).date_time
+  def set_gps_as_decimal(array,ref)
+    decimal = array[0].to_f + array[1].to_f/60.0
+    
+    if ref == "N"
+      self.update_attributes(lat: decimal)
+    elsif ref == "S"
+      decimal = decimal*-1
+      self.update_attributes(lat: decimal)
+    elsif ref == "E"
+      self.update_attributes(long: decimal)
+    elsif ref == "W"
+      decimal = decimal*-1
+      self.update_attributes(long: decimal)
+    else
+      raise "GPS Ref error"
+    end
+      
   end
 
 end
