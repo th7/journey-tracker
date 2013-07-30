@@ -1,4 +1,5 @@
-<h1>Welcome to Journey Tracker</h1>
+<div class="index-container">
+<h1>Welcome to Viagg.io</h1>
 <% if @user %>
 <h2><%= link_to "Create a Trip!", new_trip_path %></h2>
 <p><%= link_to "Or check out all trips", trips_path  %></p>
@@ -6,4 +7,4 @@
 <% else %>
 <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
 <% end %>
-
+</div>

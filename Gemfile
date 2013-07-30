@@ -48,5 +48,5 @@ gem "omniauth-facebook", "1.4.0"
 # To use debugger
 # gem 'debugger'
 gem 'miro'
-gem 's3_direct_upload'#, :git => 'https://github.com/pomartel/s3_direct_upload.git'
+gem 's3_direct_upload', :git => 'https://github.com/pomartel/s3_direct_upload.git'
 gem 'exifr'

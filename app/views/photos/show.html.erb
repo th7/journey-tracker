@@ -1,1 +1,23 @@
+<style>
+	.main_pic {
+		display: inline-block;
+	}
+	.palette {
+		display: inline-block;
+		vertical-align: top;
+	}
+	.tile {
+		width:100px; height:100px;
+	}
+</style>
 <h1>Photo show page</h1>
+
+<div class="main_pic" ><%= image_tag(@photo.url) %></div>
+<div class="palette">
+	<div class="tile" style="background-color:<%= @photo.palette.color1 %>;"></div>
+	<div class="tile" style="background-color:<%= @photo.palette.color2 %>;"></div>
+	<div class="tile" style="background-color:<%= @photo.palette.color3 %>;"></div>
+	<div class="tile" style="background-color:<%= @photo.palette.color4 %>;"></div>
+	<div class="tile" style="background-color:<%= @photo.palette.color5 %>;"></div>
+	<div class="tile" style="background-color:<%= @photo.palette.color6 %>;"></div>
+</div>
