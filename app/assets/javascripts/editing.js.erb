@@ -1,0 +1,42 @@
+var EditButton = {
+
+    onSuccess : function(success){
+      var photoId = $(success).data("photo-id");
+      var selector  = "#form_"+photoId;
+      $(selector).replaceWith(success);
+
+      // photoId = success['photo_id'];
+      
+      // selector = '#form_'+photoId;
+      // alert(selector);
+      // $(selector).replaceWith("<div data-photo-id='"+success['photo_id']+"' data-trip-id='"+success['trip_id']+"'>");
+    },
+    submitForm: function (event) {
+        event.preventDefault();
+        var data = $(this).serialize();
+        var photoIdArray = data.match(/photoId=(\d+)/);
+        var photoId = photoIdArray[1];
+        $.ajax({
+            type: "PUT",
+            url: '/photos/'+photoId,
+            data: data,
+            success: EditButton.onSuccess
+        });
+
+    },
+    editButton: function (event) {
+        event.preventDefault();
+        var photoCaption = ($(this).siblings('.photo_caption').text());
+        var photoLat = ($(this).siblings('.photo_lat').text());
+        var photoLong = ($(this).siblings('.photo_long').text());
+        var photoDate = ($(this).siblings('.photo_date').text());
+        var photoId = $(this).parent().data('photo-id');
+        var tripId = $(this).parent().data('trip-id');
+        $(this).parent().replaceWith("<form class='editForm' id='form_"+photoId+"'><label for='caption'>Caption: </label><input type='text' name='caption' value='" + photoCaption + "'><br><label for='lat'>Latitude: </label><input type='text' name='lat' value='" + photoLat + "'><br><label for='long'>Long: </label><input type='text' name='long' value='" + photoLong + "'><br><label for='date'>Date: </label><input type='text' name='date' value='" + photoDate + "'><input type='hidden' name='photoId' value='" + photoId + "'><input type='hidden' name='tripId' value='" + tripId + "'><input type='submit' value='Submit'></form>");
+        $('.editForm').on('submit', EditButton.submitForm);
+    },
+    initialize: function () {
+        $('.edit_button').on('click', EditButton.editButton);
+    }
+};
+

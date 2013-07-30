@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Edit your Trip</h1>
+    <h1 id='edit_header'>Edit your Trip</h1>
   <%= form_for @trip do |f| %>
     <%= f.text_field :name, :placeholder => @trip.name %>
     <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
@@ -11,9 +11,10 @@
 
 <h2>Available Photos</h2>
 <% @photos.each do |photo| %>
-  <div class='single_photo'>
-  <img src="<%= photo.url %>" ><br>
-  <span><%=photo.caption%> | <%=photo.lat%> | <%=photo.long%> | <%=Time.at(photo.date)%><%= link_to "Delete", photo_path(photo), method: "DELETE"  %></span>
+  <div class='single_photo' >
+    <%= image_tag photo.url  %><br>
+    <%= render partial: "photo_details", :locals => {:photo => photo} %>
+     
   </div>
 <% end %>
 
@@ -21,9 +22,11 @@
 
 </div>
   <script>
-    $(function() {
+    $(document).ready(function() {
       $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
-
+      EditButton.initialize();
     });
   </script>
   
+
+

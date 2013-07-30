@@ -101,3 +101,16 @@ def connect
   end
 
 end
+
+
+# .replaceWith("<form><label for='caption'>Caption</label><input type='text' name='caption' value='<%=@photos.first.caption%>'><input type='submit' value='Submit'></form>");
+
+# $(this).parent().siblings('.photo_caption').replaceWith("<%= form_tag(photo_path, method: 'put') do %>
+#   <%= label_tag(:q, Caption:) %>
+#   <%= text_field_tag(:q, :placeholder => photo.caption) %>
+#   <%= label_tag(:lat, Latitude:) %>
+#   <%= text_field_tag(:lat, :placeholder => photo.lat) %>
+#   <%= label_tag(:long, Longitude:) %>
+#   <%= text_field_tag(:long, :placeholder => photo.long) %>
+#   <%= submit_tag(Search) %>
+# <% end %>");
