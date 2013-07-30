@@ -1,5 +1,9 @@
 <div class="main-container">
-<h1>Welcome to Viagg.io</h1>
+<h1 id="welcome">Welcome to Viagg.io</h1>
+<h3 id="explanation">
+  <p>It's Italian for "travel."</p>
+  <p>It lets you share your adventures.</p>
+</h3>
 <% if @user %>
 <h2><%= link_to "Create a Trip!", new_trip_path %></h2>
 <p><%= link_to "Or check out all trips", trips_path  %></p>

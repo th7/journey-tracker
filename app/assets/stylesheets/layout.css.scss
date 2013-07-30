@@ -9,7 +9,6 @@ a {
 h1 {
   font-size: 72px;
 }
-
 ul {
   list-style-type: none;
   padding: 0;
@@ -19,6 +18,18 @@ li {
   background-color: transparent;
 }
 /* ------ Main -------- */
+h1#welcome {
+  margin-bottom: 0;
+}
+h3#explanation {
+  margin-top: 12px;
+  margin-bottom: 72px;
+  font-size: 28px;
+  // font-weight: 300;
+  // font-style: italic;
+  // width: 100%;
+  // text-align: right;
+}
 .main-container {
   @include narrow-container;
   a {
