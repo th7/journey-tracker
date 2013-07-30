@@ -42,6 +42,12 @@ GEM
     bourne (1.5.0)
       mocha (>= 0.13.2, < 0.15)
     builder (3.0.4)
+    capybara (2.1.0)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
     chunky_png (1.2.8)
@@ -97,6 +103,7 @@ GEM
       treetop (~> 1.4.8)
     metaclass (0.0.1)
     mime-types (1.23)
+    mini_portile (0.5.1)
     miro (0.2.3)
       cocaine
       oily_png
@@ -104,6 +111,8 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.7.7)
     multipart-post (1.2.0)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
     oauth2 (0.8.1)
       faraday (~> 0.8)
       httpauth (~> 0.1)
@@ -191,11 +200,14 @@ GEM
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     websocket (1.0.7)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  capybara
   coffee-rails (~> 3.2.1)
   exifr
   instagram

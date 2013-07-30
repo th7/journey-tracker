@@ -13,6 +13,7 @@ group :development, :test do
   gem 'jasmine'
   gem 'rspec-rails', '~> 2.12'
   gem 'shoulda-matchers', '1.5.4'
+  gem 'capybara'
 end
 
 
