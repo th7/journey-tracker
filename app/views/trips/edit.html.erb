@@ -10,7 +10,7 @@
 <p><a href="/facebook/connect">Fetch Photos From Facebook</a></p>
 
 <h2>Available Photos</h2>
-<% @photos.each do |photo| %>
+<% @trip.photos.each do |photo| %>
   <div class='single_photo' >
     <%= image_tag photo.url  %><br>
     <%= render partial: "photo_details", :locals => {:photo => photo} %>
@@ -18,6 +18,21 @@
   </div>
 <% end %>
 
+<%= form_for(Photo.new, method: :put, html: {class: 'hidden', id: 'editForm'} ) do |f| %>
+    <%= f.label :caption, 'Caption:' %>
+    <%= f.text_field :caption, {class: 'caption'} %><br>
+    <%= f.label :lat, 'Lat:' %>
+    <%= f.text_field :lat, {class: 'lat'} %><br>
+    <%= f.label :long, 'Long:' %>
+    <%= f.text_field :long, {class: 'long'} %><br>
+    <%= f.label :date, 'Date:' %>
+    <%= f.text_field :date, {class: 'date'} %><br>
+    <%= hidden_field(:photo, :id, :class => :photo_id) %>
+    <%= hidden_field(:photo, :trip_id, :class => :trip_id) %>
+    <%=f.submit 'Submit'  %>
+<% end %>
+  
+<!-- <form id='editForm' class='hidden'><label for='caption'>Caption: </label><input type='text' name='caption' value=''><br><label for='lat'>Latitude: </label><input type='text' name='lat' value=''><br><label for='long'>Long: </label><input type='text' name='long' value=''><br><label for='date'>Date: </label><input type='text' name='date' value=''><input type='hidden' name='photoId' value=''><input type='hidden' name='tripId' value=''><input type='submit' value='Submit'></form> -->
 
 
 </div>

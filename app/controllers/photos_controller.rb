@@ -27,12 +27,12 @@ require 'open-uri'
 
 	def update
 		p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-		p params["caption"]
-		@temp_photo = Photo.find(params['photoId'])
-		@temp_photo.update_attributes(caption: params["caption"],
-																										lat: params["lat"],
-																										long: params["long"],
-																										date: params["date"].to_i)
+		p params
+		@temp_photo = Photo.find(params['photo_id'])
+		@temp_photo.update_attributes(caption: params["photo_caption"],
+																										lat: params["photo_lat"],
+																										long: params["photo_long"],
+																										date: params["photo_date"].to_i)
     
     if request.xhr?
     	@trip = @temp_photo.trip
