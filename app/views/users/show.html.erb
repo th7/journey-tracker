@@ -7,14 +7,18 @@
 	<h2>Check out <%= @user_on_page.name %>'s Trips:</h2>
 	<% end %>
 	<ul>
-	<% @trips.each do |trip| %>
-	  <li><%= link_to trip.name, trip_path(trip) %></li> 
-	  <% if @user == @user_on_page %>
-	  <span>
-	<%= link_to "Edit", edit_trip_path(trip)  %><%= button_to "Delete", trip, :confirm => "Are you sure you want to delete #{trip.name}>", :method => :delete %>
-	</span>
-	<% end %>
-	<% end %>
+		<% @trips.each do |trip| %>
+		<li>
+			<% if @user == @user_on_page %>
+			<div class="update-buttons">
+				<%= link_to "Edit", edit_trip_path(trip), class: "edit-button"  %><%= link_to "Delete", trip, :confirm => "Are you sure you want to delete #{trip.name}>", :method => :delete, class: "delete-button" %>
+			</div>
+			<% end %>
+			<%= link_to trip.name, trip_path(trip), class: "trip-name" %> 
+		</li>
+		<% end %>
 	</ul>
-	<%= link_to 'Create a Trip', new_trip_path %>
-</div
+	<% if @user == @user_on_page %>
+	<%= link_to 'Create a Trip', new_trip_path, class: "create" %>
+	<% end %>
+</div>
