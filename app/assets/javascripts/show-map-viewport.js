@@ -21,6 +21,10 @@ Photo.prototype.width = function() {
   return this.$elem.width();
 };
 
+Photo.prototype.vertCenter = function() {
+  return this.top() + this.height() / 2;
+}
+
 Photo.prototype.resize = function(maxHeight, maxWidth) {
   var photoHW = this.height() / this.width();
 
@@ -34,18 +38,18 @@ Photo.prototype.resize = function(maxHeight, maxWidth) {
 };
 
 Photo.prototype.vertOffset = function(windowCenter) {
-  return (this.top() + this.height() / 2) - windowCenter;
+  return (this.vertCenter()) - windowCenter;
 };
 
 Photo.prototype.lineStartCoords = function(windowTop, windowLeft) {
-  return {y: this.top() + this.height() / 2 - windowTop,
+  return {y: this.vertCenter() - windowTop,
              x: this.left() + this.width() - windowLeft}
 };
 
 Photo.prototype.showLine = function(windowTop, windowHeight) {
   var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
   var hideTop = windowTop - windowHeight * 0.5;
-  if (this.top() + this.height() / 2 > hideTop && this.top() + this.height() / 2 < hideBottom) {
+  if (this.vertCenter() > hideTop && this.vertCenter() < hideBottom) {
     return true;
   } else {
     return false;

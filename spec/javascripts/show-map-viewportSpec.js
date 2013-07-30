@@ -6,6 +6,9 @@ describe('Photo', function() {
     $elem.height('50px');
     $elem.width('100px');
     photo = new Photo($elem[0]);
+    photo.top = function() {
+      return 200;
+    };
   });
 
   describe('#height', function() {
@@ -29,6 +32,12 @@ describe('Photo', function() {
   describe('#lng', function() {
     it('holds the longitude', function() {
       expect(photo.lng).toBe(200);
+    });
+  });
+
+  describe('#vertCenter', function() {
+    it('returns the offset top of the center of the photo', function() {
+      expect(photo.vertCenter()).toBe(225)
     });
   });
 
@@ -78,18 +87,18 @@ describe('ViewPort', function() {
   var svg, $window, fakeCoords, gmap;
 
 
-  fakeCoords = [
-    {lat: 100, lng: 100},
-    {lat: 100, lng: 100},
-    {lat: 100, lng: 100},
-    {lat: 100, lng: 100},
-    {lat: 100, lng: 100}
-  ];
 
   beforeEach(function() {
+    fakeCoords = [
+      {lat: 100, lng: 50},
+      {lat: 200, lng: 100},
+      {lat: 300, lng: 150},
+      {lat: 400, lng: 200},
+      {lat: 500, lng: 250}
+    ];
     ViewPort.photos = [];
     for(var i = 0; i < 5; i++) {
-      $elem = $('<img data-lat="100" data-lng="100">')
+      $elem = $('<img data-lat="' + (i*100 + 100) + '" data-lng="' + (i*50 + 50) + '">')
       $elem.height('100px');
       $elem.width('100px');
       p = new Photo($elem);
