@@ -9,7 +9,7 @@ class TripsController < ApplicationController
   def show
     @user = current_user
     @trip = Trip.find(params[:id])
-    @photos = @trip.photos.map{ |p| PhotoPresenter.new(p)}.sort {|a,b| a.date <=> b.date}
+    @photos = @trip.photos.sort {|a,b| a.date <=> b.date}
     session[:current_trip] = @trip.id
     # render layout: false
   end
@@ -33,7 +33,7 @@ class TripsController < ApplicationController
 
   def create
     @user = current_user
-    new_trip = @user.trips.create(params[:trip])
+    new_trip = current_user.trips.create(params[:trip])
     session[:current_trip] = new_trip.id
     redirect_to edit_trip_path(new_trip)
   end
