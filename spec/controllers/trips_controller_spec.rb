@@ -146,7 +146,7 @@ describe TripsController do
       end
 
       it 'does not delete the trip' do
-        expect(@test_user.trips.find(@to_delete.id)).to eq @to_delete
+        expect(@test_user.trips.find_by_id(@to_delete.id)).to eq @to_delete
       end
     end
 
@@ -180,6 +180,18 @@ describe TripsController do
 
       it 'doesnt create a trip' do
         expect{post :create, trip: @test_trip_params}.not_to change{Trip.count}
+      end
+    end
+  end
+
+  describe '#new' do
+    context 'when user is logged in' do
+      before(:each) do
+        session[:user_id] = @test_user.id
+      end
+      it 'assigns a new trip' do
+        get :new
+        expect(assigns(:trip)).to eq Trip.new
       end
     end
   end
