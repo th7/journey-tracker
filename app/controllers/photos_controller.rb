@@ -6,7 +6,7 @@ class PhotosController < ApplicationController
 	end
 
 	def new
-		@trip = Trip.find(session[:current_trip])
+		# @trip = Trip.find(session[:current_trip])
 	end
 
 	def create
