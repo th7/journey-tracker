@@ -1,0 +1,10 @@
+<div class="container">
+  <h1>Upload new photo to Imgur</h1>
+  <p><%= link_to "Back to Photo List", photos_path %></p>
+  <div>DROP!<button onclick="document.querySelector('input').click()">Or click</button></div>
+  <input style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files,this.files.length-1)">
+  <div id="results"><p>Here's the results:</p></div>
+</div>
+  <script>
+    imgur_uploader();
+  </script>
