@@ -5,7 +5,7 @@ env:
   - DB=postgresql
 script:
   - bundle exec rake spec
-  - rake jasmine:ci
+  - bundle exec rake jasmine:ci
 before_script:
   - bundle exec rake db:create RAILS_ENV=test
   - bundle exec rake db:migrate
