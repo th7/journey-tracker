@@ -19,13 +19,12 @@ var imgur_uploader = function(){
 
 	  if(numRemaining>=0){
 
+	    /* Is the file an image? */
+	    if (!files[numRemaining].type.match(/image.*/)) uploadImage(files,numRemaining-1);
+
 	    $("#results").append("<p>Uploading! "+(numRemaining+1)+" images remaining...</p>")
 	    console.log(numRemaining)
 	    console.log(files[numRemaining])
-
-
-	    /* Is the file an image? */
-	    if (!files[numRemaining] || !files[numRemaining].type.match(/image.*/)) uploadImage(files,numRemaining-1);
 
 	    // Alert the EXIF data (need to include the vendor files)
 	    var file = files[numRemaining]
