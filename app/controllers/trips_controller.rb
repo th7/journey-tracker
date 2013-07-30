@@ -9,31 +9,29 @@ class TripsController < ApplicationController
   def show
     @user = current_user
     @trip = Trip.find(params[:id])
-    @photos = @trip.photos.map{ |p| PhotoPresenter.new(p)}.sort {|a,b| a.date <=> b.date}
+    @photos = @trip.photos.sort {|a,b| a.date <=> b.date}
     session[:current_trip] = @trip.id
-    # render layout: false
   end
 
   def edit
-    @trip = Trip.find(params[:id])
-    session[:current_trip] = @trip.id
-    @user =current_user
-    # The above is to ensure the user name appears in the header bar
-    if @trip.user != current_user
+    @trip = current_user.trips.find_by_id(params[:id])
+    if @trip
+      session[:current_trip] = @trip.id
+    else
       flash[:error] = "You don't have permissions to edit that trip"
       redirect_to root_path
     end
-    @photos = @trip.photos
   end
 
   def destroy
-    current_user.trips.find(params[:id]).destroy
+    trip = current_user.trips.find_by_id(params[:id])
+    trip.destroy if trip
     redirect_to user_path(current_user)
   end
 
   def create
     @user = current_user
-    new_trip = @user.trips.create(params[:trip])
+    new_trip = current_user.trips.create(params[:trip])
     session[:current_trip] = new_trip.id
     redirect_to edit_trip_path(new_trip)
   end
