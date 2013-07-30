@@ -18,6 +18,17 @@
         /* Is the file an image? */
         if (!files[numRemaining] || !files[numRemaining].type.match(/image.*/)) return;
 
+        // Alert the EXIF data (need to include the vendor files)
+        var file = files[numRemaining]
+        fr = new FileReader;
+        fr.onloadend = function() {
+          var exif = EXIF.readFromBinaryFile(new BinaryFile(this.result));  
+          console.log(exif.DateTimeDigitized);
+          console.log(exif.GPSLatitude);
+          console.log(exif.GPSLongitude);
+        };
+        fr.readAsBinaryString(file);
+
         // /* It is! */
         // document.body.className = "uploading";
 
