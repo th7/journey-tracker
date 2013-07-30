@@ -40,17 +40,17 @@ class TripsController < ApplicationController
     @trip = Trip.new
   end
  
-def update
-  trip = current_user.trips.find_by_id(params[:trip][:id])
-  if trip
-    trip.update_attributes(params[:trip]) 
-    redirect_to edit_trip_path(trip)
-  else
-    redirect_to root_path
+  def update
+    trip = current_user.trips.find_by_id(params[:trip][:id])
+    if trip
+      trip.update_attributes(params[:trip]) 
+      redirect_to edit_trip_path(trip)
+    else
+      redirect_to root_path
+    end
   end
-end
 
-def connect
+  def connect
     if session[:user_id]
       redirect_to Instagram.authorize_url(:redirect_uri => 'http://localhost:3000/instagram/callback')
     else
@@ -78,7 +78,7 @@ def connect
     session[:current_trip] = nil
     redirect_to edit_trip_path(@trip)
   end
-  
+    
   def load_trip
     @trip = Trip.find(params[:id] || params[:trip_id] || session[:current_trip])
     session[:current_trip_id] = @trip.id
