@@ -86,7 +86,6 @@ var ViewPort = {
   },
 
   drawRoutes: function(coords) {
-    // return 1;
     for(var i = 1; i < coords.length; i++) {
       gmap.drawRoute([coords[i-1], coords[i]])
     }
