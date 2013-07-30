@@ -23,7 +23,7 @@ class PhotosController < ApplicationController
 			new_photo.set_gps_as_decimal(params["lon"],params["lonRef"])
 		end
 
-		redirect_to photo_path(new_photo)
+		render :nothing => true, :status => 200, :content_type => 'text/html'
 
 	end
 
