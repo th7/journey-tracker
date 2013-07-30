@@ -5,30 +5,32 @@
 }
 
 @mixin narrow-container {
-	width: 30%;
-	margin: auto;
-	a {
-		display: block;
-		font-size: 32px;
-		background: $nav;
-		color: $white;
-		border-radius: 12px;
-		padding: 18px;
-		text-align: center;
-		&:hover {
-			@include shadow;
-		}
-	}
-	li a {
-		display: block;
-		font-size: 32px;
-		background: $white;
-		color: $nav;
-		border-radius: 12px;
-		padding: 18px;
-		text-align: center;
-		&:hover {
-			@include shadow;
-		}
-	}
+  width: 30%;
+  margin: auto;
+}
+
+@mixin action-link {
+  display: block;
+  font-size: 32px;
+  background: $nav;
+  color: $white;
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+  &:hover {
+    @include shadow;
+  }
+}
+
+@mixin info-link {
+  display: block;
+  font-size: 32px;
+  background: $white;
+  color: $nav;
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+  &:hover {
+    @include shadow;
+  }
 }
