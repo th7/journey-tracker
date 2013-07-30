@@ -19,7 +19,8 @@ class PhotosController < ApplicationController
 		# DateTime.strptime("2013:05:04 09:56:14","%Y:%m:%d %T").to_i
 		
 		new_photo = @trip.photos.find_or_initialize_by_url(url: params["url"].gsub!(/(\.)([^\.]*)\z/,'h\1\2'))
-		new_photo.update_attributes(date: DateTime.strptime(params["date"],"%Y:%m:%d %T").to_i)
+		new_photo.save
+		new_photo.update_attributes(date: DateTime.strptime(params["date"],"%Y:%m:%d %T").to_i) if params["date"]
 
 		if params["lon"]
 			new_photo.set_gps_as_decimal(params["lat"],params["latRef"])
