@@ -101,7 +101,6 @@ describe TripsController do
     context 'when imposter user is logged in' do
       before(:each) do
         session.clear
-        @current_user = nil
         session[:user_id] = @imposter_user.id
         get :edit, id: @test_trip.id
       end
@@ -119,6 +118,46 @@ describe TripsController do
 
       it 'does not assign the trip' do
         expect(assigns(:trip)).to eq nil
+      end
+    end
+  end
+
+  describe '#destroy' do
+    before(:each) do
+      @to_delete = @test_user.trips.create(@test_trip_params);
+    end
+
+    context 'when user is logged in' do
+      before(:each) do
+        session[:user_id] = @test_user.id
+        post :destroy, id: @to_delete.id
+      end
+
+      it 'deletes the correct trip' do
+        expect(@test_user.trips.find_by_id(@to_delete.id)).to eq nil
+      end
+    end
+
+    context 'when imposter user is logged in' do
+      before(:each) do
+        session.clear
+        session[:user_id] = @imposter_user.id
+        post :destroy, id: @to_delete.id
+      end
+
+      it 'does not delete the trip' do
+        expect(@test_user.trips.find(@to_delete.id)).to eq @to_delete
+      end
+    end
+
+    context 'when user is not logged in' do
+      before(:each) do
+        session.clear
+        post :destroy, id: @to_delete.id
+      end
+
+      it 'does not delete the trip' do
+        expect(@test_user.trips.find_by_id(@to_delete.id)).to eq @to_delete
       end
     end
   end

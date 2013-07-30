@@ -15,7 +15,6 @@ class TripsController < ApplicationController
   end
 
   def edit
-    p current_user
     @trip = current_user.trips.find_by_id(params[:id])
     if @trip
       session[:current_trip] = @trip.id
@@ -26,7 +25,8 @@ class TripsController < ApplicationController
   end
 
   def destroy
-    current_user.trips.find(params[:id]).destroy
+    trip = current_user.trips.find_by_id(params[:id])
+    trip.destroy if trip
     redirect_to user_path(current_user)
   end
 
