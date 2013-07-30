@@ -1,0 +1,21 @@
+@import "variables";
+@import "mixins";
+
+/* ------ Trips edit page ------ */
+.container {
+  padding: 10px;
+  width: 800px;
+  margin: auto;
+  font-size: 18px;
+}
+
+/* ------- Index ------- */
+.trips-container {
+  @include narrow-container;
+  a {
+    @include action-link;
+  }
+  li a {
+    @include info-link;
+  }
+}
