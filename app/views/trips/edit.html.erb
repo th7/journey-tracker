@@ -25,6 +25,7 @@
     <%= f.text_field :date, {class: 'date'} %><br>
     <%= label_tag "address", 'Enter an Address:' %>
     <%= text_field_tag "address", nil, class: "address"%><br>
+    <%= link_to 'Pick on Map', edit_trip_path(@trip), class: "locator-button" %><br>
     <%= f.label :lat, 'Lat:' %>
     <%= f.text_field :lat, {class: 'lat'} %><br>
     <%= f.label :long, 'Long:' %>
