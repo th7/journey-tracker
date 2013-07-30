@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require jquery-ui-1.10.3.custom
 //= require d3.v3
+//= require binaryajax
+//= require exif
 //= require s3_direct_upload
 //= require editing
 //= require_tree .
