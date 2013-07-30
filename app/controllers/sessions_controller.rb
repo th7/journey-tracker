@@ -9,8 +9,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    session[:current_trip] = nil
+    session.clear
     redirect_to root_url
   end
 

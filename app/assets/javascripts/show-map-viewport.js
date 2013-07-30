@@ -21,6 +21,10 @@ Photo.prototype.width = function() {
   return this.$elem.width();
 };
 
+Photo.prototype.vertCenter = function() {
+  return this.top() + this.height() / 2;
+}
+
 Photo.prototype.resize = function(maxHeight, maxWidth) {
   var photoHW = this.height() / this.width();
 
@@ -34,18 +38,18 @@ Photo.prototype.resize = function(maxHeight, maxWidth) {
 };
 
 Photo.prototype.vertOffset = function(windowCenter) {
-  return (this.top() + this.height() / 2) - windowCenter;
+  return (this.vertCenter()) - windowCenter;
 };
 
 Photo.prototype.lineStartCoords = function(windowTop, windowLeft) {
-  return {y: this.top() + this.height() / 2 - windowTop,
+  return {y: this.vertCenter() - windowTop,
              x: this.left() + this.width() - windowLeft}
 };
 
 Photo.prototype.showLine = function(windowTop, windowHeight) {
   var hideBottom = windowTop + windowHeight + windowHeight * 0.5;
   var hideTop = windowTop - windowHeight * 0.5;
-  if (this.top() + this.height() / 2 > hideTop && this.top() + this.height() / 2 < hideBottom) {
+  if (this.vertCenter() > hideTop && this.vertCenter() < hideBottom) {
     return true;
   } else {
     return false;
@@ -86,10 +90,8 @@ var ViewPort = {
   },
 
   drawRoutes: function(coords) {
-    for(i in coords) {
-      if (i > 0) {
-        gmap.drawRoute([coords[i-1], coords[i]])
-      }
+    for(var i = 1; i < coords.length; i++) {
+      gmap.drawRoute([coords[i-1], coords[i]])
     }
   },
 
@@ -100,7 +102,7 @@ var ViewPort = {
 
     var maxHeight = this.$window.height() * 0.9;
     var maxWidth = this.$window.width() * 0.5;
-    var windowHW = maxHeight / maxWidth;
+    // var windowHW = maxHeight / maxWidth;
 
     for (i=0; i<ViewPort.photos.length; i++) {
       ViewPort.photos[i].resize(maxHeight, maxWidth);
