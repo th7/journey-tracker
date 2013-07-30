@@ -21,12 +21,14 @@
 <%= form_for(Photo.new, method: :put, html: {class: 'hidden', id: 'editForm'} ) do |f| %>
     <%= f.label :caption, 'Caption:' %>
     <%= f.text_field :caption, {class: 'caption'} %><br>
+    <%= f.label :date, 'Date:' %>
+    <%= f.text_field :date, {class: 'date'} %><br>
+    <%= label_tag "address", 'Enter an Address:' %>
+    <%= text_field_tag "address", nil, class: "address"%><br>
     <%= f.label :lat, 'Lat:' %>
     <%= f.text_field :lat, {class: 'lat'} %><br>
     <%= f.label :long, 'Long:' %>
     <%= f.text_field :long, {class: 'long'} %><br>
-    <%= f.label :date, 'Date:' %>
-    <%= f.text_field :date, {class: 'date'} %><br>
     <%= hidden_field(:photo, :id, :class => :photo_id) %>
     <%= hidden_field(:photo, :trip_id, :class => :trip_id) %>
     <%=f.submit 'Submit'  %>
