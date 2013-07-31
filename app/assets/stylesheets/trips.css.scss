@@ -14,12 +14,12 @@ form.new_trip {
   width: 72px;
 }
 .new_trip input {
-  width: 80%;
+  width: 98%;
   height: 2em;
   margin-bottom: 12px;
   line-height: 2em;
   font-size: 24px;
-  padding-left: 4px;
+  padding: 0 1%;
 }
 .new_trip input[type="submit"] {
   width: 100%;
@@ -81,7 +81,7 @@ form.edit_trip {
 }
 
 .bg-filter {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
   opacity: 0.8;
@@ -90,12 +90,11 @@ form.edit_trip {
 
 #locator-container {
   background: $white;
-  position: absolute;
-  top: 33%;
-  left: 33%;
+  position: fixed;
+  top: 10%;
+  left: 40%;
   width: 420px;
   height: 460px;
-  margin: auto;
   font-size: 18px;
   text-align: center;
   z-index: 999;
@@ -173,11 +172,64 @@ form.edit_trip {
 
 /* ------- Show ------- */
 #trip-title {
-  margin-left: 3%;
+  // display: inline-block;
+  // padding: 8px;
+  background: $white;
+  width: 50%;
+  margin: 0 3%;
 }
+
+#trip-title h1 {
+  margin-top: 36px;
+  margin-bottom: 0;
+  padding-left: 8px;
+}
+
+.trip-subtitle {
+  display: inline-block;
+  font-size: 18px;
+  background: $white;
+  width: 100%;
+  padding-bottom: 4px;
+}
+
+// .trip-subtitle a, p {
+//   padding: 0 8px;
+//   margin: 0;
+// }
+
+.edit-button, .delete-button {
+  padding: 0 8px;
+  margin: 0;
+}
+
+.trip-username {
+  padding: 2px 8px; 
+}
+
+// .edit-button {
+//   border-top-left-radius: 8px;
+//   &:hover {
+//     -webkit-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
+//     -moz-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
+//     box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
+//   }
+// }
+
+// .delete-button {
+//   border-top-right-radius: 8px;
+//   &:hover {
+//     -webkit-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
+//     -moz-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
+//     box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
+//   }
+// }
+
+
 .photo-caption {
   font-size: 18px;
   padding: 8px;
   background: $white;
   border-radius: 8px;
 }
+
