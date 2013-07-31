@@ -1,4 +1,4 @@
-<h1><%= @trip.name %></h1>
+<h1 id="trip-title"><%= @trip.name %></h1>
 
 
 <div class="map-wrapper">
@@ -8,11 +8,16 @@
 <div class="photos-wrapper">
   <% if @photos %>
     <% @photos.each do |photo|%>
-        <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long}%>
-        <br>
+      <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long}%>
+      <% if photo.caption != "" %>
+        <div class="photo-caption">
+          <%= photo.caption %>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 </div>
+
 
 <svg class="main-svg"></svg>
 
