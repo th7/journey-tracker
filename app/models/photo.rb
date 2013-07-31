@@ -21,7 +21,7 @@ class Photo < ActiveRecord::Base
     if self.date == 0
       "Date not found"
     else
-      Time.at(self.date)
+      Time.at(self.date).strftime('%B %e, %Y')
     end
   end
 
