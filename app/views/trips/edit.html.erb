@@ -34,11 +34,11 @@
   <% end %>
 
   <%= form_for([@trip, Photo.new], method: :put, html: {class: 'hidden', id: 'editForm'} ) do |f| %>
-  <%= f.label :caption, 'Caption:' %>
+  <%= f.label :caption, 'Caption:' %><br>
   <%= f.text_field :caption, {class: 'caption'} %><br>
-  <%= f.label :date, 'Date:' %>
+  <%= f.label :date, 'Date:' %><br>
   <%= f.text_field :date, {class: 'datepicker'} %><br>
-  <%= label_tag "photo_address", 'Enter an Address:' %>
+  <%= label_tag "photo_address", 'Enter an Address:' %><br>
   <%= text_field_tag "photo_address", nil, class: "address"%><br>
   <%= link_to 'Pick on Map', edit_trip_path(@trip), class: "locator-button" %><br>
   <%= f.hidden_field :lat, {class: 'lat'} %>

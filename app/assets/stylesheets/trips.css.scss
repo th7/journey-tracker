@@ -115,6 +115,8 @@ form.edit_trip {
   border: dashed black 2px;
   min-height: 90px;
   background-color: #ccc;
+  opacity:0.8; /* transparency */  
+  filter:alpha(opacity=80); /* IE transparency */  
   position: relative;
   margin: 10px 0 20px 0;
 }
@@ -123,16 +125,16 @@ form.edit_trip {
   font-size: 24px;
   color: black;
   margin-top: 30px;
-}  
+}
 .uploading_image{
   position: relative;
   display: inline-block; 
   width: 100px;
-  margin: 5px;
+  margin: 5px; 
 }
 .image_preview {
   width: 100px;
-  vertical-align: top;
+  vertical-align: top; 
 }
 .loader {
   position: absolute;

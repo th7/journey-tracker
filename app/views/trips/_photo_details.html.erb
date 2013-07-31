@@ -1,6 +1,8 @@
 <div data-photo-id="<%=photo.id%>" data-trip-id="<%=@trip.id%>">
-    <span class='photo_caption'><%=photo.caption%></span> | <span class='photo_lat'><%=photo.lat%></span> | <span class='photo_long'><%=photo.long%></span> | <span class='photo_date'><%=photo.display_date%></span>
-    <br>
-    <a href="#" class="delete_button">Delete</a>
-    <%= link_to "Edit", edit_trip_photo_path(photo.trip), {class: 'edit_button'} %>
+    <div class='photo_caption'><%=photo.caption%></div>
+    <div class='photo_lat'><%=photo.lat%></div>
+    <div class='photo_long'><%=photo.long%></div>
+    <div class='photo_date'><%=photo.display_date%></div>
+    <div><a href="#" class="delete_button">Delete</a> | 
+    <%= link_to "Edit", edit_trip_photo_path(photo.trip), {class: 'edit_button'} %></div>
 </div>
