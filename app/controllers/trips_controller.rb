@@ -2,12 +2,10 @@ class TripsController < ApplicationController
     skip_before_filter :check_authorization, only: [:show]
 
   def index
-    @user = current_user
     @trips = Trip.all
   end
   
   def show
-    @user = current_user
     @trip = Trip.find(params[:id])
     @photos = @trip.photos.sort {|a,b| a.date <=> b.date}
     session[:current_trip] = @trip.id
@@ -30,7 +28,6 @@ class TripsController < ApplicationController
   end
 
   def create
-    @user = current_user
     new_trip = current_user.trips.create(params[:trip])
     if new_trip.valid?
       session[:current_trip] = new_trip.id
@@ -45,7 +42,7 @@ class TripsController < ApplicationController
   end
  
   def update
-    trip = current_user.trips.find_by_id(params[:trip][:id])
+    trip = current_user.trips.find_by_id(params[:id])
     if trip
       trip.update_attributes(params[:trip]) 
       redirect_to edit_trip_path(trip)
