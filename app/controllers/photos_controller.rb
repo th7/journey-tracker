@@ -11,7 +11,6 @@ class PhotosController < ApplicationController
 
 	def create
     trip = current_user.trips.find_by_id(params[:trip_id])
-		url = params[:photo][:url].gsub(/(\.)([^\.]*)\z/,'h\1\2')
 		new_photo = trip.photos.find_or_initialize_by_url(url: url)
     new_photo.update_attributes(params[:photo])
 
