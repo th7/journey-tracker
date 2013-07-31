@@ -65,6 +65,8 @@ class TripFacebookSessionController < ApplicationController
 
 p "!!!!!!!!!!!!!!!!!!!!"+Time.now.to_s
       # session[:current_trip] = nil
+
+
       redirect_to edit_trip_path(trip)
     end
 

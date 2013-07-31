@@ -1,5 +1,25 @@
+var DeleteButton = {
+
+  deletePhoto: function (event) {
+    event.preventDefault();
+    $this = $(this)
+    $.ajax({
+      type: "DELETE",
+      url: '/trips/' + $this.parent().data('trip-id') + '/photos/' + $this.parent().data('photo-id'),      
+      beforeSend: function(){
+        $this.parent().parent().hide();
+        alert('/trips/' + $this.parent().data('trip-id') + '/photos/' + $this.parent().data('photo-id'));
+      }
+    });
+  },
+
+  initialize: function () {
+    $('.single_photo').on('click','.delete_button',DeleteButton.deletePhoto);
+  }  
+};
+
 var EditButton = {
-  onSuccess : function(success){
+  onSuccess: function(success){
     var photoId = $(success).data("photo-id");
     var selector  = "#form_"+photoId;
     $(selector).replaceWith(success);

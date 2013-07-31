@@ -4,7 +4,7 @@ class CreatePhotos < ActiveRecord::Migration
       t.integer :trip_id
       t.string :caption
       t.string :url
-      t.integer :date
+      t.integer :date, default: 0
       t.float :lat
       t.float :long
       t.timestamps

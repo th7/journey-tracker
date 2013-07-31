@@ -1,7 +1,17 @@
 <div class="container">
   <h1 id='edit_header'>Edit your trip</h1>
-  <a href="/instagram/connect"><button class="fetch-button"><i class="icon-instagram"></i> Fetch Photos From Instagram</button></a>
-  <a href="/facebook/connect"><button class="fetch-button"><i class="icon-facebook"></i> Fetch Photos From Facebook</button></a>
+  <h2>Import Your Photos!</h2>
+  <a href="/instagram/connect"><button class="fetch-button"><i class="icon-instagram"></i> Get Instagram Photos</button></a>
+  <a href="#"><button class="fetch-button" onclick="document.querySelector('#manual_upload').click()"><i class="icon-upload"></i> Upload Photos</button></a>
+  <a href="/facebook/connect"><button class="fetch-button"><i class="icon-facebook"></i> Get Facebook Photos</button></a>
+
+  <input id="manual_upload" style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files,this.files.length-1)">
+  <div id="counter"></div>
+  <div id="results">
+    <div id="results_label">Drag and Drop New Photos Here</div>
+    <div id="preview_area"></div>
+  </div>
+
   <%= form_for @trip do |f| %>
     <%= f.label :name %>  
     <%= f.text_field :name, :placeholder => @trip.name %>
@@ -27,17 +37,15 @@
   <%= f.label :caption, 'Caption:' %>
   <%= f.text_field :caption, {class: 'caption'} %><br>
   <%= f.label :date, 'Date:' %>
-  <%= f.text_field :date, {class: 'date'} %><br>
+  <%= f.text_field :date, {class: 'datepicker'} %><br>
   <%= label_tag "photo_address", 'Enter an Address:' %>
   <%= text_field_tag "photo_address", nil, class: "address"%><br>
   <%= link_to 'Pick on Map', edit_trip_path(@trip), class: "locator-button" %><br>
-  <%= f.label :lat, 'Lat:' %>
-  <%= f.text_field :lat, {class: 'lat'} %><br>
-  <%= f.label :long, 'Long:' %>
-  <%= f.text_field :long, {class: 'long'} %><br>
+  <%= f.hidden_field :lat, {class: 'lat'} %>
+  <%= f.hidden_field :long, {class: 'long'} %>
   <%= hidden_field(:photo, :id, :class => :photo_id) %>
   <%= hidden_field(:photo, :trip_id, :class => :trip_id) %>
-  <%=f.submit 'Submit'  %>
+  <%= f.submit 'Submit'  %>
   <% end %>
 
 </div>
@@ -45,6 +53,8 @@
 $(document).ready(function() {
   $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
   EditButton.initialize();
+  DeleteButton.initialize();
+  imgur_uploader();
 });
 </script>
 
