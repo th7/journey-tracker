@@ -2,11 +2,11 @@
 	<h1>Add a trip</h1>
 	<%= form_for @trip do |f| %>
 		<%= f.label :name %>
-		<%= f.text_field :name, :placeholder => 'e.g., "Road Trip 2013"' %>
-		<%= f.label :start  %>
-	  <%= f.text_field :start, :class => 'datepicker'  %>
-	  <%= f.label :end  %>
-	  <%= f.text_field :end, :class => 'datepicker'  %>
+		<%= f.text_field :name, :placeholder => 'e.g., "Road Trip 2013"', :required => true %>
+		<%= f.label :start %>
+	  <%= f.text_field :start, :class => 'datepicker', :required => true %>
+	  <%= f.label :end %>
+	  <%= f.text_field :end, :class => 'datepicker', :required => true %>
 		<%= f.submit %>
 	<% end %>
 
