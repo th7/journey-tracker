@@ -185,17 +185,15 @@ form.edit_trip {
   padding-bottom: 4px;
 }
 
-.trip-subtitle a, p {
+// .trip-subtitle a, p {
+//   padding: 0 8px;
+//   margin: 0;
+// }
+
+.edit-button, .delete-button {
   padding: 0 8px;
   margin: 0;
 }
-
-// .edit-button, .delete-button {
-//   color: $nav;
-//   padding: 4px 18px;
-//   font-size: 14px;
-//   background: $white;
-// }
 
 // .edit-button {
 //   border-top-left-radius: 8px;
