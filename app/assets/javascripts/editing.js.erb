@@ -40,12 +40,12 @@ var EditButton = {
   },
   editButton: function (event) {
     event.preventDefault();
-    var photoCaption = ($(this).siblings('.photo_caption').text());
-    var photoLat = ($(this).siblings('.photo_lat').text());
-    var photoLong = ($(this).siblings('.photo_long').text());
-    var photoDate = ($(this).siblings('.photo_date').text());
-    var photoId = $(this).parent().data('photo-id');
-    var tripId = $(this).parent().data('trip-id');
+    var photoCaption = ($(this).parent().siblings('.photo_caption').text());
+    var photoDate = ($(this).parent().siblings('.photo_date').text());
+    var photoLat = $(this).parent().parent().data('lat');
+    var photoLong = $(this).parent().parent().data('lng');
+    var photoId = $(this).parent().parent().data('photo-id');
+    var tripId = $(this).parent().parent().data('trip-id');
     var formId = "form_"+photoId;
     var formClone = $('#editForm').clone().removeClass('hidden')
     .attr("id", formId).attr("method", 'PUT').attr("action", "photos/"+photoId);
@@ -60,6 +60,7 @@ var EditButton = {
       // $(this).parent().replaceWith("<form class='editForm' id='form_"+photoId+"'><label for='caption'>Caption: </label><input type='text' name='caption' value='" + photoCaption + "'><br><label for='lat'>Latitude: </label><input type='text' name='lat' value='" + photoLat + "'><br><label for='long'>Long: </label><input type='text' name='long' value='" + photoLong + "'><br><label for='date'>Date: </label><input type='text' name='date' value='" + photoDate + "'><input type='hidden' name='photoId' value='" + photoId + "'><input type='hidden' name='tripId' value='" + tripId + "'><input type='submit' value='Submit'></form>");
       // $(selector).on('submit', EditButton.submitForm);
     EditButton.locator();
+    $(selector).find('.form_datepicker').datepicker({dateFormat:'yy-mm-dd'});
     $(selector).on('submit', EditButton.submitForm);
   },
   locator: function() {

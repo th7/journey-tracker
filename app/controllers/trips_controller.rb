@@ -44,7 +44,12 @@ class TripsController < ApplicationController
   def update
     trip = current_user.trips.find_by_id(params[:id])
     if trip
-      trip.update_attributes(params[:trip]) 
+      trip.update_attributes(params[:trip])
+      trip.photos.each do |photo|
+        if photo.date > trip.end.to_i || photo.date < trip.start.to_i
+           photo.destroy
+        end
+      end
       redirect_to edit_trip_path(trip)
     else
       redirect_to root_path
