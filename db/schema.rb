@@ -29,11 +29,11 @@ ActiveRecord::Schema.define(:version => 20130728191913) do
     t.integer  "trip_id"
     t.string   "caption"
     t.string   "url"
-    t.integer  "date"
+    t.integer  "date",       :default => 0
     t.float    "lat"
     t.float    "long"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "trips", :force => true do |t|

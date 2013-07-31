@@ -16,6 +16,5 @@
 //= require d3.v3
 //= require binaryajax
 //= require exif
-//= require s3_direct_upload
 //= require editing
 //= require_tree .
