@@ -11,7 +11,7 @@
 		<li>
 			<% if @user == @user_on_page %>
 			<div class="update-buttons">
-				<%= link_to "Edit", edit_trip_path(trip), class: "edit-button"  %><%= link_to "Delete", trip, :confirm => "Are you sure you want to delete #{trip.name}>", :method => :delete, class: "delete-button" %>
+				<%= link_to "Edit", edit_trip_path(trip), class: "edit-button"  %><%= link_to "Delete", trip, :confirm => "Are you sure you want to delete #{trip.name}?", :method => :delete, class: "delete-button" %>
 			</div>
 			<% end %>
 			<%= link_to trip.name, trip_path(trip), class: "trip-name" %> 

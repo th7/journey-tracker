@@ -7,6 +7,9 @@ gem 'rails', '3.2.13'
 
 gem 'pg'
 
+gem 'sidekiq'
+
+gem 'redis'
 
 group :development, :test do
   gem 'quiet_assets'

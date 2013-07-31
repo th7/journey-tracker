@@ -1,5 +1,25 @@
+var DeleteButton = {
+
+  deletePhoto: function (event) {
+    event.preventDefault();
+    $this = $(this)
+    $.ajax({
+      type: "DELETE",
+      url: '/trips/' + $this.closest('.photo-info').data('trip-id') + '/photos/' + $this.closest('.photo-info').data('photo-id'),      
+      beforeSend: function(){
+        $this.closest('.single_photo').hide();
+        alert('/trips/' + $this.parent().parent().data('trip-id') + '/photos/' + $this.parent().parent().data('photo-id'));
+      }
+    });
+  },
+
+  initialize: function () {
+    $('.single_photo').on('click','.delete_button',DeleteButton.deletePhoto);
+  }  
+};
+
 var EditButton = {
-  onSuccess : function(success){
+  onSuccess: function(success){
     var photoId = $(success).data("photo-id");
     var selector  = "#form_"+photoId;
     $(selector).replaceWith(success);
@@ -35,7 +55,7 @@ var EditButton = {
     formClone.find("#photo_date").val(photoDate);
     formClone.find("#photo_id").val(photoId);
     formClone.find("#photo_trip_id").val(tripId);
-    var replaceShit =  $(this).parent().replaceWith(formClone);
+    var replaceShit =  $(this).closest('.photo-info').replaceWith(formClone);
     selector = '#form_'+photoId;
       // $(this).parent().replaceWith("<form class='editForm' id='form_"+photoId+"'><label for='caption'>Caption: </label><input type='text' name='caption' value='" + photoCaption + "'><br><label for='lat'>Latitude: </label><input type='text' name='lat' value='" + photoLat + "'><br><label for='long'>Long: </label><input type='text' name='long' value='" + photoLong + "'><br><label for='date'>Date: </label><input type='text' name='date' value='" + photoDate + "'><input type='hidden' name='photoId' value='" + photoId + "'><input type='hidden' name='tripId' value='" + tripId + "'><input type='submit' value='Submit'></form>");
       // $(selector).on('submit', EditButton.submitForm);
