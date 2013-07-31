@@ -3,31 +3,33 @@
   <a href="/instagram/connect"><button class="fetch-button"><i class="icon-instagram"></i> Fetch Photos From Instagram</button></a>
   <a href="/facebook/connect"><button class="fetch-button"><i class="icon-facebook"></i> Fetch Photos From Facebook</button></a>
   <%= form_for @trip do |f| %>
-  <%= f.label :name %>  
-  <%= f.text_field :name, :placeholder => @trip.name %>
-  <%= f.label :start  %>
-  <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
-  <%= f.label :end  %>
-  <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
+    <%= f.label :name %>  
+    <%= f.text_field :name, :placeholder => @trip.name %>
+    <%= f.label :start  %>
+    <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
+    <%= f.label :end  %>
+    <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
 
-  <h2><%= Available Photos if @trip.photos.any? %></h2>
-  <% @trip.photos.each do |photo| %>
-  <div class='single_photo' >
-    <%= image_tag photo.url  %><br>
-    <%= render partial: "photo_details", :locals => {:photo => photo} %>
-    
-  </div>
+    <%= f.submit %>
   <% end %>
-  <%= f.submit %>
+  <% if @trip.photos.any? %>
+    <h2>Available Photos</h2>
+    <% @trip.photos.each do |photo| %>
+      <div class='single_photo' >
+        <%= image_tag photo.url  %><br>
+        <%= render partial: "photo_details", :locals => {:photo => photo} %>
+        
+      </div>
+    <% end %>
   <% end %>
 
-  <%= form_for(Photo.new, method: :put, html: {class: 'hidden', id: 'editForm'} ) do |f| %>
+  <%= form_for([@trip, Photo.new], method: :put, html: {class: 'hidden', id: 'editForm'} ) do |f| %>
   <%= f.label :caption, 'Caption:' %>
   <%= f.text_field :caption, {class: 'caption'} %><br>
   <%= f.label :date, 'Date:' %>
   <%= f.text_field :date, {class: 'date'} %><br>
-  <%= label_tag "address", 'Enter an Address:' %>
-  <%= text_field_tag "address", nil, class: "address"%><br>
+  <%= label_tag "photo_address", 'Enter an Address:' %>
+  <%= text_field_tag "photo_address", nil, class: "address"%><br>
   <%= link_to 'Pick on Map', edit_trip_path(@trip), class: "locator-button" %><br>
   <%= f.label :lat, 'Lat:' %>
   <%= f.text_field :lat, {class: 'lat'} %><br>
@@ -37,9 +39,6 @@
   <%= hidden_field(:photo, :trip_id, :class => :trip_id) %>
   <%=f.submit 'Submit'  %>
   <% end %>
-  
-  <!-- <form id='editForm' class='hidden'><label for='caption'>Caption: </label><input type='text' name='caption' value=''><br><label for='lat'>Latitude: </label><input type='text' name='lat' value=''><br><label for='long'>Long: </label><input type='text' name='long' value=''><br><label for='date'>Date: </label><input type='text' name='date' value=''><input type='hidden' name='photoId' value=''><input type='hidden' name='tripId' value=''><input type='submit' value='Submit'></form> -->
-
 
 </div>
 <script>

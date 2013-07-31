@@ -84,7 +84,7 @@ describe('Photo', function() {
 });
 
 describe('ViewPort', function() {
-  var svg, $window, fakeCoords, gmap;
+  var svg, $window, fakeCoords;
 
 
 
@@ -125,8 +125,6 @@ describe('ViewPort', function() {
         return 250;
       }
     };
-    
-    // gmap = {};
   });
 
   describe('onMapReady', function() {
@@ -146,15 +144,6 @@ describe('ViewPort', function() {
       expect(ViewPort.readPhotosCoords()).toEqual(fakeCoords);
     });
   });
-
-  //HELP ME NATE
-  // describe('#drawRoutes', function() {
-  //   it('calls gmap.drawRoute with each consequtive pair of coords', function() {
-  //     jasmine.createSpyObj('gmap', ['drawRoute']);
-  //     ViewPort.drawRoutes(fakeCoords);
-  //     expect(gmap.drawRoute.calls.length).toEqual(fakeCoords.length-1);
-  //   });
-  // });
 
   describe('#resize', function() {
     it('calls resize on each photo', function() {

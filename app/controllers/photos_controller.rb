@@ -1,33 +1,21 @@
 class PhotosController < ApplicationController
 	def index
-		@user = current_user
-		@trip = Trip.find(session[:current_trip])
-		@photos = @trip.photos
+    @trip = current_user.trips.find_by_id(params[:trip_id])
+    redirect_to root_path unless @trip
 	end
 
 	def new
-		# @trip = Trip.find(session[:current_trip])
+		@trip = current_user.trips.find_by_id(params[:trip_id])
+    redirect_to root_path unless @trip
 	end
 
 	def create
-		@trip = Trip.find(session[:current_trip])
-		p "======= PHOTO PARAMS ==============="
-		p params
-		# {"url"=>"http://i.imgur.com/5drf5AG.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>"N", "lon"=>"E", "action"=>"create", "controller"=>"photos"}
-		# {"url"=>"http://i.imgur.com/cabjMk2.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>["21", "1.77", "0"], "lon"=>["105", "50.91", "0"], "action"=>"create", "controller"=>"photos"}
-		# {"url"=>"http://i.imgur.com/fHHpwBj.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>["21", "1.77", "0"], "lon"=>["105", "50.91", "0"], "latRef"=>"N", "lonRef"=>"E", "action"=>"create", "controller"=>"photos"}
-		# DateTime.strptime("2013:05:04 09:56:14","%Y:%m:%d %T").to_i
-		
-		new_photo = @trip.photos.find_or_initialize_by_url(url: params["url"].gsub!(/(\.)([^\.]*)\z/,'h\1\2'))
-		new_photo.update_attributes(date: DateTime.strptime(params["date"],"%Y:%m:%d %T").to_i)
+    trip = current_user.trips.find_by_id(params[:trip_id])
+		url = params[:photo][:url].gsub(/(\.)([^\.]*)\z/,'h\1\2')
+		new_photo = trip.photos.find_or_initialize_by_url(url: url)
+    new_photo.update_attributes(params[:photo])
 
-		if params["lon"]
-			new_photo.set_gps_as_decimal(params["lat"],params["latRef"])
-			new_photo.set_gps_as_decimal(params["lon"],params["lonRef"])
-		end
-
-		redirect_to photo_path(new_photo)
-
+		render :nothing => true, :status => 200, :content_type => 'text/html'
 	end
 
 	def show
@@ -35,61 +23,39 @@ class PhotosController < ApplicationController
 	end
 
 	def update
-		p params
-		unless params['photo_address'] == "" 
-			formatted_address = params['photo_address'].gsub(/\s/, "+")
-			url = "http://maps.googleapis.com/maps/api/geocode/json?address="+formatted_address+"&sensor=true"
+    p params
+    unless params[:photo_address].nil? || params[:photo_address] == ""
+      formatted_address = params[:photo_address].gsub(/\s/, "+")
+      url = "http://maps.googleapis.com/maps/api/geocode/json?address="+formatted_address+"&sensor=true"
       file = open(url)
       read_data = file.read
       data = JSON.parse(read_data)
-      p params['photo_address']
-      p url
-      p "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-      p data
-      latitude = data['results'][0]['geometry']['location']['lat']
-		  p ">>>>>>>>>>>>>>>>>"
-      p latitude
-      longitude = data['results'][0]['geometry']['location']['lng']
-		end
-		p params['photo_date'].to_datetime
-		@temp_photo = Photo.find(params['photo_id'])
-		@temp_photo.update_attributes(caption: params["photo_caption"],date: params["photo_date"].to_datetime.to_i)
-    
-
-    if latitude
-			@temp_photo.update_attributes(lat: latitude, long: longitude)
-    else
-    	@temp_photo.update_attributes(lat: params["photo_lat"],long: params["photo_long"])
-		end
-
-    if request.xhr?
-    	@trip = @temp_photo.trip
-    	render partial: "trips/photo_details", :locals => {:photo => @temp_photo}
+      params[:photo][:lat] = data['results'][0]['geometry']['location']['lat']
+      params[:photo][:long] = data['results'][0]['geometry']['location']['lng']
     end
 
-    # respond_to do |format|
+    @trip = current_user.trips.find_by_id(params[:photo][:trip_id])
+    if @trip
+      photo = @trip.photos.find_by_id(params[:photo][:id])
+      photo.update_attributes(params[:photo]) if photo
+    end
     
-
-    # 	# format.json do
-    #  #    @errors = []
-    #  #    if @temp_photo.save!
-    #  #      render :json => {:caption => @temp_photo.caption,
-    #  #                       :lat => @temp_photo.lat,
-    #  #                       :long => @temp_photo.long,
-    #  #                       :date => Time.at(@temp_photo.date),
-    #  #                       :photo_id => @temp_photo.id,
-    #  #                       :trip_id => @temp_photo.trip.id}
-    #  #    else
-    #  #    	render :json => {:error => "Unable to save post"}
-    #  #    end
-    #  #  end
-    # end
+    if request.xhr?
+    	render partial: "trips/photo_details", :locals => {:photo => photo}
+    else
+      render :nothing => true, :status => 200, :content_type => 'text/html'
+    end
 	end
   
   def destroy
-    Photo.find(params['id']).destroy
-    @trip = Trip.find(session[:current_trip])    
-    redirect_to edit_trip_path(@trip.id)
+    photo = current_user.photos.find_by_id(params[:id])
+    if photo
+      trip_id = photo.trip_id
+      photo.destroy 
+      redirect_to edit_trip_path(trip_id)
+    else
+      redirect_to root_path
+    end
   end
 
 end
