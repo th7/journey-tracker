@@ -37,7 +37,7 @@
   <%= f.label :caption, 'Caption:' %><br>
   <%= f.text_field :caption, {class: 'caption'} %><br>
   <%= f.label :date, 'Date:' %><br>
-  <%= f.text_field :date, {class: 'datepicker'} %><br>
+  <%= f.text_field :date, {class: 'form_datepicker'} %><br>
   <%= label_tag "photo_address", 'Enter an Address:' %><br>
   <%= text_field_tag "photo_address", nil, class: "address"%><br>
   <%= link_to 'Pick on Map', edit_trip_path(@trip), class: "locator-button" %><br>
@@ -51,7 +51,7 @@
 </div>
 <script>
 $(document).ready(function() {
-  $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
+  $('.datepicker').datepicker({dateFormat:'yy-mm-dd'});
   EditButton.initialize();
   DeleteButton.initialize();
   imgur_uploader();

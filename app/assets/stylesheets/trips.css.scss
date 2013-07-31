@@ -150,6 +150,15 @@ form.edit_trip {
   width: 50px;
   margin: 10px 0 0 20px;
 }
+.delete_button {
+  color: red;
+}
+.photo_date {
+  font-size: 14px;
+  font-style: italic;
+  color: #888;
+  margin: 5px 0 5px 0;
+}
 
 /* ------- Index ------- */
 .trips-container {

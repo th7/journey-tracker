@@ -4,9 +4,11 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		@user =User.find(session[:user_id])
+		@user = current_user
     @user_on_page = User.find(params[:id])
-    @trips =@user_on_page.trips
+		if @user == @user_on_page && @trips = @user_on_page.trips.all
+			redirect_to new_trip_path
+		end
 	end
 
 end
