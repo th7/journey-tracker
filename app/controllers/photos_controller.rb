@@ -10,23 +10,18 @@ class PhotosController < ApplicationController
 	end
 
 	def create
-		@trip = Trip.find(session[:current_trip])
-		p "======= PHOTO PARAMS ==============="
-		p params
+    trip_id = params[:trip_id] || session[:current_trip]
+    trip = current_user.trips.find_by_id(trip_id)
+    # @trip = Trip.find(session[:current_trip])
 		# {"url"=>"http://i.imgur.com/5drf5AG.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>"N", "lon"=>"E", "action"=>"create", "controller"=>"photos"}
 		# {"url"=>"http://i.imgur.com/cabjMk2.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>["21", "1.77", "0"], "lon"=>["105", "50.91", "0"], "action"=>"create", "controller"=>"photos"}
 		# {"url"=>"http://i.imgur.com/fHHpwBj.jpg", "date"=>"2013:05:04 09:56:14", "lat"=>["21", "1.77", "0"], "lon"=>["105", "50.91", "0"], "latRef"=>"N", "lonRef"=>"E", "action"=>"create", "controller"=>"photos"}
 		# DateTime.strptime("2013:05:04 09:56:14","%Y:%m:%d %T").to_i
-		
-		new_photo = @trip.photos.find_or_initialize_by_url(url: params["url"].gsub!(/(\.)([^\.]*)\z/,'h\1\2'))
-		new_photo.update_attributes(date: DateTime.strptime(params["date"],"%Y:%m:%d %T").to_i)
+		url = params[:photo][:url].gsub!(/(\.)([^\.]*)\z/,'h\1\2')
+		new_photo = trip.photos.find_or_initialize_by_url(url: url)
+    new_photo.update_attributes(params[:photo])
 
-		if params["lon"]
-			new_photo.set_gps_as_decimal(params["lat"],params["latRef"])
-			new_photo.set_gps_as_decimal(params["lon"],params["lonRef"])
-		end
-
-		redirect_to photo_path(new_photo)
+		redirect_to '/' #junk placeholder pending merge -- delete me
 
 	end
 
@@ -35,13 +30,17 @@ class PhotosController < ApplicationController
 	end
 
 	def update
-		p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-		p params['photo_date'].to_datetime
-		@temp_photo = Photo.find(params['photo_id'])
-		@temp_photo.update_attributes(caption: params["photo_caption"],
-																										lat: params["photo_lat"],
-																										long: params["photo_long"],
-																										date: params["photo_date"].to_datetime.to_i)
+    trip = current_user.trips.find_by_id(params[:trip_id])
+    photo = trip.photos.find_by_id(params[:id]) if trip
+    photo.update_attributes(params[:photo])
+
+		# p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+		# p params['photo_date'].to_datetime
+		# @temp_photo = Photo.find(params['photo_id'])
+		# @temp_photo.update_attributes(caption: params["photo_caption"],
+		# 																								lat: params["photo_lat"],
+		# 																								long: params["photo_long"],
+		# 																								date: params["photo_date"].to_datetime.to_i)
     
     if request.xhr?
     	@trip = @temp_photo.trip
@@ -68,6 +67,7 @@ class PhotosController < ApplicationController
 	end
   
   def destroy
+    trip = current_user.trips.find_by_id(params[:trip_id])
     Photo.find(params['id']).destroy
     @trip = Trip.find(session[:current_trip])    
     redirect_to edit_trip_path(@trip.id)

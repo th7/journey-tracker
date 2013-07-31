@@ -17,7 +17,9 @@ describe TripsController do
     @test_photos = []
     @test_photos << Photo.new(url: '1', date: Time.now)
     @test_photos << Photo.new(url: '2', date: Time.now - 100)
-    @test_photos.each {|p| p.stub(:get_photo_colors)}
+    @test_photos.each do |p| 
+      p.stub(:get_photo_colors)
+    end
     @test_trip.photos << @test_photos
   end
 
