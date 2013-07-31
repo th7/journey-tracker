@@ -2,14 +2,14 @@
   <h1 id="welcome">Welcome to Viagg.io</h1>
   <% if current_user %>
     <div class="menu">
-      <h2><%= link_to "Create a Trip!", new_trip_path %></h2>
+      <h2><%= link_to "Add a Trip!", new_trip_path %></h2>
       <p><%= link_to "Or check out all trips", trips_path  %></p>
       <p><%= link_to "Or check out all users", users_path  %></p>
     </div>
   <% else %>
     <h3 id="explanation">
       <p><em>Viaggio</em>'s Italian for "travel."</p>
-      <p>Viagg.io lets you share your travels.</p>
+      <p><em>Viagg.io</em> lets you share your travel photos and stories.</p>
     </h3>
     <%= link_to raw('<i class="icon-facebook" style="padding-right:20px"></i> Sign in with Facebook'), "/auth/facebook", id: "sign_in" %>
   <% end %>

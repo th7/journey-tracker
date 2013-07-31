@@ -1,7 +1,6 @@
 <div class="user-container">
 	<% if @user == @user_on_page %>
-	<h1>My Profile</h1>
-	<h2>Check out my Trips:</h2>
+	<h1>My Trips</h1>
 	<% else %>
 	<h1>Welcome to the profile of <%= @user_on_page.name %></h1>
 	<h2>Check out <%= @user_on_page.name %>'s Trips:</h2>
@@ -9,16 +8,11 @@
 	<ul>
 		<% @trips.each do |trip| %>
 		<li>
-			<% if @user == @user_on_page %>
-			<div class="update-buttons">
-				<%= link_to "Edit", edit_trip_path(trip), class: "edit-button"  %><%= link_to "Delete", trip, :confirm => "Are you sure you want to delete #{trip.name}?", :method => :delete, class: "delete-button" %>
-			</div>
-			<% end %>
 			<%= link_to trip.name, trip_path(trip), class: "trip-name" %> 
 		</li>
 		<% end %>
 	</ul>
 	<% if @user == @user_on_page %>
-	<%= link_to 'Create a Trip', new_trip_path, class: "create" %>
+	<%= link_to 'Add a Trip', new_trip_path, class: "create" %>
 	<% end %>
 </div>
