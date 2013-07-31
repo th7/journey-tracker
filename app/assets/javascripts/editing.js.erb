@@ -8,7 +8,6 @@ var DeleteButton = {
       url: '/trips/' + $this.closest('.photo-info').data('trip-id') + '/photos/' + $this.closest('.photo-info').data('photo-id'),      
       beforeSend: function(){
         $this.closest('.single_photo').hide();
-        alert('/trips/' + $this.parent().parent().data('trip-id') + '/photos/' + $this.parent().parent().data('photo-id'));
       }
     });
   },

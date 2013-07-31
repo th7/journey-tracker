@@ -1,8 +1,9 @@
 <div class="photo-info" data-photo-id="<%=photo.id%>" data-trip-id="<%=@trip.id%>" data-lat="<%=photo.lat%>" data-lng="<%=photo.long%>">
     <div class='photo_caption'><%=photo.caption%></div>
-    <div class='photo_lat'><%=photo.lat%></div>
-    <div class='photo_long'><%=photo.long%></div>
-    <div class='photo_date'><%=photo.display_date%></div>
-    <div><a href="#" class="delete_button">Delete</a> | 
-    <%= link_to "Edit", edit_trip_photo_path(photo.trip), {class: 'edit_button'} %></div>
+    <div><%=photo.display_date%></div>
+    <div>
+	    <% if photo.lat %><i class='icon-map-marker'></i><% end %>
+	    <%= link_to "Edit", edit_trip_photo_path(photo.trip), {class: 'edit_button'} %>
+	    <a href="#" class="delete_button"> <i class="icon-remove-sign"></i></a>
+	  </div>
 </div>
