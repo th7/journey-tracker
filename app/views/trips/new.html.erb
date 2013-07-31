@@ -1,8 +1,8 @@
-<div class="container">
-	<h1>Create new trip</h1>
+<div class="main-container">
+	<h1>Create a new trip</h1>
 	<%= form_for @trip do |f| %>
 		<%= f.label :name %>
-		<%= f.text_field :name %>
+		<%= f.text_field :name, :placeholder => 'e.g., "Road Trip 2013"' %>
 		<%= f.label :start  %>
 	  <%= f.text_field :start, :class => 'datepicker'  %>
 	  <%= f.label :end  %>
@@ -15,6 +15,5 @@
 <script>
   $(function() {
     $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
-
   });
 </script>
