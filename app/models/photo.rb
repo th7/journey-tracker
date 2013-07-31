@@ -5,7 +5,7 @@ class Photo < ActiveRecord::Base
   belongs_to :trip
   has_one :palette
 
-  after_create :get_photo_colors
+  # after_create :get_photo_colors
 
   validates_presence_of :url
   # validates_uniqueness_of :url
