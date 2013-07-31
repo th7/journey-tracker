@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130725221642) do
+ActiveRecord::Schema.define(:version => 20130728191913) do
+
+  create_table "palettes", :force => true do |t|
+    t.integer  "photo_id"
+    t.string   "color1"
+    t.string   "color2"
+    t.string   "color3"
+    t.string   "color4"
+    t.string   "color5"
+    t.string   "color6"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "photos", :force => true do |t|
     t.integer  "trip_id"

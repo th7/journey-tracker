@@ -1,0 +1,122 @@
+@import "variables";
+@import "mixins";
+
+/* ------ Trips new page ------- */
+form.new_trip {
+  width: 100%;
+  margin: auto;
+  font-size: 24px;
+}
+.new_trip label, input {
+  display: inline-block;
+}
+.new_trip label {
+  width: 72px;
+}
+.new_trip input {
+  width: 80%;
+  height: 2em;
+  margin-bottom: 12px;
+  line-height: 2em;
+  font-size: 24px;
+  padding-left: 4px;
+}
+.new_trip input[type="submit"] {
+  width: 100%;
+  @include action-link;
+  line-height: 1em;
+  border: none;
+  margin: 36px 0;
+}
+
+/* ------ Trips edit page ------ */
+.container {
+  padding: 10px;
+  width: 800px;
+  margin: auto;
+  font-size: 18px;
+}
+
+form.edit_trip {
+  width: 100%;
+  margin: auto;
+}
+.edit_trip label, input {
+  display: inline-block;
+}
+.edit_trip input {
+  width: 25%;
+  margin-right: 8px;
+  font-size: 18px;
+  padding-left: 4px;
+}
+.edit_trip input[type="submit"] {
+  width: 18%;
+  border: none;
+  background: $nav;
+  color: $white;
+  border-radius: 4px;
+  padding: 4px;
+  text-align: center;
+  &:hover {
+    @include shadow;
+    cursor: pointer;
+  }
+}
+
+.fetch-button {
+  font-size: 24px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  width: 49%;
+  border: none;
+  background: $nav;
+  color: $white;
+  border-radius: 4px;
+  text-align: center;
+  &:hover {
+    @include shadow;
+    cursor: pointer;
+  }
+}
+
+.bg-filter {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0.8;
+  background: black;
+}
+
+#locator-container {
+  background: $white;
+  position: absolute;
+  top: 33%;
+  left: 33%;
+  width: 420px;
+  height: 460px;
+  margin: auto;
+  font-size: 18px;
+  text-align: center;
+}
+
+#drag-directions {
+  display: inline-block;
+  padding: 4px 2px;
+}
+
+#locator-canvas {
+  height: 400px;
+  width: 420px;
+}
+
+/* ------- Index ------- */
+.trips-container {
+  @include narrow-container;
+  a {
+    @include action-link;
+  }
+  li a {
+    @include info-link;
+  }
+}

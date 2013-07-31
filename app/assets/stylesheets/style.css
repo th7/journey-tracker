@@ -1,0 +1,19 @@
+.container {
+	padding: 10px;
+	width: 800px;
+	margin: auto;
+}
+
+.single_photo img {
+  width: 100%;
+}
+.single_photo {
+  width: 30%;
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+}
+
+.hidden {
+  display: none;
+}

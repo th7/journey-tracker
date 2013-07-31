@@ -1,0 +1,6 @@
+<div data-photo-id="<%=photo.id%>" data-trip-id="<%=@trip.id%>">
+    <span class='photo_caption'><%=photo.caption%></span> | <span class='photo_lat'><%=photo.lat%></span> | <span class='photo_long'><%=photo.long%></span> | <span class='photo_date'><%=Time.at(photo.date)%></span>
+    <br>
+    <%= link_to "Delete", trip_photo_path(photo.trip, photo), method: "DELETE"  %>
+    <%= link_to "Edit", edit_trip_photo_path(photo.trip), {class: 'edit_button'} %>
+</div>

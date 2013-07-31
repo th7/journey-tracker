@@ -3,21 +3,23 @@
 <head>
   <title>JourneyTracker</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<div id="user_nav">
-  <% if current_user %>
-    Signed in as <strong><%= current_user.name %></strong>!
-    <%= link_to "Sign out", signout_path, id: "sign_out" %>
-  <% else %>
-    <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
+<nav>
+  <div id='title_link'><%= link_to 'Viagg.io', root_url %></div>
+  <% if @user %>
+    <div id='username_link'>Signed in as <%=link_to @user.name, user_path(@user) %> |
+    <%= link_to "Sign out", signout_path, id: "sign_out" %></div>
   <% end %>
-</div>
+</nav>
 
-<%= yield %>
+
+  <%= yield %>
+
 
 </body>
 </html>

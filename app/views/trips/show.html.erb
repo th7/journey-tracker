@@ -1,0 +1,24 @@
+<h1><%= @trip.name %></h1>
+
+
+<div class="map-wrapper">
+  <div id="map-canvas"></div>
+</div>
+
+<div class="photos-wrapper">
+  <% if @photos %>
+    <% @photos.each do |photo|%>
+        <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long}%>
+        <br>
+    <% end %>
+  <% end %>
+</div>
+
+<svg class="main-svg"></svg>
+
+<script>
+	$(document).ready(function() {
+	  gmap.initialize();
+    ViewPort.initialize();
+	});
+</script>
