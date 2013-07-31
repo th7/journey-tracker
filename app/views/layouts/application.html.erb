@@ -11,8 +11,8 @@
 
 <nav>
   <div id='title_link'><%= link_to 'Viagg.io', root_url %></div>
-  <% if @user %>
-    <div id='username_link'>Signed in as <%=link_to @user.name, user_path(@user) %> |
+  <% if current_user %>
+    <div id='username_link'>Signed in as <%=link_to current_user.name, user_path(current_user) %> |
     <%= link_to "Sign out", signout_path, id: "sign_out" %></div>
   <% end %>
 </nav>
