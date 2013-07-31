@@ -9,6 +9,36 @@
   font-size: 18px;
 }
 
+.bg-filter {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0.8;
+  background: black;
+}
+
+#locator-container {
+  background: $white;
+  position: absolute;
+  top: 33%;
+  left: 33%;
+  width: 420px;
+  height: 460px;
+  margin: auto;
+  font-size: 18px;
+  text-align: center;
+}
+
+#drag-directions {
+  display: inline-block;
+  padding: 4px 2px;
+}
+
+#locator-canvas {
+  height: 400px;
+  width: 420px;
+}
+
 /* ------- Index ------- */
 .trips-container {
   @include narrow-container;
