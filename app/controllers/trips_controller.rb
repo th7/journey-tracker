@@ -32,8 +32,12 @@ class TripsController < ApplicationController
   def create
     @user = current_user
     new_trip = current_user.trips.create(params[:trip])
-    session[:current_trip] = new_trip.id
-    redirect_to edit_trip_path(new_trip)
+    if new_trip.valid?
+      session[:current_trip] = new_trip.id
+      redirect_to edit_trip_path(new_trip)
+    else
+      redirect_to new_trip_path, :error => new_trip.errors
+    end
   end
 
   def new
