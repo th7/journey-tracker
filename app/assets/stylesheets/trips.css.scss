@@ -14,12 +14,12 @@ form.new_trip {
   width: 72px;
 }
 .new_trip input {
-  width: 80%;
+  width: 98%;
   height: 2em;
   margin-bottom: 12px;
   line-height: 2em;
   font-size: 24px;
-  padding-left: 4px;
+  padding: 0 1%;
 }
 .new_trip input[type="submit"] {
   width: 100%;
@@ -193,6 +193,10 @@ form.edit_trip {
 .edit-button, .delete-button {
   padding: 0 8px;
   margin: 0;
+}
+
+.trip-username {
+  padding: 2px 8px; 
 }
 
 // .edit-button {

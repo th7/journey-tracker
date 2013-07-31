@@ -4,7 +4,7 @@
   <% if current_user == @trip.user %>
     <%= link_to "Edit this trip", edit_trip_path(@trip), class: "edit-button" %>|<%= link_to "Delete this trip", @trip, :confirm => "Are you sure you want to delete #{@trip.name}?", :method => :delete, class: "delete-button" %>
   <% else %>
-    <p>Uploaded by: <%= @trip.user.name %></p>
+    <p class="trip-username">Uploaded by: <%= @trip.user.name %></p>
   <% end %>
   </div>
 </div>
