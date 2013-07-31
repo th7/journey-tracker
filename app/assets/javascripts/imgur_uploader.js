@@ -10,20 +10,29 @@ var imgur_uploader = function(){
 
 	self.uploadImage = function(files,numRemaining) {
 
-	      date_created = null;
-	      lat = null;
-	      lon = null;
-	      latRef = null;
-	      lonRef = null;
-	      response = null;
-	      dataUrl = null;
+		$('#results_label').hide();
+		// Hack to redraw the DOM and get images to come to the top
+		$("#results").hide();
+		$("#results").show();
+
+    date_created = null;
+    lat = null;
+    lon = null;
+    latRef = null;
+    lonRef = null;
+    response = null;
+    dataUrl = null;
 
 	  if(numRemaining>=0){
 
 	    /* Is the file an image? */
 	    if (!files[numRemaining].type.match(/image.*/)) uploadImage(files,numRemaining-1);
 
-	    $("#counter").html("<p>Uploading! "+(numRemaining+1)+" images remaining...</p>")
+	    if (numRemaining == 0){
+	    	$("#counter").hide();
+	    }else {
+		    $("#counter").html("<p>Uploading! "+(numRemaining+1)+" images remaining...</p>");
+	    }
 	    console.log(numRemaining)
 	    console.log(files[numRemaining])
 

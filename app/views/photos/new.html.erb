@@ -1,11 +1,27 @@
 <style>
+  #results {
+    border: dashed black 2px;
+    min-height: 90px;
+    background-color:gray;  
+    opacity:0.4; /* transparency */  
+    filter:alpha(opacity=40); /* IE transparency */
+    position: relative;
+  }
+  #results_label {
+    text-align: center;
+    font-size: 24px;
+    color: black;
+    margin-top: 30px;
+  }  
   .uploading_image{
     position: relative;
     display: inline-block;
     width: 100px;
+    margin: 5px;
   }
   .image_preview {
     width: 100px;
+    vertical-align: top;
   }
   .loader {
     position: absolute;
@@ -19,7 +35,7 @@
   }
   .loader img {
     width: 50px;
-    margin-left: 10%;
+    margin: 10px 0 0 20px;
   }
 
 
@@ -29,10 +45,11 @@
 <div class="container">
   <h1>Upload new photo to Imgur</h1>
   <p><%= link_to "Back to Photo List", photos_path %></p>
-  <div>DROP!<button onclick="document.querySelector('input').click()">Or click</button></div>
-  <input style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files,this.files.length-1)">
+  <div><button onclick="document.querySelector('#manual_upload').click()">Upload Photos</button></div>
+  <input id="manual_upload" style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files,this.files.length-1)">
   <div id="counter"></div>
   <div id="results">
+    <div id="results_label">Drag and Drop Photos Here</div>
     <div id="preview_area"></div>
   </div>
 </div>
