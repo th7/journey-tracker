@@ -59,7 +59,7 @@ var EditButton = {
       // $(this).parent().replaceWith("<form class='editForm' id='form_"+photoId+"'><label for='caption'>Caption: </label><input type='text' name='caption' value='" + photoCaption + "'><br><label for='lat'>Latitude: </label><input type='text' name='lat' value='" + photoLat + "'><br><label for='long'>Long: </label><input type='text' name='long' value='" + photoLong + "'><br><label for='date'>Date: </label><input type='text' name='date' value='" + photoDate + "'><input type='hidden' name='photoId' value='" + photoId + "'><input type='hidden' name='tripId' value='" + tripId + "'><input type='submit' value='Submit'></form>");
       // $(selector).on('submit', EditButton.submitForm);
     EditButton.locator();
-    $(selector).find('.datepicker').datepicker({dateFormat:'yy-mm-dd'});
+    $(selector).find('.form_datepicker').datepicker({dateFormat:'yy-mm-dd'});
     $(selector).on('submit', EditButton.submitForm);
   },
   locator: function() {
