@@ -35,14 +35,33 @@ class PhotosController < ApplicationController
 	end
 
 	def update
-		p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+		p params
+		unless params['photo_address'] == "" 
+			formatted_address = params['photo_address'].gsub(/\s/, "+")
+			url = "http://maps.googleapis.com/maps/api/geocode/json?address="+formatted_address+"&sensor=true"
+      file = open(url)
+      read_data = file.read
+      data = JSON.parse(read_data)
+      p params['photo_address']
+      p url
+      p "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      p data
+      latitude = data['results'][0]['geometry']['location']['lat']
+		  p ">>>>>>>>>>>>>>>>>"
+      p latitude
+      longitude = data['results'][0]['geometry']['location']['lng']
+		end
 		p params['photo_date'].to_datetime
 		@temp_photo = Photo.find(params['photo_id'])
-		@temp_photo.update_attributes(caption: params["photo_caption"],
-																										lat: params["photo_lat"],
-																										long: params["photo_long"],
-																										date: params["photo_date"].to_datetime.to_i)
+		@temp_photo.update_attributes(caption: params["photo_caption"],date: params["photo_date"].to_datetime.to_i)
     
+
+    if latitude
+			@temp_photo.update_attributes(lat: latitude, long: longitude)
+    else
+    	@temp_photo.update_attributes(lat: params["photo_lat"],long: params["photo_long"])
+		end
+
     if request.xhr?
     	@trip = @temp_photo.trip
     	render partial: "trips/photo_details", :locals => {:photo => @temp_photo}
