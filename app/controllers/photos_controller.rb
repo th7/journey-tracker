@@ -29,9 +29,11 @@ class PhotosController < ApplicationController
       file = open(url)
       read_data = file.read
       data = JSON.parse(read_data)
+     
       params[:photo][:lat] = data['results'][0]['geometry']['location']['lat']
       params[:photo][:long] = data['results'][0]['geometry']['location']['lng']
     end
+      params[:photo][:date] = params[:photo][:date].to_datetime.to_i if params[:photo][:date]
 
     @trip = current_user.trips.find_by_id(params[:photo][:trip_id])
     if @trip

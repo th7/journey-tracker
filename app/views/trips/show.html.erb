@@ -1,5 +1,13 @@
-<h1 id="trip-title"><%= @trip.name %></h1>
-
+<div id="trip-title">
+  <h1><%= @trip.name %></h1>
+  <div class="trip-subtitle">
+  <% if current_user == @trip.user %>
+    <%= link_to "Edit this trip", edit_trip_path(@trip), class: "edit-button" %>|<%= link_to "Delete this trip", @trip, :confirm => "Are you sure you want to delete #{@trip.name}?", :method => :delete, class: "delete-button" %>
+  <% else %>
+    <p class="trip-username">Uploaded by: <%= @trip.user.name %></p>
+  <% end %>
+  </div>
+</div>
 
 <div class="map-wrapper">
   <div id="map-canvas"></div>
