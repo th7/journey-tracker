@@ -25,6 +25,7 @@ var imgur_uploader = function(){
 	    if (numRemaining == 0){
 	    	$("#counter").hide();
 	    }else {
+	    	$("#counter").show();
 		    $("#counter").html("<p>Uploading! "+(numRemaining+1)+" images remaining...</p>");
 	    }
 	    console.log(numRemaining)

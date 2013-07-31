@@ -51,8 +51,12 @@ class PhotosController < ApplicationController
     photo = current_user.photos.find_by_id(params[:id])
     if photo
       trip_id = photo.trip_id
-      photo.destroy 
-      redirect_to edit_trip_path(trip_id)
+      photo.destroy
+      if request.xhr?
+        render :nothing => true, :status => 200, :content_type => 'text/html'
+      else 
+        redirect_to edit_trip_path(trip_id)
+      end
     else
       redirect_to root_path
     end

@@ -17,6 +17,14 @@ class Photo < ActiveRecord::Base
     self.save
   end
 
+  def display_date
+    if self.date == 0
+      "Date not found"
+    else
+      Time.at(self.date)
+    end
+  end
+
   def exif_date=(date)
     p date
     self.date = DateTime.strptime(date,"%Y:%m:%d %T").to_i
