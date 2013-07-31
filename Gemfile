@@ -8,8 +8,9 @@ gem 'rails', '3.2.13'
 gem 'pg'
 
 
-
 group :development, :test do
+  gem 'quiet_assets'
+  gem 'webrick', '1.3.1' # seems to stop WARN  Could not determine content-length of response body messages
   gem 'jasmine'
   gem 'rspec-rails', '~> 2.12'
   gem 'shoulda-matchers', '1.5.4'
@@ -51,5 +52,4 @@ gem "omniauth-facebook", "1.4.0"
 # To use debugger
 # gem 'debugger'
 gem 'miro'
-gem 's3_direct_upload', :git => 'https://github.com/pomartel/s3_direct_upload.git'
 gem 'exifr'
