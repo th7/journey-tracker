@@ -27,13 +27,19 @@ class PhotosWorker
         else
           photo_date = photo["created"]
         end
-        if photo["place_id"]
-          place_response = rest.fql_query("SELECT latitude, longitude FROM place WHERE page_id = #{photo["place_id"]}")
-          place_lat = place_response[0]["latitude"] if place_response[0]["latitude"]
-          place_long = place_response[0]["longitude"] if place_response[0]["longitude"]
+        
+        begin
+          if photo["place_id"]
+            place_response = rest.fql_query("SELECT latitude, longitude FROM place WHERE page_id = #{photo["place_id"]}")
+            place_lat = place_response[0]["latitude"]
+            place_long = place_response[0]["longitude"]
+          end
+        rescue NoMethodError => e
+          p e
         end
+
         temp_photo = trip.photos.find_or_initialize_by_url(date: photo_date, url:photo["src_big"])
-        temp_photo.update_attributes(lat: place_lat, long: place_long) if photo["place_id"]
+        temp_photo.update_attributes(lat: place_lat, long: place_long) if place_lat
         temp_photo.update_attributes(caption: photo["caption"]) if photo["caption"]
         temp_photo.save!
       end
