@@ -1,17 +1,16 @@
 class PhotosController < ApplicationController
 	def index
-		@user = current_user
-		@trip = Trip.find(session[:current_trip])
-		@photos = @trip.photos
+    @trip = current_user.trips.find_by_id(params[:trip_id])
+    redirect_to root_path unless @trip
 	end
 
 	def new
-		# @trip = Trip.find(session[:current_trip])
+		@trip = current_user.trips.find_by_id(params[:trip_id])
+    redirect_to root_path unless @trip
 	end
 
 	def create
-    trip_id = params[:trip_id] || session[:current_trip]
-    trip = current_user.trips.find_by_id(trip_id)
+    trip = current_user.trips.find_by_id(params[:trip_id])
 		url = params[:photo][:url].gsub(/(\.)([^\.]*)\z/,'h\1\2')
 		new_photo = trip.photos.find_or_initialize_by_url(url: url)
     new_photo.update_attributes(params[:photo])
@@ -24,7 +23,8 @@ class PhotosController < ApplicationController
 	end
 
 	def update
-    unless params[:photo_address] == "" 
+    p params
+    unless params[:photo_address].nil? || params[:photo_address] == ""
       formatted_address = params[:photo_address].gsub(/\s/, "+")
       url = "http://maps.googleapis.com/maps/api/geocode/json?address="+formatted_address+"&sensor=true"
       file = open(url)
@@ -42,14 +42,20 @@ class PhotosController < ApplicationController
     
     if request.xhr?
     	render partial: "trips/photo_details", :locals => {:photo => photo}
+    else
+      render :nothing => true, :status => 200, :content_type => 'text/html'
     end
 	end
   
   def destroy
-    trip = current_user.trips.find_by_id(params[:trip_id])
-    Photo.find(params['id']).destroy
-    @trip = Trip.find(session[:current_trip])    
-    redirect_to edit_trip_path(@trip.id)
+    photo = current_user.photos.find_by_id(params[:id])
+    if photo
+      trip_id = photo.trip_id
+      photo.destroy 
+      redirect_to edit_trip_path(trip_id)
+    else
+      redirect_to root_path
+    end
   end
 
 end

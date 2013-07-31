@@ -23,24 +23,24 @@ class Photo < ActiveRecord::Base
     p self.date
   end
 
-  def set_gps_as_decimal(array,ref)
-    decimal = array[0].to_f + array[1].to_f/60.0
+  # def set_gps_as_decimal(array,ref)
+  #   decimal = array[0].to_f + array[1].to_f/60.0
     
-    if ref == "N"
-      self.lat = decimal
-    elsif ref == "S"
-      decimal = decimal*-1
-      self.lat = decimal
-    elsif ref == "E"
-      self.long = decimal
-    elsif ref == "W"
-      decimal = decimal*-1
-      # self.update_attributes(long: decimal)
-      self.long = decimal
-    else
-      raise "GPS Ref error"
-    end
+  #   if ref == "N"
+  #     self.lat = decimal
+  #   elsif ref == "S"
+  #     decimal = decimal*-1
+  #     self.lat = decimal
+  #   elsif ref == "E"
+  #     self.long = decimal
+  #   elsif ref == "W"
+  #     decimal = decimal*-1
+  #     # self.update_attributes(long: decimal)
+  #     self.long = decimal
+  #   else
+  #     raise "GPS Ref error"
+  #   end
       
-  end
+  # end
 
 end

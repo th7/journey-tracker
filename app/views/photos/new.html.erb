@@ -44,7 +44,7 @@
 
 <div class="container">
   <h1>Upload new photo to Imgur</h1>
-  <p><%= link_to "Back to Photo List", photos_path %></p>
+  <p><%= link_to "Back to Photo List", trip_photos_path(@trip) %></p>
   <div><button onclick="document.querySelector('#manual_upload').click()">Upload Photos</button></div>
   <input id="manual_upload" style="visibility: collapse; width: 0px;" type="file" multiple onchange="uploadImage(this.files,this.files.length-1)">
   <div id="counter"></div>

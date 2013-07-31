@@ -8,11 +8,12 @@ var EditButton = {
   },
   submitForm: function (event) {
     event.preventDefault();
-    var data = $(this).serialize();
+    $this = $(this);
+    var data = $this.serialize();
 
     $.ajax({
       type: "PUT",
-      url: '/photos/'+$(this).find('.photo_id').val(),
+      url: '/trips/' + $this.find('#photo_trip_id').val() + '/photos/' + $(this).find('#photo_id').val(),
       data: data,
       success: EditButton.onSuccess
     });

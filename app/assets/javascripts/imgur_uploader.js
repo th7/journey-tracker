@@ -76,8 +76,9 @@ var imgur_uploader = function(){
 	    xhr.send(fd);
 	    xhr.addEventListener("load", transferComplete, false);
 	    function transferComplete(evt) {
+	    	var trip_id = document.URL.match(/trips\/(\d*)/)[1];
 	      $.ajax({
-	        url: "/photos",
+	        url: '/trips/' + trip_id + '/photos',
 	        type: "post",
 	        data: {
 	        	photo: {
@@ -85,7 +86,8 @@ var imgur_uploader = function(){
 	              exif_date: date_created,
 	              lat: lat,
 	              long: lon
-	            }
+            },
+            trip_id: trip_id
 	        }
 	      });
 	      uploadImage(files,numRemaining-1);
