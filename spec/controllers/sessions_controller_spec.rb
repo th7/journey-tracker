@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe SessionsController do
-  describe '#create' do
-    it 'redirects to root_url' do
-    	# NOT SURE HOW TO TEST OMNIAUTH
+  # describe '#create' do
+    # it 'redirects to root_url' do
+    	# pending 'NOT SURE HOW TO TEST OMNIAUTH'
       # response.should redirect_to(root_url)
-    end
-  end
+    # end
+  # end
 
   describe '#destroy' do
     it 'removes sessions' do

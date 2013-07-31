@@ -12,8 +12,8 @@ window.fbAsyncInit = ->
 
   $('#sign_in').click (e) ->
     e.preventDefault()
-    FB.login (response) ->
-      window.location = '/auth/facebook/callback' if response.authResponse
+    FB.login ((response) ->
+      window.location = '/auth/facebook/callback' if response.authResponse), scope: "email,user_events,user_location,user_photos"
 
   $('#sign_out').click (e) ->
     FB.getLoginStatus (response) ->
