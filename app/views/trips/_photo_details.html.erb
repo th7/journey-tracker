@@ -1,6 +1,6 @@
 <div class="photo-info" data-photo-id="<%=photo.id%>" data-trip-id="<%=@trip.id%>" data-lat="<%=photo.lat%>" data-lng="<%=photo.long%>">
     <div class='photo_caption'><%=photo.caption%></div>
-    <div><%=photo.display_date%></div>
+    <div class='photo_date'><%=photo.display_date%></div>
     <div>
 	    <% if photo.lat %><i class='icon-map-marker'></i><% end %>
 	    <%= link_to "Edit", edit_trip_photo_path(photo.trip), {class: 'edit_button'} %>

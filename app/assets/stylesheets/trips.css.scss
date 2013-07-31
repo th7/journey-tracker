@@ -152,7 +152,12 @@ form.edit_trip {
 }
 .delete_button {
   color: red;
-  font-size: 24px;
+}
+.photo_date {
+  font-size: 14px;
+  font-style: italic;
+  color: #888;
+  margin: 5px 0 5px 0;
 }
 
 /* ------- Index ------- */
