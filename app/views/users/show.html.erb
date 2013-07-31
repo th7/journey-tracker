@@ -8,16 +8,11 @@
 	<ul>
 		<% @trips.each do |trip| %>
 		<li>
-			<% if @user == @user_on_page %>
-			<div class="update-buttons">
-				<%= link_to "Edit", edit_trip_path(trip), class: "edit-button"  %><%= link_to "Delete", trip, :confirm => "Are you sure you want to delete #{trip.name}?", :method => :delete, class: "delete-button" %>
-			</div>
-			<% end %>
 			<%= link_to trip.name, trip_path(trip), class: "trip-name" %> 
 		</li>
 		<% end %>
 	</ul>
 	<% if @user == @user_on_page %>
-	<%= link_to 'Create a Trip', new_trip_path, class: "create" %>
+	<%= link_to 'Add a Trip', new_trip_path, class: "create" %>
 	<% end %>
 </div>

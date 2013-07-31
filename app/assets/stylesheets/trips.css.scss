@@ -123,11 +123,62 @@ form.edit_trip {
 
 /* ------- Show ------- */
 #trip-title {
-  margin-left: 3%;
+  // display: inline-block;
+  // padding: 8px;
+  background: $white;
+  width: 50%;
+  margin: 0 3%;
 }
+
+#trip-title h1 {
+  margin-top: 36px;
+  margin-bottom: 0;
+  padding-left: 8px;
+}
+
+.trip-subtitle {
+  display: inline-block;
+  font-size: 18px;
+  background: $white;
+  width: 100%;
+  padding-bottom: 4px;
+}
+
+.trip-subtitle a, p {
+  padding: 0 8px;
+  margin: 0;
+}
+
+// .edit-button, .delete-button {
+//   color: $nav;
+//   padding: 4px 18px;
+//   font-size: 14px;
+//   background: $white;
+// }
+
+// .edit-button {
+//   border-top-left-radius: 8px;
+//   &:hover {
+//     -webkit-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
+//     -moz-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
+//     box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
+//   }
+// }
+
+// .delete-button {
+//   border-top-right-radius: 8px;
+//   &:hover {
+//     -webkit-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
+//     -moz-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
+//     box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
+//   }
+// }
+
+
 .photo-caption {
   font-size: 18px;
   padding: 8px;
   background: $white;
   border-radius: 8px;
 }
+
