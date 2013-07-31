@@ -11,17 +11,11 @@ var imgur_uploader = function(){
 	self.uploadImage = function(files,numRemaining) {
 
 		$('#results_label').hide();
-		// Hack to redraw the DOM and get images to come to the top
-		$("#results").hide();
-		$("#results").show();
 
     date_created = null;
     lat = null;
     lon = null;
-    latRef = null;
-    lonRef = null;
     response = null;
-    dataUrl = null;
 
 	  if(numRemaining>=0){
 
@@ -49,14 +43,17 @@ var imgur_uploader = function(){
 	    }
 	    disp.readAsDataURL(file);
 
+	    gpsFormatConvert = function(array,ref){
+	    	var decimal = parseFloat(array[0]) + parseFloat(array[1])/60.0;
+	    	if (ref == "S" || ref == "W"){	decimal = decimal * -1;	}
+	    	return decimal;
+	    };
 
 	    fr.onloadend = function() {
 	      var exif = EXIF.readFromBinaryFile(new BinaryFile(this.result));  
 	      date_created = (exif.DateTimeDigitized);
-	      lat = (exif.GPSLatitude);
-	      lon = (exif.GPSLongitude);
-	      latRef = (exif.GPSLatitudeRef);
-	      lonRef = (exif.GPSLongitudeRef);
+	      lat = gpsFormatConvert(exif.GPSLatitude,exif.GPSLatitudeRef);
+	      lon = gpsFormatConvert(exif.GPSLongitude,exif.GPSLongitudeRef);
 	    };
 	    fr.readAsBinaryString(file);
 
@@ -80,12 +77,15 @@ var imgur_uploader = function(){
 	      $.ajax({
 	        url: "/photos",
 	        type: "post",
-	        data: {url: response,
+	        data: {
+	        	photo: {
+	        			url: response,
 	              date: date_created,
 	              lat: lat,
-	              lon: lon,
+	              long: lon,
 	              latRef: latRef,
 	              lonRef: lonRef
+	            }
 	        }
 	      });
 	      uploadImage(files,numRemaining-1);
