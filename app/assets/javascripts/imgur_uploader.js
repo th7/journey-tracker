@@ -50,8 +50,10 @@ var imgur_uploader = function(){
 	    };
 
 	    fr.onloadend = function() {
-	      var exif = EXIF.readFromBinaryFile(new BinaryFile(this.result));  
+	      var exif = EXIF.readFromBinaryFile(new BinaryFile(this.result));
+	      console.log(exif); 
 	      date_created = (exif.DateTimeDigitized);
+	      console.log(date_created);
 	      lat = gpsFormatConvert(exif.GPSLatitude,exif.GPSLatitudeRef);
 	      lon = gpsFormatConvert(exif.GPSLongitude,exif.GPSLongitudeRef);
 	    };
@@ -80,11 +82,9 @@ var imgur_uploader = function(){
 	        data: {
 	        	photo: {
 	        			url: response,
-	              date: date_created,
+	              exif_date: date_created,
 	              lat: lat,
-	              long: lon,
-	              latRef: latRef,
-	              lonRef: lonRef
+	              long: lon
 	            }
 	        }
 	      });

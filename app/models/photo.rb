@@ -18,7 +18,9 @@ class Photo < ActiveRecord::Base
   end
 
   def exif_date=(date)
+    p date
     self.date = DateTime.strptime(date,"%Y:%m:%d %T").to_i
+    p self.date
   end
 
   def set_gps_as_decimal(array,ref)
