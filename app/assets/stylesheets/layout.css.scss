@@ -2,11 +2,18 @@
 @import "mixins";
 
 /* ------ Defaults ------- */
+body {
+  background-image: url($bg-img);
+  background-repeat: repeat-y;
+  background-size: cover;
+}
 a {
+  font-family: $main-font;
   color: $black;
   text-decoration: none;
 }
 h1 {
+  font-family: $main-font;
   font-size: 72px;
   margin: 72px 0;
 }
@@ -32,12 +39,8 @@ h3#explanation {
     @include action-link;
   }
 }
-body {
-  background-image: url($bg-img);
-  background-repeat: repeat-y;
-  background-size: cover;
-}
 nav {
+  font-family: $main-font;
   position: fixed;
   top: 0;
   width: 100%;

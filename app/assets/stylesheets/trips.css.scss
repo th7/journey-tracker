@@ -161,3 +161,14 @@ form.edit_trip {
     @include info-link;
   }
 }
+
+/* ------- Show ------- */
+#trip-title {
+  margin-left: 3%;
+}
+.photo-caption {
+  font-size: 18px;
+  padding: 8px;
+  background: $white;
+  border-radius: 8px;
+}
