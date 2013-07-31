@@ -1,6 +1,34 @@
 @import "variables";
 @import "mixins";
 
+/* ------ Trips new page ------- */
+form.new_trip {
+  width: 100%;
+  margin: auto;
+  font-size: 24px;
+}
+.new_trip label, input {
+  display: inline-block;
+}
+.new_trip label {
+  width: 72px;
+}
+.new_trip input {
+  width: 80%;
+  height: 2em;
+  margin-bottom: 12px;
+  line-height: 2em;
+  font-size: 24px;
+  padding-left: 4px;
+}
+.new_trip input[type="submit"] {
+  width: 100%;
+  @include action-link;
+  line-height: 1em;
+  border: none;
+  margin: 36px 0;
+}
+
 /* ------ Trips edit page ------ */
 .container {
   padding: 10px;
