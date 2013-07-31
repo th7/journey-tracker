@@ -81,7 +81,7 @@ form.edit_trip {
 }
 
 .bg-filter {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
   opacity: 0.8;
@@ -90,12 +90,11 @@ form.edit_trip {
 
 #locator-container {
   background: $white;
-  position: absolute;
-  top: 33%;
-  left: 33%;
+  position: fixed;
+  top: 10%;
+  left: 40%;
   width: 420px;
   height: 460px;
-  margin: auto;
   font-size: 18px;
   text-align: center;
   z-index: 999;
