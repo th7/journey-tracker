@@ -210,7 +210,7 @@ describe TripsController do
     context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
-        post :update, trip: {id: @to_update.id, name: @new_name} 
+        post :update, id: @to_update.id, trip: {name: @new_name} 
       end
 
       it 'updates the correct trip' do
@@ -222,7 +222,7 @@ describe TripsController do
       before(:each) do
         session.clear
         session[:user_id] = @imposter_user.id
-        post :update, trip: {id: @to_update.id, name: @new_name}
+        post :update, id: @to_update.id, trip: {name: @new_name}
       end
 
       it 'does not update the trip' do
@@ -233,7 +233,7 @@ describe TripsController do
     context 'when user is not logged in' do
       before(:each) do
         session.clear
-        post :update, trip: {id: @to_update.id, name: @new_name}
+        post :update, id: @to_update.id, trip: {name: @new_name}
       end
 
       it 'does not update the trip' do
