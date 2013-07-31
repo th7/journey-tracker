@@ -1,60 +1,65 @@
 var EditButton = {
+  onSuccess : function(success){
+    var photoId = $(success).data("photo-id");
+    var selector  = "#form_"+photoId;
+    $(selector).replaceWith(success);
+    $('.edit_button').on('click', EditButton.editButton);
 
-    onSuccess : function(success){
-      var photoId = $(success).data("photo-id");
-      var selector  = "#form_"+photoId;
-      $(selector).replaceWith(success);
-      $('.edit_button').on('click', EditButton.editButton);
-      
-    },
-    submitForm: function (event) {
-        event.preventDefault();
-        console.log($(this));
-        var data = {photo_id: $(this).find('.photo_id').val(),
-                   photo_lat: $(this).find('.lat').val(),
-                  photo_long: $(this).find('.long').val(),
-                    photo_caption: $(this).find('.caption').val(),
-                   photo_date: $(this).find('.date').val(),
-                    photo_trip_id: $(this).find('.trip_id').val()
-                     
-        };
-        console.log($(data));
-        photoId = data["photo_id"];
-        console.log(photoId);
-        
-        $.ajax({
-            type: "PUT",
-            url: '/photos/'+photoId,
-            data: data,
-            success: EditButton.onSuccess
-        });
+  },
+  submitForm: function (event) {
+    event.preventDefault();
+    $this = $(this);
+    var data = $this.serialize();
 
-    },
-    editButton: function (event) {
-        event.preventDefault();
-        var photoCaption = ($(this).siblings('.photo_caption').text());
-        var photoLat = ($(this).siblings('.photo_lat').text());
-        var photoLong = ($(this).siblings('.photo_long').text());
-        var photoDate = ($(this).siblings('.photo_date').text());
-        var photoId = $(this).parent().data('photo-id');
-        var tripId = $(this).parent().data('trip-id');
-        var formId = "form_"+photoId;
-        var formClone = $('#editForm').clone().removeClass('hidden')
-        .attr("id", formId).attr("method", 'PUT').attr("action", "photos/"+photoId);
-        formClone.find("#photo_caption").val(photoCaption);
-        formClone.find("#photo_lat").val(photoLat);
-        formClone.find("#photo_long").val(photoLong);
-        formClone.find("#photo_date").val(photoDate);
-        formClone.find("#photo_id").val(photoId);
-        formClone.find("#photo_trip_id").val(tripId);
-        var replaceShit =  $(this).parent().replaceWith(formClone);
-        selector = '#form_'+photoId;
-        // $(this).parent().replaceWith("<form class='editForm' id='form_"+photoId+"'><label for='caption'>Caption: </label><input type='text' name='caption' value='" + photoCaption + "'><br><label for='lat'>Latitude: </label><input type='text' name='lat' value='" + photoLat + "'><br><label for='long'>Long: </label><input type='text' name='long' value='" + photoLong + "'><br><label for='date'>Date: </label><input type='text' name='date' value='" + photoDate + "'><input type='hidden' name='photoId' value='" + photoId + "'><input type='hidden' name='tripId' value='" + tripId + "'><input type='submit' value='Submit'></form>");
-        // $(selector).on('submit', EditButton.submitForm);
-        $(selector).on('submit', EditButton.submitForm);
-    },
-    initialize: function () {
-        $('.edit_button').on('click', EditButton.editButton);
-    }
+    $.ajax({
+      type: "PUT",
+      url: '/trips/' + $this.find('#photo_trip_id').val() + '/photos/' + $(this).find('#photo_id').val(),
+      data: data,
+      success: EditButton.onSuccess
+    });
+  },
+  editButton: function (event) {
+    event.preventDefault();
+    var photoCaption = ($(this).siblings('.photo_caption').text());
+    var photoLat = ($(this).siblings('.photo_lat').text());
+    var photoLong = ($(this).siblings('.photo_long').text());
+    var photoDate = ($(this).siblings('.photo_date').text());
+    var photoId = $(this).parent().data('photo-id');
+    var tripId = $(this).parent().data('trip-id');
+    var formId = "form_"+photoId;
+    var formClone = $('#editForm').clone().removeClass('hidden')
+    .attr("id", formId).attr("method", 'PUT').attr("action", "photos/"+photoId);
+    formClone.find("#photo_caption").val(photoCaption);
+    formClone.find("#photo_lat").val(photoLat);
+    formClone.find("#photo_long").val(photoLong);
+    formClone.find("#photo_date").val(photoDate);
+    formClone.find("#photo_id").val(photoId);
+    formClone.find("#photo_trip_id").val(tripId);
+    var replaceShit =  $(this).parent().replaceWith(formClone);
+    selector = '#form_'+photoId;
+      // $(this).parent().replaceWith("<form class='editForm' id='form_"+photoId+"'><label for='caption'>Caption: </label><input type='text' name='caption' value='" + photoCaption + "'><br><label for='lat'>Latitude: </label><input type='text' name='lat' value='" + photoLat + "'><br><label for='long'>Long: </label><input type='text' name='long' value='" + photoLong + "'><br><label for='date'>Date: </label><input type='text' name='date' value='" + photoDate + "'><input type='hidden' name='photoId' value='" + photoId + "'><input type='hidden' name='tripId' value='" + tripId + "'><input type='submit' value='Submit'></form>");
+      // $(selector).on('submit', EditButton.submitForm);
+    EditButton.locator();
+    $(selector).on('submit', EditButton.submitForm);
+  },
+  locator: function() {
+    $('form').on('click', '.locator-button', function(event) {
+      event.preventDefault();
+      $('nav').after('<div class="bg-filter"></div><div id="locator-container"><div id="locator-canvas"></div><span id="drag-directions">Drag and drop the marker to select a new location.</span><button id="locator-done">Done</button></div>');
+      var photoLat = ($(this).siblings('.photo_lat').text());
+      var photoLong = ($(this).siblings('.photo_long').text());
+      var formId = '#' + $(this).parent().attr('id');
+      gmapLocator = new GmapLocator(photoLat, photoLong, formId);
+      gmapLocator.initialize();
+    });
+    $('body').on('click', '#locator-done', function(event) {
+      event.preventDefault();
+      $('.bg-filter').remove();
+      $('#locator-container').remove();
+    });
+  },
+  initialize: function () {
+    $('.edit_button').on('click', EditButton.editButton);
+  }
 };
 

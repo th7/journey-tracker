@@ -14,13 +14,16 @@ describe TripsController do
     @test_trip_params = {name: "STUFF", start: Time.now, end: Time.now}
     @test_trip = @test_user.trips.create(@test_trip_params)
 
+
+    Photo.skip_callback(:create, :after, :get_photo_colors)
     @test_photos = []
     @test_photos << Photo.new(url: '1', date: Time.now)
     @test_photos << Photo.new(url: '2', date: Time.now - 100)
-    @test_photos.each do |p| 
-      p.stub(:get_photo_colors)
-    end
     @test_trip.photos << @test_photos
+  end
+
+  after(:all) do
+    Photo.set_callback(:create, :after, :get_photo_colors)
   end
 
   before(:each) do

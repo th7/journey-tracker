@@ -11,7 +11,11 @@ describe PhotosController do
 
     @test_trip_params = {name: "STUFF", start: Time.now, end: Time.now}
     @test_trip = @test_user.trips.create(@test_trip_params)
+    Photo.skip_callback(:create, :after, :get_photo_colors)
+  end
 
+  after(:all) do
+    Photo.set_callback(:create, :after, :get_photo_colors)
   end
 
   before(:each) do
@@ -43,15 +47,6 @@ describe PhotosController do
       it 'creates a photo using params' do
         expect{post :create, trip_id: @test_trip.id, photo: @test_photo_params}.to change{Photo.count}.by(1)
       end
-
-      it 'creates a photo using session trip' do
-        session[:current_trip] = @test_trip.id
-        expect{post :create, photo: @test_photo_params}.to change{Photo.count}.by(1)
-      end
-
-      it 'creates a photo eith exif_date' do
-        expect{post :create, trip_id: @test_trip.id, photo: {exif_date: '2013:05:04 09:56:14', url: 'atest.jpg'}}.to change{Photo.count}.by(1)
-      end
     end
 
     context 'when user is not logged in' do
@@ -70,10 +65,83 @@ describe PhotosController do
   end
   
   describe '#update' do
-    pending
+    before(:each) do
+      @to_update = @test_trip.photos.create(@test_photo_params)
+      @new_url = 'thisisanewurl.jpg'
+    end
+
+    context 'when user is logged in' do
+      before(:each) do
+        session[:user_id] = @test_user.id
+        post :update, photo: {id: @to_update.id, trip_id: @test_trip.id, url: @new_url}
+      end
+
+      it 'updates the correct photo' do
+        expect(@test_trip.photos.find_by_id(@to_update.id).url).to eq @new_url
+      end
+    end
+
+    context 'when imposter user is logged in' do
+      before(:each) do
+        session.clear
+        session[:user_id] = @imposter_user.id
+        post :update, photo: {id: @to_update.id, trip_id: @test_trip.id, url: @new_url}
+      end
+
+      it 'does not update the photo' do
+        expect(@test_trip.photos.find_by_id(@to_update.id).url).to_not eq @new_url
+      end
+    end
+
+    context 'when user is not logged in' do
+      before(:each) do
+        session.clear
+        post :update, photo: {id: @to_update.id, trip_id: @test_trip.id, url: @new_url}
+      end
+
+      it 'does not update the photo' do
+        expect(@test_trip.photos.find_by_id(@to_update.id).url).to_not eq @new_url
+      end
+    end
   end
   
   describe '#destroy' do
-    pending
+    before(:each) do
+      @to_delete = @test_trip.photos.create(@test_photo_params)
+    end
+
+    context 'when user is logged in' do
+      before(:each) do
+        session[:user_id] = @test_user.id
+        post :destroy, id: @to_delete.id
+      end
+
+      it 'deletes the correct photo' do
+        expect(@test_trip.photos.find_by_id(@to_delete.id)).to eq nil
+      end
+    end
+
+    context 'when imposter user is logged in' do
+      before(:each) do
+        session.clear
+        session[:user_id] = @imposter_user.id
+        post :destroy, id: @to_delete.id
+      end
+
+      it 'does not delete the photo' do
+        expect(@test_trip.photos.find_by_id(@to_delete.id)).to eq @to_delete
+      end
+    end
+
+    context 'when user is not logged in' do
+      before(:each) do
+        session.clear
+        post :destroy, id: @to_delete.id
+      end
+
+      it 'does not delete the photo' do
+        expect(@test_trip.photos.find_by_id(@to_delete.id)).to eq @to_delete
+      end
+    end
   end
 end
