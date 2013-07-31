@@ -1,0 +1,67 @@
+var GmapLocator = function(lat, lng, formId) {
+  this.lat = lat || 41.889909;
+  this.lng = lng || -87.637103;
+  this.formId = formId;
+};
+
+GmapLocator.prototype.initialize = function() {
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmapLocator.onScriptLoad";
+  document.body.appendChild(script);
+};
+
+GmapLocator.prototype.onScriptLoad = function() {
+  this.latLng = new google.maps.LatLng(this.lat, this.lng);
+  this.map = this.buildMap();
+  this.marker = this.placeMarker();
+  self = this;
+  google.maps.event.addListener(this.marker, 'dragend', function() {
+    gmapLocator.lat = self.marker.getPosition().lat();
+    gmapLocator.lng = self.marker.getPosition().lng();
+    // console.log(gmapLocator.latLng);
+    $(gmapLocator.formId).find("#photo_lat").val(gmapLocator.lat);
+    $(gmapLocator.formId).find("#photo_long").val(gmapLocator.lng);
+  });
+};
+
+GmapLocator.prototype.buildMap = function() {
+  google.maps.visualRefresh = true;
+  
+  var mapType = google.maps.MapTypeId.ROADMAP;
+  var styles = [
+    {
+      stylers: [
+        { saturation: -70 },
+        { gamma: 1.5 }
+      ]
+    }
+  ];
+
+  var mapOptions = { 
+    center: gmapLocator.latLng,
+    zoom: 8,
+    mapTypeId: mapType,
+    styles: styles,
+    disableDoubleClickZoom: true,
+    draggable: true,
+    keyboardShortcuts: true,
+    mapTypeControl: true,
+    panControl: true,
+    scrollwheel: true,
+    streetViewControl: false,
+    zoomControl: true
+  };
+
+  return new google.maps.Map(document.getElementById("locator-canvas"), mapOptions);
+};
+
+GmapLocator.prototype.placeMarker = function() {
+  var marker = new google.maps.Marker({
+    position: this.latLng,
+    map: this.map,
+    draggable: true  
+  });
+
+  return marker;
+};

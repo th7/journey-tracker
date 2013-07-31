@@ -17,7 +17,6 @@ class PhotosController < ApplicationController
     new_photo.update_attributes(params[:photo])
 
 		render :nothing => true, :status => 200, :content_type => 'text/html'
-
 	end
 
 	def show
@@ -25,40 +24,25 @@ class PhotosController < ApplicationController
 	end
 
 	def update
-    trip = current_user.trips.find_by_id(params[:trip_id])
-    photo = trip.photos.find_by_id(params[:id]) if trip
-    photo.update_attributes(params[:photo])
-
-		# p ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-		# p params['photo_date'].to_datetime
-		# @temp_photo = Photo.find(params['photo_id'])
-		# @temp_photo.update_attributes(caption: params["photo_caption"],
-		# 																								lat: params["photo_lat"],
-		# 																								long: params["photo_long"],
-		# 																								date: params["photo_date"].to_datetime.to_i)
-    
-    if request.xhr?
-    	@trip = @temp_photo.trip
-    	render partial: "trips/photo_details", :locals => {:photo => @temp_photo}
+    unless params[:photo_address] == "" 
+      formatted_address = params[:photo_address].gsub(/\s/, "+")
+      url = "http://maps.googleapis.com/maps/api/geocode/json?address="+formatted_address+"&sensor=true"
+      file = open(url)
+      read_data = file.read
+      data = JSON.parse(read_data)
+      params[:photo][:lat] = data['results'][0]['geometry']['location']['lat']
+      params[:photo][:long] = data['results'][0]['geometry']['location']['lng']
     end
 
-    # respond_to do |format|
+    @trip = current_user.trips.find_by_id(params[:photo][:trip_id])
+    if @trip
+      photo = @trip.photos.find_by_id(params[:photo][:id])
+      photo.update_attributes(params[:photo]) if photo
+    end
     
-
-    # 	# format.json do
-    #  #    @errors = []
-    #  #    if @temp_photo.save!
-    #  #      render :json => {:caption => @temp_photo.caption,
-    #  #                       :lat => @temp_photo.lat,
-    #  #                       :long => @temp_photo.long,
-    #  #                       :date => Time.at(@temp_photo.date),
-    #  #                       :photo_id => @temp_photo.id,
-    #  #                       :trip_id => @temp_photo.trip.id}
-    #  #    else
-    #  #    	render :json => {:error => "Unable to save post"}
-    #  #    end
-    #  #  end
-    # end
+    if request.xhr?
+    	render partial: "trips/photo_details", :locals => {:photo => photo}
+    end
 	end
   
   def destroy
