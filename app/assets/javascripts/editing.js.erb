@@ -56,20 +56,19 @@ var EditButton = {
     formClone.find("#photo_trip_id").val(tripId);
     var replaceShit =  $(this).closest('.photo-info').replaceWith(formClone);
     selector = '#form_'+photoId;
-      // $(this).parent().replaceWith("<form class='editForm' id='form_"+photoId+"'><label for='caption'>Caption: </label><input type='text' name='caption' value='" + photoCaption + "'><br><label for='lat'>Latitude: </label><input type='text' name='lat' value='" + photoLat + "'><br><label for='long'>Long: </label><input type='text' name='long' value='" + photoLong + "'><br><label for='date'>Date: </label><input type='text' name='date' value='" + photoDate + "'><input type='hidden' name='photoId' value='" + photoId + "'><input type='hidden' name='tripId' value='" + tripId + "'><input type='submit' value='Submit'></form>");
-      // $(selector).on('submit', EditButton.submitForm);
     EditButton.locator();
     $(selector).find('.form_datepicker').datepicker({dateFormat:'yy-mm-dd'});
     $(selector).on('submit', EditButton.submitForm);
   },
   locator: function() {
+    var defaultCenter = this.defaultCenter;
     $('form').on('click', '.locator-button', function(event) {
       event.preventDefault();
       $('nav').after('<div class="bg-filter"></div><div id="locator-container"><div id="locator-canvas"></div><span id="drag-directions">Drag and drop the marker to select a new location.</span><button id="locator-done">Done</button></div>');
-      var photoLat = ($(this).siblings('.photo_lat').text());
-      var photoLong = ($(this).siblings('.photo_long').text());
+      var photoLat = ($(this).siblings('.lat').val());
+      var photoLong = ($(this).siblings('.long').val());
       var formId = '#' + $(this).parent().attr('id');
-      gmapLocator = new GmapLocator(photoLat, photoLong, formId);
+      gmapLocator = new GmapLocator(photoLat, photoLong, formId, defaultCenter);
       gmapLocator.initialize();
     });
     $('body').on('click', '#locator-done', function(event) {
@@ -78,7 +77,8 @@ var EditButton = {
       $('#locator-container').remove();
     });
   },
-  initialize: function () {
+  initialize: function (defaultCenter) {
+    this.defaultCenter = defaultCenter;
     $('.edit_button').on('click', EditButton.editButton);
   }
 };
