@@ -78,6 +78,20 @@
 <script>
 $(document).ready(function() {
   $('.datepicker').datepicker({dateFormat:'yy-mm-dd'});
+  $('.edit_trip').on('submit', function (event) {
+    var tripName = $('#trip_name');
+    var tripStart = new Date($('#trip_start').val());
+    var tripEnd = new Date($('#trip_end').val());
+    if (tripStart.getTime() > tripEnd.getTime()) {
+        event.preventDefault();
+        alert('Your end date must be after your start date');
+    }
+    if (tripName.val().length > 50) {
+        alert('Your trip name is too long');
+        event.preventDefault();
+    }
+
+});
   EditButton.initialize("<%= @trip.location if @trip.location %>");
   DeleteButton.initialize();
   imgur_uploader();
