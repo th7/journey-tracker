@@ -15,7 +15,27 @@
 </div>
 
 <script>
-  $(function() {
-    $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
-  });
+$(document).ready(function(){
+  $('#new_trip').on('submit', function (event) {
+        tripName = $("#trip_name");
+        tripLocation = $('#trip_location');
+        if (tripName.val().length > 50) {
+            event.preventDefault();
+            alert('Your trip name is too long');
+        }
+        if (tripLocation.val().length > 50) {
+            alert('Location name is too long.');
+            event.preventDefault();
+        }
+    });
+
+});
+  $(function () {
+    $(".datepicker").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+ 
+
+
+});
 </script>
