@@ -2,13 +2,6 @@
 var Facebook = {
   initialize: function(user) {
     $('#sign_in').on('click', Facebook.login);
-    FB.init({
-      appId      : '<%=ENV['FACEBOOK_APP_ID']%>', // App ID
-      channelUrl : '<%=root_path%>' + '/channel.html', // Channel File
-      status     : false, // check login status
-      cookie     : false, // enable cookies to allow the server to access the session
-      xfbml      : false  // parse XFBML
-    });
   },
   login: function(e) {
     e.preventDefault();
@@ -20,6 +13,14 @@ var Facebook = {
 };
 
 window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '<%=ENV['FACEBOOK_APP_ID']%>',
+    channelUrl : '<%=root_path%>' + '/channel.html',
+    status     : false,
+    cookie     : false,
+    xfbml      : false
+  });
+
   FB.Event.subscribe('auth.authResponseChange', function(response) {
     if (response.status === 'connected') {
       console.log(response);
