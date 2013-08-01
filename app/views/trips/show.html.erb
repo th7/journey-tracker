@@ -2,7 +2,7 @@
   <h1><%= @trip.name %></h1>
   <div class="trip-subtitle">
   <% if current_user == @trip.user %>
-    <%= link_to "Edit this trip", edit_trip_path(@trip), class: "edit-button" %>|<%= link_to "Delete this trip", @trip, :confirm => "Are you sure you want to delete #{@trip.name}?", :method => :delete, class: "delete-button" %>
+    <%= link_to "Edit this trip", edit_trip_path(@trip), class: "edit-button" %>
   <% else %>
     <p class="trip-username">Uploaded by: <%= @trip.user.name %></p>
   <% end %>
@@ -16,7 +16,7 @@
 <div class="photos-wrapper">
   <% if @photos %>
     <% @photos.each do |photo|%>
-      <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long}%>
+      <%= image_tag photo.url, class: 'photo', data: {lat: photo.lat, lng: photo.long, colors:{color1:photo.palette.color1, color2:photo.palette.color2, color3:photo.palette.color3, color4:photo.palette.color4, color5:photo.palette.color5, color6:photo.palette.color6}} %>
       <% if photo.caption != "" %>
         <div class="photo-caption">
           <%= photo.caption %>
