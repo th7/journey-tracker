@@ -1,25 +1,25 @@
 
-var Facebook = {
-  initialize: function() {
-    console.log('initialize');
-    $('#sign_in').on('click', Facebook.login);
-  },
-  login: function(e) {
-    console.log('login');
-    e.preventDefault();
-    FB.init({
-      appId      : 2, // App ID
-      channelUrl : 'http://viagg.io/channel.html', // Channel File
-      status     : true, // check login status
-      cookie     : true, // enable cookies to allow the server to access the session
-      xfbml      : true  // parse XFBML
-    });
-    FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
-  },
-  createUserSuccess: function(e) {
-    location.reload();
-  }
-};
+// var Facebook = {
+//   initialize: function() {
+//     console.log('initialize');
+//     $('#sign_in').on('click', Facebook.login);
+//   },
+//   login: function(e) {
+//     console.log('login');
+//     e.preventDefault();
+//     FB.init({
+//       appId      : 2, // App ID
+//       channelUrl : 'http://viagg.io/channel.html', // Channel File
+//       status     : true, // check login status
+//       cookie     : true, // enable cookies to allow the server to access the session
+//       xfbml      : true  // parse XFBML
+//     });
+//     FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
+//   },
+//   createUserSuccess: function(e) {
+//     location.reload();
+//   }
+// };
 
 window.fbAsyncInit = function() {
   FB.Event.subscribe('auth.authResponseChange', function(response) {
