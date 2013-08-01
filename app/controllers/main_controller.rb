@@ -3,7 +3,7 @@ class MainController < ApplicationController
 
   def index
   	if current_user	
-	  	redirect_to new_trip_path if current_user.trips
+	  	redirect_to new_trip_path if current_user.trips.empty?
 	  end
   end
 end
