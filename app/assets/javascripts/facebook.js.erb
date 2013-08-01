@@ -21,29 +21,29 @@
 //   }
 // };
 
-window.fbAsyncInit = function() {
-  FB.Event.subscribe('auth.authResponseChange', function(response) {
-    console.log('auth change');
-    if (response.status === 'connected') {
-      console.log(response);
-      $.ajax({
-        type: 'POST',
-        url: '/auth/facebook/callback',
-        data: response,
-        success: Facebook.createUserSuccess
-      });
-    } else if (response.status === 'not_authorized') {
-      FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
-    } else {
-      FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
-    }
-  });
-};
+// window.fbAsyncInit = function() {
+//   FB.Event.subscribe('auth.authResponseChange', function(response) {
+//     console.log('auth change');
+//     if (response.status === 'connected') {
+//       console.log(response);
+//       $.ajax({
+//         type: 'POST',
+//         url: '/auth/facebook/callback',
+//         data: response,
+//         success: Facebook.createUserSuccess
+//       });
+//     } else if (response.status === 'not_authorized') {
+//       FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
+//     } else {
+//       FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
+//     }
+//   });
+// };
 
-(function(d){
-   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-   if (d.getElementById(id)) {return;}
-   js = d.createElement('script'); js.id = id; js.async = true;
-   js.src = "//connect.facebook.net/en_US/all.js";
-   ref.parentNode.insertBefore(js, ref);
- }(document));
+// (function(d){
+//    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+//    if (d.getElementById(id)) {return;}
+//    js = d.createElement('script'); js.id = id; js.async = true;
+//    js.src = "//connect.facebook.net/en_US/all.js";
+//    ref.parentNode.insertBefore(js, ref);
+//  }(document));
