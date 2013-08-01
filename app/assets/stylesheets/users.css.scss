@@ -9,46 +9,15 @@
 /* ---- User show ----- */
 .user-container {
   @include narrow-container;
+  padding-bottom: 48px;
 }
 
 .user-container .create {
   @include action-link;
-  margin-top: 36px;
+  margin: 36px 0;
 }
 
 .trip-name {
   @include info-link;
 }
 
-// div.update-buttons {
-//   display: inline-block;
-//   width: 100%;
-//   text-align: right;
-//   margin: 2px 0 -30px 0;
-//   visibility: hidden;
-// }
-
-// .edit-button, .delete-button {
-//   color: $nav;
-//   padding: 4px 18px;
-//   font-size: 14px;
-//   background: $white;
-// }
-
-// .edit-button {
-//   border-top-left-radius: 8px;
-//   &:hover {
-//     -webkit-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
-//     -moz-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
-//     box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
-//   }
-// }
-
-// .delete-button {
-//   border-top-right-radius: 8px;
-//   &:hover {
-//     -webkit-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
-//     -moz-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
-//     box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
-//   }
-// }

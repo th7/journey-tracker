@@ -4,7 +4,7 @@
 	<% if @trips %>
 	<ul>
 		<% @trips.each do |trip| %>
-			<li><%= link_to trip.name, trip_path(trip) %></li>
+			<li><%= link_to "#{trip.name} (#{trip.user.name})", trip_path(trip) %></li>
 		<% end %>
 	</ul>
 
