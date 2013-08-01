@@ -9,6 +9,9 @@ var Facebook = {
   },
   createUserSuccess: function(e) {
     location.reload();
+  },
+  appId: function() {
+    return '<%=ENV['FACEBOOK_APP_ID']%>';
   }
 };
 
