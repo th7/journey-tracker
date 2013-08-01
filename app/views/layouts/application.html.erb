@@ -9,7 +9,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+<div id="fb-root"></div>
 <nav>
   <div id='title_link'><%= link_to 'Viagg.io', root_url %></div>
   <% if current_user %>
@@ -25,3 +25,9 @@
 </body>
 
 </html>
+
+<script>
+  $(document).ready(function() {
+    
+  });
+</script>

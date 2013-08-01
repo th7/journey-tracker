@@ -1,19 +1,17 @@
 
 var Facebook = {
-  initialize: function() {
-    console.log('initialize');
+  initialize: function(user) {
     $('#sign_in').on('click', Facebook.login);
-  },
-  login: function(e) {
-    console.log('login');
-    e.preventDefault();
     FB.init({
       appId      : '<%=ENV['FACEBOOK_APP_ID']%>', // App ID
       channelUrl : '<%=root_path%>' + '/channel.html', // Channel File
-      status     : true, // check login status
-      cookie     : true, // enable cookies to allow the server to access the session
-      xfbml      : true  // parse XFBML
+      status     : false, // check login status
+      cookie     : false, // enable cookies to allow the server to access the session
+      xfbml      : false  // parse XFBML
     });
+  },
+  login: function(e) {
+    e.preventDefault();
     FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
   },
   createUserSuccess: function(e) {
@@ -23,7 +21,6 @@ var Facebook = {
 
 window.fbAsyncInit = function() {
   FB.Event.subscribe('auth.authResponseChange', function(response) {
-    console.log('auth change');
     if (response.status === 'connected') {
       console.log(response);
       $.ajax({
