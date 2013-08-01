@@ -15,16 +15,17 @@ var gmap = {
 
   onScriptLoad: function(inputs) {
     google.maps.visualRefresh = true;
-
     this.geocode(this.location);
   },
 
   geocode: function(location) {
     var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'address': location }, function(results) {
-      gmap.map = gmap.buildMap(results[0].geometry.location);
-      gmap.overlay = gmap.buildOverlay();
-    });
+    geocoder.geocode({ 'address': location }, gmap.onLocationReady);
+  },
+
+  onLocationReady: function(geocodedLocations) {
+    gmap.map = gmap.buildMap(geocodedLocations[0].geometry.location);
+    gmap.overlay = gmap.buildOverlay();
   },
 
   buildMap: function(defaultCenter) {
@@ -140,7 +141,7 @@ var gmap = {
       var resultPlaces = gmap.SlowWorker.queue.shift();
 
       if (gmap.SlowWorker.running) {
-        setTimeout(gmap.SlowWorker.poll, 200);
+        setTimeout(gmap.SlowWorker.poll, 300);
       }
 
       if(status == google.maps.DirectionsStatus.OK) {
