@@ -123,6 +123,7 @@ form.edit_trip {
   position: relative;
   margin: 10px 0 20px 0;
   width: 97%;
+  z-index: -999;
 }
 #results_label {
   text-align: center;
@@ -211,11 +212,6 @@ form.edit_trip {
   padding-bottom: 4px;
 }
 
-// .trip-subtitle a, p {
-//   padding: 0 8px;
-//   margin: 0;
-// }
-
 .edit-button, .delete-button {
   padding: 0 8px;
   margin: 0;
@@ -224,24 +220,6 @@ form.edit_trip {
 .trip-username {
   padding: 2px 8px; 
 }
-
-// .edit-button {
-//   border-top-left-radius: 8px;
-//   &:hover {
-//     -webkit-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
-//     -moz-box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
-//     box-shadow: -5px -5px 19px -6px rgba(0,0,0,0.5);
-//   }
-// }
-
-// .delete-button {
-//   border-top-right-radius: 8px;
-//   &:hover {
-//     -webkit-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
-//     -moz-box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
-//     box-shadow: 5px -5px 19px -6px rgba(0,0,0,0.5);
-//   }
-// }
 
 
 .photo-caption {
