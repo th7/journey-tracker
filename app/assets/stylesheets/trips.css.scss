@@ -24,9 +24,12 @@ form.new_trip {
 .new_trip input[type="submit"] {
   width: 100%;
   @include action-link;
-  line-height: 1em;
   border: none;
   margin: 36px 0;
+  padding: 0;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 /* ------ Trips edit page ------ */
