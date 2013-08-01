@@ -14,11 +14,15 @@ class Photo < ActiveRecord::Base
     Miro.options[:color_count] = 6
     colors_rgb = Miro::DominantColors.new(self.url).to_rgb
     colors_hsv = []
+    colors = []
     colors_rgb.each_with_index { |col,index| colors_hsv[index] = rgb_to_hsv(col) }
     colors_hsv.sort_by!(&:last)
+    colors_hsv.each_with_index { |col,index| colors[index] = hsv_to_rgb(col) }
 
-    p "SORTED"
-    p colors_hsv
+
+    p "original: #{colors_rgb}"
+    p "sorted: #{colors_hsv}"
+    p "final: #{}"
 
     self.palette = self.build_palette(color1: colors[0], color2: colors[1], color3: colors[2], color4: colors[3], color5: colors[4], color6: colors[5])
     self.save
@@ -40,8 +44,8 @@ class Photo < ActiveRecord::Base
 
 def hsv_to_rgb(array)
   h = [0, [360.0, array[0]*360.0].min].max
-  s = [0, [100, array[1]].min].max
-  v = [0, [100, array[2]].min].max
+  s = [0, [1, array[1]].min].max
+  v = [0, [1, array[2]].min].max
 
   if s==0
     r = v
@@ -50,7 +54,46 @@ def hsv_to_rgb(array)
     return [(r*255).round,(g*255).round,(b*255).round]
   end
 
+  h = h/60.0
+  i = h.to_i.to_f
+  f = h-i
+  p = v*(1-s)
+  q = v * (1 - s * f)
+  t = v * (1 - s * (1 - f))
 
+  case i.to_i
+    when 0:
+      r = v
+      g = t
+      b = p
+ 
+    when 1:
+      r = q
+      g = v
+      b = p
+ 
+    when 2:
+      r = p
+      g = v
+      b = t
+ 
+    when 3:
+      r = p
+      g = q
+      b = v
+ 
+    when 4:
+      r = t
+      g = p
+      b = v
+ 
+    else:
+      r = v
+      g = p
+      b = q
+
+  return [(r*255).round,(g*255).round,(b*255).round] 
+      
 end  
 
 def rgb_to_hsv(array)
