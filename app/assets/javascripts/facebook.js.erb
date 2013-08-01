@@ -9,7 +9,7 @@ var Facebook = {
     e.preventDefault();
     FB.init({
       appId      : <%=ENV['FACEBOOK_APP_ID']%>, // App ID
-      channelUrl : '<%=root_path%>' + '/channel.html', // Channel File
+      channelUrl : 'http://viagg.io/channel.html', // Channel File
       status     : true, // check login status
       cookie     : true, // enable cookies to allow the server to access the session
       xfbml      : true  // parse XFBML
