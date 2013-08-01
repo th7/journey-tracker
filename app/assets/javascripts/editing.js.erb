@@ -65,8 +65,8 @@ var EditButton = {
     $('form').on('click', '.locator-button', function(event) {
       event.preventDefault();
       $('nav').after('<div class="bg-filter"></div><div id="locator-container"><div id="locator-canvas"></div><span id="drag-directions">Drag and drop the marker to select a new location.</span><button id="locator-done">Done</button></div>');
-      var photoLat = ($(this).siblings('.photo_lat').text());
-      var photoLong = ($(this).siblings('.photo_long').text());
+      var photoLat = ($(this).siblings('.lat').val());
+      var photoLong = ($(this).siblings('.long').val());
       var formId = '#' + $(this).parent().attr('id');
       gmapLocator = new GmapLocator(photoLat, photoLong, formId, defaultCenter);
       gmapLocator.initialize();
