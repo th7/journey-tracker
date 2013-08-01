@@ -3,6 +3,22 @@ var Photo = function(elem) {
   this.lat = +this.$elem.data('lat');
   this.lng = +this.$elem.data('lng');
   this.coords = {lat: this.lat, lng: this.lng};
+  this.colors = this.$elem.data('colors');
+};
+
+Photo.prototype.intColorR = function() {
+  var subHexR = this.colors.color4.substr(1,2);
+  return parseInt(subHexR, 16);
+};
+
+Photo.prototype.intColorG = function() {
+  var subHexG = this.colors.color4.substr(3,2);
+  return parseInt(subHexG, 16);
+};
+
+Photo.prototype.intColorB = function() {
+  var subHexB = this.colors.color4.substr(5,2);
+  return parseInt(subHexB, 16);
 };
 
 Photo.prototype.top = function() {
@@ -60,10 +76,13 @@ var ViewPort = {
   photos: [],
   svg: null,
   $window: null,
+  $titleBar: null,
 
   initialize: function() {
     this.$window = $(window);
+    this.$titleBar = $('.title-bar');
     $(document).on('scroll', ViewPort.update);
+    this.$window.on('load', ViewPort.update);
     this.$window.on('load', ViewPort.resize);
     this.$window.on('resize', ViewPort.resize);
     this.svg = d3.select("svg");
@@ -102,7 +121,6 @@ var ViewPort = {
 
     var maxHeight = this.$window.height() * 0.9;
     var maxWidth = this.$window.width() * 0.5;
-    // var windowHW = maxHeight / maxWidth;
 
     for (i=0; i<ViewPort.photos.length; i++) {
       ViewPort.photos[i].resize(maxHeight, maxWidth);
@@ -152,20 +170,28 @@ var ViewPort = {
       }
     }
 
-    ViewPort.panBetween(prevPhoto, prevOffset, nextPhoto, nextOffset);
+
+    // $('.line').css('opacity', opacity);
 
     ViewPort.drawLines(data);
+    if (prevPhoto || nextPhoto) {
+      ViewPort.panBetween(prevPhoto, prevOffset, nextPhoto, nextOffset);
+    }
   },
 
   panBetween: function(prevPhoto, prevOffset, nextPhoto, nextOffset) {
     if(!prevPhoto && nextPhoto) {
-      gmap.pan(nextPhoto.lat, nextPhoto.lng)
+      gmap.pan(nextPhoto.lat, nextPhoto.lng);
+      this.$titleBar.css('background', nextPhoto.colors.color4);
+      $('.line').css('stroke', nextPhoto.colors.color4);
     } else if (!nextPhoto && prevPhoto) {
-      gmap.pan(prevPhoto.lat, prevPhoto.lng)
+      gmap.pan(prevPhoto.lat, prevPhoto.lng);
+      this.$titleBar.css('background', prevPhoto.colors.color4);
+      $('.line').css('stroke', nextPhoto.colors.color4);
     } else {
       var offsetDiff = prevOffset - nextOffset;
       var linearMod = prevOffset / offsetDiff;
-      var mod = 1 / (1 + Math.pow(Math.E, (-15*(linearMod-0.5))));
+      var positionMod = 1 / (1 + Math.pow(Math.E, (-15*(linearMod-0.5))));
 
       var prevLat = prevPhoto.lat;
       var nextLat = nextPhoto.lat;
@@ -175,20 +201,38 @@ var ViewPort = {
         latDiff = 360 - Math.abs(latDiff)
       }
 
-      var newLat = prevLat + latDiff * mod;
+      var newLat = prevLat + latDiff * positionMod;
 
       var prevLng = prevPhoto.lng;
       var nextLng = nextPhoto.lng;
       var lngDiff = nextLng - prevLng;
   
       if (Math.abs(lngDiff) > 180) {
-        lngDiff = 360 - Math.abs(lngDiff)
+        lngDiff = 360 - Math.abs(lngDiff);
       }
 
-      var newLng = prevLng + lngDiff * mod;
+      var newLng = prevLng + lngDiff * positionMod;
 
       gmap.pan(newLat, newLng);
+      ViewPort.restyleTitleBar(prevPhoto, nextPhoto, linearMod);
     }
+  },
+
+  restyleTitleBar: function(prevPhoto, nextPhoto, linearMod) {
+    var decColorR = prevPhoto.intColorR() + (nextPhoto.intColorR() - prevPhoto.intColorR()) * linearMod;
+    var decColorG = prevPhoto.intColorG() + (nextPhoto.intColorG() - prevPhoto.intColorG()) * linearMod;
+    var decColorB = prevPhoto.intColorB() + (nextPhoto.intColorB() - prevPhoto.intColorB()) * linearMod;
+
+    var newColorR = Math.round(decColorR).toString(16)
+    if (newColorR.length == 1) newColorR = "0" + newColorR;
+    var newColorG = Math.round(decColorG).toString(16)
+    if (newColorG.length == 1) newColorG = "0" + newColorG; 
+    var newColorB = Math.round(decColorB).toString(16)
+    if (newColorB.length == 1) newColorB = "0" + newColorB; 
+    var newColor = '#' + newColorR + newColorG + newColorB;
+    this.$titleBar.css('background', newColor);
+    $('.line').css('stroke', newColor);
+    // $('.photo').css('-moz-box-shadow', '0 0 19px ' + newColor) //wishful thinking
   },
 
   drawLines: function(data) {
