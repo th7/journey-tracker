@@ -1,8 +1,10 @@
-var GmapLocator = function(lat, lng, formId) {
-  this.lat = lat || 41.889909;
-  this.lng = lng || -87.637103;
+var GmapLocator = function(lat, lng, formId, defaultCenter) {
+  this.defaultCenter = defaultCenter;
+  this.lat = lat;
+  this.lng = lng;
   this.formId = formId;
 };
+
 
 GmapLocator.prototype.initialize = function() {
   var script = document.createElement("script");
@@ -11,20 +13,37 @@ GmapLocator.prototype.initialize = function() {
   document.body.appendChild(script);
 };
 
+GmapLocator.prototype.onGeocodeReady = function(results) {
+  var latLng = results[0].geometry.location;
+  GmapLocator.prototype.onLatLngReady(latLng);
+}
+
+GmapLocator.prototype.geocode = function(location) {
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ 'address': location }, this.onGeocodeReady);
+};
+
 GmapLocator.prototype.onScriptLoad = function() {
-  this.latLng = new google.maps.LatLng(this.lat, this.lng);
-  this.map = this.buildMap();
-  this.marker = this.placeMarker();
-  self = this;
-  google.maps.event.addListener(this.marker, 'dragend', function() {
-    gmapLocator.lat = self.marker.getPosition().lat();
-    gmapLocator.lng = self.marker.getPosition().lng();
+  if(this.lat && this.lng) {
+    var latLng = new google.maps.LatLng(this.lat, this.lng)
+    this.onLatLngReady(latLng);
+  } else {
+    this.geocode(this.defaultCenter);
+  }
+};
+
+GmapLocator.prototype.onLatLngReady = function(latLng) {
+  var map = this.buildMap(latLng);
+  var marker = this.placeMarker(map, latLng);
+  google.maps.event.addListener(marker, 'dragend', function() {
+    gmapLocator.lat = marker.getPosition().lat();
+    gmapLocator.lng = marker.getPosition().lng();
     $(gmapLocator.formId).find("#photo_lat").val(gmapLocator.lat);
     $(gmapLocator.formId).find("#photo_long").val(gmapLocator.lng);
   });
-};
+}
 
-GmapLocator.prototype.buildMap = function() {
+GmapLocator.prototype.buildMap = function(latLng) {
   google.maps.visualRefresh = true;
   
   var mapType = google.maps.MapTypeId.ROADMAP;
@@ -38,7 +57,7 @@ GmapLocator.prototype.buildMap = function() {
   ];
 
   var mapOptions = { 
-    center: gmapLocator.latLng,
+    center: latLng,
     zoom: 8,
     mapTypeId: mapType,
     styles: styles,
@@ -55,10 +74,10 @@ GmapLocator.prototype.buildMap = function() {
   return new google.maps.Map(document.getElementById("locator-canvas"), mapOptions);
 };
 
-GmapLocator.prototype.placeMarker = function() {
+GmapLocator.prototype.placeMarker = function(map, latLng) {
   var marker = new google.maps.Marker({
-    position: this.latLng,
-    map: this.map,
+    position: latLng,
+    map: map,
     draggable: true  
   });
 

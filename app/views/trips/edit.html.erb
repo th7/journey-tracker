@@ -45,14 +45,14 @@
   <%= f.hidden_field :long, {class: 'long'} %>
   <%= hidden_field(:photo, :id, :class => :photo_id) %>
   <%= hidden_field(:photo, :trip_id, :class => :trip_id) %>
-  <%= f.submit 'Submit' %>
+  <%= f.submit 'Done' %>
   <% end %>
 
 </div>
 <script>
 $(document).ready(function() {
   $('.datepicker').datepicker({dateFormat:'yy-mm-dd'});
-  EditButton.initialize();
+  EditButton.initialize("<%= @trip.location if @trip.location %>");
   DeleteButton.initialize();
   imgur_uploader();
 });
