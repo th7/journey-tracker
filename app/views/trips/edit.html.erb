@@ -1,5 +1,6 @@
 <div class="container">
   <h1 id='edit_header'>Edit your trip</h1>
+  <%= link_to "Delete this trip", @trip, :confirm => "Are you sure you want to delete #{@trip.name}?", :method => :delete %>
   <h2>Import Your Photos!</h2>
   <a href="/instagram/connect"><button class="fetch-button"><i class="icon-instagram"></i> Get Instagram Photos</button></a>
   <a href="#"><button class="fetch-button" onclick="document.querySelector('#manual_upload').click()"><i class="icon-upload"></i> Upload Photos</button></a>
@@ -12,18 +13,38 @@
     <div id="preview_area"></div>
   </div>
 
-  <%= form_for @trip do |f| %>
-    <%= f.label :name %>  
-    <%= f.text_field :name, :placeholder => @trip.name %>
-    <%= f.label :start  %>
-    <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
-    <%= f.label :end  %>
-    <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
+  <h2>Edit Trip Dates</h2>
 
-    <%= f.submit %>
+  <%= form_for @trip do |f| %>
+  <div class="edit-form">
+    <div>
+      <div>
+        <%= f.label :name %><br>
+        <%= f.text_field :name, :placeholder => @trip.name %>
+      </div>
+      <div>
+        <%= f.label :location  %><br>
+        <%= f.text_field :location, :placeholder => @trip.location  %>
+      </div>
+    </div>
+    <div>
+      <div>
+        <%= f.label :end  %><br>
+        <%= f.text_field :end, :class => 'datepicker', :placeholder => @trip.end  %>
+      </div>
+      <div>
+        <%= f.label :start  %><br>
+        <%= f.text_field :start, :class => 'datepicker', :placeholder => @trip.start%>
+      </div>
+    </div>
+    <div class="submit-field">
+      <%= f.submit "Update Dates" %>
+    </div>
+  </div>
   <% end %>
   <% if @trip.photos.any? %>
-    <h2>Available Photos</h2>
+
+    <h2>Edit Photos</h2>
     <% @trip.photos.each do |photo| %>
       <div class='single_photo' >
         <%= image_tag photo.url  %><br>
@@ -47,6 +68,11 @@
   <%= hidden_field(:photo, :trip_id, :class => :trip_id) %>
   <%= f.submit 'Submit' %>
   <% end %>
+
+  <div>
+    <%= link_to 'View your trip!', trip_path(@trip),  class: "view-trip-button"  %>
+  </div>
+
 
 </div>
 <script>
