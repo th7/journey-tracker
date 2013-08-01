@@ -38,6 +38,7 @@ form.new_trip {
   width: 800px;
   margin: auto;
   font-size: 18px;
+  padding-bottom: 200px;
 }
 
 form.edit_trip {
@@ -69,10 +70,10 @@ form.edit_trip {
 }
 
 .fetch-button {
-  font-size: 20px;
+  font-size: 18px;
   padding: 6px;
   margin: 8px 2px 8px 0;
-  width: 32%;
+  width: 31%;
   border: none;
   background: $nav;
   color: $white;
@@ -175,6 +176,38 @@ form.edit_trip {
   font-style: italic;
   color: #888;
   margin: 5px 0 5px 0;
+}
+.view-trip-button {
+  font-size: 32px;
+  padding: 20px;
+  width: 350px;
+  margin: auto;
+  border: none;
+  background: $trip-button;
+  color: $white;
+  border-radius: 4px;
+  text-align: center;
+  &:hover {
+    @include shadow;
+    cursor: pointer;
+    background: $trip-button-hover;
+  }
+  a {
+    color: $white;
+  }
+}
+.edit-form {
+  display: inline-block;
+  position: relative;
+  div {
+    display: inline-block;
+  }
+  input {
+    width: 90%;
+  }
+  .submit-field {
+    display: block;
+  }
 }
 
 /* ------- Index ------- */
