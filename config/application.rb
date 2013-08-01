@@ -8,6 +8,7 @@ require "active_resource/railtie"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
+
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
   Bundler.require(*Rails.groups(:assets => %w(development test)))
@@ -22,6 +23,7 @@ module JourneyTracker
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
+    config.assets.initialize_on_precompile = false
     config.autoload_paths += %W(#{Rails.root}/app/presenters)
 
     # Only load the plugins named here, in the order given (default is alphabetical).

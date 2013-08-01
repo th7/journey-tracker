@@ -11,6 +11,8 @@
       <p><em>Viaggio</em>'s Italian for "travel."</p>
       <p><em>Viagg.io</em> lets you share your travel photos and stories.</p>
     </h3>
-    <%= link_to raw('<i class="icon-facebook" style="padding-right:20px"></i> Sign in with Facebook'), "/auth/facebook", id: "sign_in" %>
+    <a id="sign_in" href="/auth/facebook"><i class="icon-facebook" style="padding-right:20px"></i> Sign in with Facebook </a> 
+    <p class="warning">Closed beta. Invite Only.<p>
+    <script>Facebook.initialize();</script>
   <% end %>
 </div>
