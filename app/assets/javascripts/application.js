@@ -17,4 +17,4 @@
 //= require binaryajax
 //= require exif
 //= require editing
-//= require tree .
+//= require_tree .
