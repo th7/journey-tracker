@@ -30,8 +30,8 @@ gem 'jquery-rails'
 
 gem "koala", "~> 1.7.0rc1"
 gem "instagram"
-gem "omniauth", "1.1.1"
-gem "omniauth-facebook", "1.4.0"
+# gem "omniauth", "1.1.1"
+# gem "omniauth-facebook", "1.4.0"
 
 gem 'miro'
 
