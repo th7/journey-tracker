@@ -1,6 +1,6 @@
 <div class="container">
   <h1 id='edit_header'>Edit your trip</h1>
-
+  <%= link_to "Delete this trip", @trip, :confirm => "Are you sure you want to delete #{@trip.name}?", :method => :delete %>
   <h2>Import Your Photos!</h2>
   <a href="/instagram/connect"><button class="fetch-button"><i class="icon-instagram"></i> Get Instagram Photos</button></a>
   <a href="#"><button class="fetch-button" onclick="document.querySelector('#manual_upload').click()"><i class="icon-upload"></i> Upload Photos</button></a>
@@ -72,6 +72,7 @@
   <div class="view-trip-button">
     <%= link_to 'View your trip!', trip_path(@trip)  %>
   </div>
+
 
 </div>
 <script>
