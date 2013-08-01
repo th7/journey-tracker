@@ -12,7 +12,7 @@ body {
 .line {
   fill: none;
   stroke: steelblue;
-  stroke-width: 1.5px;
+  stroke-width: 3px;
 }
 
 .photos-wrapper {
@@ -31,9 +31,9 @@ body {
   background-image: -o-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
   background-image: -ms-linear-gradient(top, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
   background-image: linear-gradient(to bottom, #fcfcfc, #f7f7f7 3%, #f2f2f2 12%, #d9d9d9 90%, #bfbfbf);
-  -webkit-box-shadow: 0 0 19px rgba(0,0,0,0.5);
-  -moz-box-shadow: 0 0 19px rgba(0,0,0,0.5);
-  box-shadow: 0 0 19px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 0 19px;
+  -moz-box-shadow: 0 0 19px;
+  box-shadow: 0 0 19px;
 }
 
 .main-svg {
