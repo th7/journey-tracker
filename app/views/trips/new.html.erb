@@ -15,7 +15,33 @@
 </div>
 
 <script>
-  $(function() {
-    $( ".datepicker" ).datepicker({dateFormat:'yy-mm-dd'});
-  });
+$(document).ready(function(){
+  $('#new_trip').on('submit', function (event) {
+     var tripName = $("#trip_name");
+     var tripLocation = $('#trip_location');
+     var tripStart = new Date($('#trip_start').val());
+     var tripEnd = new Date($('#trip_end').val());
+     if (tripStart.getTime() > tripEnd.getTime()) {
+         event.preventDefault();
+         alert('Your end date must be after your start date');
+     }
+     if (tripName.val().length > 50) {
+         event.preventDefault();
+         alert('Choose a shorter name for your trip.');
+     }
+     if (tripLocation.val().length > 50) {
+         alert('Choose a shorter name for the location.');
+         event.preventDefault();
+     }
+ });
+
+});
+  $(function () {
+    $(".datepicker").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+ 
+
+
+});
 </script>

@@ -17,13 +17,13 @@ var gmap = {
     google.maps.visualRefresh = true;
 
     this.geocode(this.location);
-    gmap.overlay = gmap.buildOverlay();
   },
 
   geocode: function(location) {
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ 'address': location }, function(results) {
       gmap.map = gmap.buildMap(results[0].geometry.location);
+      gmap.overlay = gmap.buildOverlay();
     });
   },
 
