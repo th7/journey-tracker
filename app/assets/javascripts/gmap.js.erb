@@ -141,7 +141,7 @@ var gmap = {
       var resultPlaces = gmap.SlowWorker.queue.shift();
 
       if (gmap.SlowWorker.running) {
-        setTimeout(gmap.SlowWorker.poll, 200);
+        setTimeout(gmap.SlowWorker.poll, 300);
       }
 
       if(status == google.maps.DirectionsStatus.OK) {
