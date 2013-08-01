@@ -17,12 +17,7 @@ class Photo < ActiveRecord::Base
     colors = []
     colors_rgb.each_with_index { |col,index| colors_hsv[index] = rgb_to_hsv(col) }
     colors_hsv.sort_by!(&:last)
-    colors_hsv.each_with_index { |col,index| colors[index] = hsv_to_rgb(col) }
-
-
-    p "original: #{colors_rgb}"
-    p "sorted: #{colors_hsv}"
-    p "final: #{}"
+    colors_hsv.each_with_index { |col,index| colors[index] = rgb_to_hex(hsv_to_rgb(col)) }
 
     self.palette = self.build_palette(color1: colors[0], color2: colors[1], color3: colors[2], color4: colors[3], color5: colors[4], color6: colors[5])
     self.save
@@ -42,7 +37,24 @@ class Photo < ActiveRecord::Base
     p self.date
   end
 
+  def rgb_to_hex(rgb_array)
+    hex = []
+    r = rgb_array[0].to_s(16)
+    g = rgb_array[1].to_s(16)
+    b = rgb_array[2].to_s(16)
+
+    r = "0"+r if r.length == 1
+    g = "0"+g if g.length == 1
+    b = "0"+b if b.length == 1
+
+    hex = "#"+r+g+b
+
+    return hex
+
+  end
+
 def hsv_to_rgb(array)
+
   h = [0, [360.0, array[0]*360.0].min].max
   s = [0, [1, array[1]].min].max
   v = [0, [1, array[2]].min].max
@@ -57,40 +69,41 @@ def hsv_to_rgb(array)
   h = h/60.0
   i = h.to_i.to_f
   f = h-i
-  p = v*(1-s)
+  p2 = v*(1-s)
   q = v * (1 - s * f)
   t = v * (1 - s * (1 - f))
 
   case i.to_i
-    when 0:
+    when 0
       r = v
       g = t
-      b = p
+      b = p2
  
-    when 1:
+    when 1
       r = q
       g = v
-      b = p
+      b = p2
  
-    when 2:
-      r = p
+    when 2
+      r = p2
       g = v
       b = t
  
-    when 3:
-      r = p
+    when 3
+      r = p2
       g = q
       b = v
  
-    when 4:
+    when 4
       r = t
-      g = p
+      g = p2
       b = v
  
-    else:
+    when 5
       r = v
-      g = p
+      g = p2
       b = q
+  end
 
   return [(r*255).round,(g*255).round,(b*255).round] 
       
@@ -121,14 +134,14 @@ def rgb_to_hsv(array)
     h = 0.0
   else
     case max_val
-    when r
-      h = (g - b) / d + (g < b ? 6.0 : 0)
-    when g
-      h = (b - r) / d + 2.0
-    when b
-      h = (r - g) / d + 4.0
-    else
-      raise "Max does not match r,g or b"
+      when r
+        h = (g - b) / d + (g < b ? 6.0 : 0)
+      when g
+        h = (b - r) / d + 2.0
+      when b
+        h = (r - g) / d + 4.0
+      else
+        raise "Max does not match r,g or b"
     end
 
     h = h/6.0
