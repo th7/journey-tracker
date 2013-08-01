@@ -26,7 +26,6 @@ var gmap = {
   onLocationReady: function(geocodedLocations) {
     gmap.map = gmap.buildMap(geocodedLocations[0].geometry.location);
     gmap.overlay = gmap.buildOverlay();
-
   },
 
   buildMap: function(defaultCenter) {
