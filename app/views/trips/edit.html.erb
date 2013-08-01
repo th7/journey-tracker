@@ -39,13 +39,13 @@
   <%= f.label :date, 'Date:' %><br>
   <%= f.text_field :date, {class: 'form_datepicker'} %><br>
   <%= label_tag "photo_address", 'Enter an Address:' %><br>
-  <%= text_field_tag "photo_address", nil, class: "address"%><br>
-  <%= link_to 'Pick on Map', edit_trip_path(@trip), class: "locator-button" %><br>
+  <%= text_field_tag "photo_address", nil, class: "address", style: "width: 70%" %><br>
+  <%= link_to 'Or Find on a Map', edit_trip_path(@trip), class: "locator-button" %><br>
   <%= f.hidden_field :lat, {class: 'lat'} %>
   <%= f.hidden_field :long, {class: 'long'} %>
   <%= hidden_field(:photo, :id, :class => :photo_id) %>
   <%= hidden_field(:photo, :trip_id, :class => :trip_id) %>
-  <%= f.submit 'Submit'  %>
+  <%= f.submit 'Submit' %>
   <% end %>
 
 </div>

@@ -163,6 +163,12 @@ form.edit_trip {
 .delete_button {
   color: red;
 }
+.locator-button {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .photo_date {
   font-size: 14px;
   font-style: italic;
