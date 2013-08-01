@@ -10,9 +10,9 @@ form.new_trip {
 .new_trip label, input {
   display: inline-block;
 }
-.new_trip label {
-  width: 72px;
-}
+// .new_trip label {
+//   width: 72px;
+// }
 .new_trip input {
   width: 98%;
   height: 2em;
@@ -24,9 +24,12 @@ form.new_trip {
 .new_trip input[type="submit"] {
   width: 100%;
   @include action-link;
-  line-height: 1em;
   border: none;
   margin: 36px 0;
+  padding: 0;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 /* ------ Trips edit page ------ */
@@ -51,6 +54,7 @@ form.edit_trip {
   padding-left: 4px;
 }
 .edit_trip input[type="submit"] {
+  margin: 20px 0;
   width: 18%;
   border: none;
   background: $nav;
@@ -66,8 +70,8 @@ form.edit_trip {
 
 .fetch-button {
   font-size: 20px;
-  padding: 6px 10px;
-  margin: 8px 0;
+  padding: 6px;
+  margin: 8px 2px 8px 0;
   width: 32%;
   border: none;
   background: $nav;
@@ -100,14 +104,14 @@ form.edit_trip {
   z-index: 999;
 }
 
-#drag-directions {
-  display: inline-block;
-  padding: 4px 2px;
-}
-
 #locator-canvas {
   height: 400px;
   width: 420px;
+}
+
+#drag-directions {
+  display: inline-block;
+  padding: 4px 2px;
 }
 
 #results {
@@ -118,6 +122,7 @@ form.edit_trip {
   filter:alpha(opacity=80); /* IE transparency */  
   position: relative;
   margin: 10px 0 20px 0;
+  width: 97%;
 }
 #results_label {
   text-align: center;
@@ -149,9 +154,21 @@ form.edit_trip {
   width: 50px;
   margin: 10px 0 0 20px;
 }
+.edit_button {
+  color: $white;
+  background: #009900;
+  border-radius: 3px;
+  padding: 0 4px;
+}
 .delete_button {
   color: red;
 }
+.locator-button {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .photo_date {
   font-size: 14px;
   font-style: italic;
@@ -168,6 +185,7 @@ form.edit_trip {
   li a {
     @include info-link;
   }
+  padding-bottom: 48px;
 }
 
 /* ------- Show ------- */

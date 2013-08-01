@@ -4,22 +4,30 @@ var gmap = {
   overlay: null,
   projection: null,
 
-  initialize: function() {
+  initialize: function(location) {
+    this.location = location || 'chicago';
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.onScriptLoad";
     document.body.appendChild(script);
   },
 
+
   onScriptLoad: function(inputs) {
     google.maps.visualRefresh = true;
 
-    this.map = this.buildMap();
+    this.geocode(this.location);
     gmap.overlay = gmap.buildOverlay();
   },
 
+  geocode: function(location) {
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'address': location }, function(results) {
+      gmap.map = gmap.buildMap(results[0].geometry.location);
+    });
+  },
 
-  buildMap: function() {
+  buildMap: function(defaultCenter) {
     var mapType = google.maps.MapTypeId.ROADMAP;
     var styles = [
       {
@@ -29,9 +37,8 @@ var gmap = {
         ]
       }
     ];
-
     var mapOptions = { 
-      center: new google.maps.LatLng(41.85, -87.65),
+      center: defaultCenter,
       zoom: 8,
       mapTypeId: mapType,
       styles: styles,

@@ -1,5 +1,5 @@
 class Trip < ActiveRecord::Base
-  attr_accessible :name, :start, :end
+  attr_accessible :name, :location, :start, :end
   has_many :photos
   belongs_to :user
 

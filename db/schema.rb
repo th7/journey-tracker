@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130728191913) do
+ActiveRecord::Schema.define(:version => 20130801020956) do
 
   create_table "palettes", :force => true do |t|
     t.integer  "photo_id"
@@ -29,11 +29,11 @@ ActiveRecord::Schema.define(:version => 20130728191913) do
     t.integer  "trip_id"
     t.string   "caption"
     t.string   "url"
-    t.integer  "date",       :default => 0
+    t.integer  "date"
     t.float    "lat"
     t.float    "long"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "trips", :force => true do |t|
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20130728191913) do
     t.datetime "end"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "location"
   end
 
   create_table "users", :force => true do |t|

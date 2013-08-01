@@ -19,7 +19,6 @@ GmapLocator.prototype.onScriptLoad = function() {
   google.maps.event.addListener(this.marker, 'dragend', function() {
     gmapLocator.lat = self.marker.getPosition().lat();
     gmapLocator.lng = self.marker.getPosition().lng();
-    // console.log(gmapLocator.latLng);
     $(gmapLocator.formId).find("#photo_lat").val(gmapLocator.lat);
     $(gmapLocator.formId).find("#photo_long").val(gmapLocator.lng);
   });
