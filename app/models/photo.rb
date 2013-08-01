@@ -6,7 +6,7 @@ class Photo < ActiveRecord::Base
   has_one :palette
 
   # after_create :get_photo_colors
-
+  before_create :fix_imgur_url
   validates_presence_of :url
   # validates_uniqueness_of :url
 
@@ -29,5 +29,11 @@ class Photo < ActiveRecord::Base
     p date
     self.date = DateTime.strptime(date,"%Y:%m:%d %T").to_i
     p self.date
+  end
+
+  private
+
+  def fix_imgur_url
+    self.url = url.gsub(/(\.[^\.]*)\z/,'h\1') if url.match(/imgur/)
   end
 end
