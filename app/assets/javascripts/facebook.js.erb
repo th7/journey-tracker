@@ -19,7 +19,7 @@ var Facebook = {
   createUserSuccess: function(e) {
     location.reload();
   }
-}
+};
 
 window.fbAsyncInit = function() {
   FB.Event.subscribe('auth.authResponseChange', function(response) {
