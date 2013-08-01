@@ -54,6 +54,7 @@ form.edit_trip {
   padding-left: 4px;
 }
 .edit_trip input[type="submit"] {
+  margin: 20px 0;
   width: 18%;
   border: none;
   background: $nav;
@@ -69,8 +70,8 @@ form.edit_trip {
 
 .fetch-button {
   font-size: 20px;
-  padding: 6px 10px;
-  margin: 8px 0;
+  padding: 6px;
+  margin: 8px 2px 8px 0;
   width: 32%;
   border: none;
   background: $nav;
@@ -103,14 +104,14 @@ form.edit_trip {
   z-index: 999;
 }
 
-#drag-directions {
-  display: inline-block;
-  padding: 4px 2px;
-}
-
 #locator-canvas {
   height: 400px;
   width: 420px;
+}
+
+#drag-directions {
+  display: inline-block;
+  padding: 4px 2px;
 }
 
 #results {
@@ -121,6 +122,7 @@ form.edit_trip {
   filter:alpha(opacity=80); /* IE transparency */  
   position: relative;
   margin: 10px 0 20px 0;
+  width: 97%;
 }
 #results_label {
   text-align: center;
