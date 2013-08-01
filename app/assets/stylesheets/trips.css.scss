@@ -154,6 +154,12 @@ form.edit_trip {
   width: 50px;
   margin: 10px 0 0 20px;
 }
+.edit_button {
+  color: $white;
+  background: #009900;
+  border-radius: 3px;
+  padding: 0 4px;
+}
 .delete_button {
   color: red;
 }
