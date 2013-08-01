@@ -2,7 +2,7 @@
   <h1><%= @trip.name %></h1>
   <div class="trip-subtitle">
   <% if current_user == @trip.user %>
-    <%= link_to "Edit this trip", edit_trip_path(@trip), class: "edit-button" %>|<%= link_to "Delete this trip", @trip, :confirm => "Are you sure you want to delete #{@trip.name}?", :method => :delete, class: "delete-button" %>
+    <%= link_to "Edit this trip", edit_trip_path(@trip), class: "edit-button" %>
   <% else %>
     <p class="trip-username">Uploaded by: <%= @trip.user.name %></p>
   <% end %>
