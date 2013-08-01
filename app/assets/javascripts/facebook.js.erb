@@ -17,7 +17,7 @@ var Facebook = {
 
 window.fbAsyncInit = function() {
   FB.init({
-    appId      : '<%=ENV['FACEBOOK_APP_ID']%>',
+    appId      : $('#fb-root').data('app'),
     channelUrl : '<%=root_path%>' + '/channel.html',
     status     : false,
     cookie     : false,
