@@ -68,8 +68,8 @@ var gmap = {
     };
     overlay.draw = function() { 
       if (!this.ready) { 
-          this.ready = true; 
-          google.maps.event.trigger(this, 'ready');
+        this.ready = true; 
+        google.maps.event.trigger(this, 'ready');
       } 
     };
     return overlay;
@@ -78,10 +78,7 @@ var gmap = {
   buildRenderer: function() {
     rendererOptions = {
       draggable: false,
-      markerOptions: {
-        draggable: false, 
-        visible: true
-      },
+      suppressMarkers: true,
       polylineOptions: {
         strokeColor: "#000000",
         strokeWeight: 3
@@ -113,6 +110,8 @@ var gmap = {
       var origin = places[0];
       var destination = places[places.length - 1];
       var waypoints = [];
+      
+      new google.maps.Marker({ position: places[0], map: gmap.map });
 
       for(var i=1; i < places.length - 1; i++) {
         waypoints.push( { location: places[i], stopover: true } );
