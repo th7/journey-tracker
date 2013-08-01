@@ -21,4 +21,19 @@ class User < ActiveRecord::Base
 
   end
 
+  def self.create_from_fb_response(response)
+    token = response['accessToken']
+    result = open("https://graph.facebook.com/me?fields=name&oauth_token=#{token}").read
+
+    params = {
+      provider: 'facebook',
+      uid: response['userID'],
+      oauth_token: token,
+      name: JSON.parse(result)['name']
+    }
+    user = User.find_or_initialize_by_uid(params[:uid])
+    user.update_attributes(params)
+    user
+  end
+
 end
