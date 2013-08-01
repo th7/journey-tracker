@@ -12,7 +12,14 @@ class Photo < ActiveRecord::Base
 
   def get_photo_colors
     Miro.options[:color_count] = 6
-    colors = Miro::DominantColors.new(self.url).to_hex
+    colors_rgb = Miro::DominantColors.new(self.url).to_rgb
+    colors_hsv = []
+    colors_rgb.each_with_index { |col,index| colors_hsv[index] = rgb_to_hsv(col) }
+    colors_hsv.sort_by!(&:last)
+
+    p "SORTED"
+    p colors_hsv
+
     self.palette = self.build_palette(color1: colors[0], color2: colors[1], color3: colors[2], color4: colors[3], color5: colors[4], color6: colors[5])
     self.save
   end
@@ -30,6 +37,63 @@ class Photo < ActiveRecord::Base
     self.date = DateTime.strptime(date,"%Y:%m:%d %T").to_i
     p self.date
   end
+
+def hsv_to_rgb(array)
+  h = [0, [360.0, array[0]*360.0].min].max
+  s = [0, [100, array[1]].min].max
+  v = [0, [100, array[2]].min].max
+
+  if s==0
+    r = v
+    g = v
+    b = v
+    return [(r*255).round,(g*255).round,(b*255).round]
+  end
+
+
+end  
+
+def rgb_to_hsv(array)
+
+  r = array[0].to_f/255.0
+  g = array[1].to_f/255.0
+  b = array[2].to_f/255.0
+
+  max_val = [r,g,b].max
+  min_val = [r,g,b].min
+
+  h = max_val
+  s = max_val
+  v = max_val
+
+  d = max_val-min_val
+
+  if max_val == 0.0
+    s = 0.0
+  else
+    s = d/max_val
+  end
+
+  if max_val == min_val
+    h = 0.0
+  else
+    case max_val
+    when r
+      h = (g - b) / d + (g < b ? 6.0 : 0)
+    when g
+      h = (b - r) / d + 2.0
+    when b
+      h = (r - g) / d + 4.0
+    else
+      raise "Max does not match r,g or b"
+    end
+
+    h = h/6.0
+  end
+
+  return [h, s, v];
+
+end  
 
   private
 
