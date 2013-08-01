@@ -12,7 +12,7 @@ class Photo < ActiveRecord::Base
 
   def get_photo_colors
     Miro.options[:color_count] = 6
-    colors_rgb = Miro::DominantColors.new(self.url).to_rgb
+    colors_rgb = Miro::DominantColors.new(self.url.dup).to_rgb
     colors_hsv = []
     colors = []
     colors_rgb.each_with_index { |col,index| colors_hsv[index] = rgb_to_hsv(col) }
