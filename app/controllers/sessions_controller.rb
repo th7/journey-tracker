@@ -1,16 +1,20 @@
 class SessionsController < ApplicationController
 
-  skip_before_filter :check_authorization, :only => [:create,:destroy]
+  skip_before_filter :check_authorization, :only => [:create,:destroy,:channel]
   def create
-    user = User.from_omniauth(env["omniauth.auth"])
-
+    # user = User.from_omniauth(env["omniauth.auth"])
+    user = User.create_from_fb_response(params['authResponse'])
     session[:user_id] = user.id
-    redirect_to root_path
+    render :nothing => true, :status => 200, :content_type => 'text/html'
   end
 
   def destroy
     session.clear
     redirect_to root_url
+  end
+
+  def channel
+    render 'channel'
   end
 
 #   def fetch_photos

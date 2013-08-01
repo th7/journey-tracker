@@ -1,0 +1,50 @@
+
+var Facebook = {
+  initialize: function(user) {
+    $('#sign_in').on('click', Facebook.login);
+  },
+  login: function(e) {
+    e.preventDefault();
+    FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
+  },
+  createUserSuccess: function(e) {
+    location.reload();
+  },
+  appId: function() {
+    return '<%=ENV['FACEBOOK_APP_ID']%>';
+  }
+};
+
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : $('#fb-root').data('app'),
+    channelUrl : '<%=root_path%>' + '/channel.html',
+    status     : false,
+    cookie     : false,
+    xfbml      : false
+  });
+
+  FB.Event.subscribe('auth.authResponseChange', function(response) {
+    if (response.status === 'connected') {
+      console.log(response);
+      $.ajax({
+        type: 'POST',
+        url: '/auth/facebook/callback',
+        data: response,
+        success: Facebook.createUserSuccess
+      });
+    } else if (response.status === 'not_authorized') {
+      FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
+    } else {
+      FB.login(function(response){}, {scope: "email,user_events,user_location,user_photos"});
+    }
+  });
+};
+
+(function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+ }(document));

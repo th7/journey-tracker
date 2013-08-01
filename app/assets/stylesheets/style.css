@@ -17,3 +17,11 @@
 .hidden {
   display: none;
 }
+
+.warning {
+  color: red;
+  font-size: 16px;
+  text-decoration: underline;
+  width: auto;
+  text-align: center;
+}
