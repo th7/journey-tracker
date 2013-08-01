@@ -152,8 +152,9 @@ var ViewPort = {
       }
     }
 
-    ViewPort.panBetween(prevPhoto, prevOffset, nextPhoto, nextOffset);
-
+    if (prevPhoto || nextPhoto) {
+      ViewPort.panBetween(prevPhoto, prevOffset, nextPhoto, nextOffset);
+    }
     ViewPort.drawLines(data);
   },
 
