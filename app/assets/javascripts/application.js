@@ -15,5 +15,4 @@
 //= require jquery-ui-1.10.3.custom
 //= require d3.v3
 //= require binaryajax
-//= require exif
-//= require_tree .
+
