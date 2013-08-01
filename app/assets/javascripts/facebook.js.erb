@@ -8,8 +8,8 @@ var Facebook = {
     console.log('login');
     e.preventDefault();
     FB.init({
-      appId      : 2, // App ID
-      channelUrl : 'http://viagg.io/channel.html', // Channel File
+      appId      : <%=ENV['FACEBOOK_APP_ID']%>, // App ID
+      channelUrl : '<%=root_path%>' + '/channel.html', // Channel File
       status     : true, // check login status
       cookie     : true, // enable cookies to allow the server to access the session
       xfbml      : true  // parse XFBML
