@@ -21,10 +21,10 @@ $(document).ready(function(){
         tripLocation = $('#trip_location');
         if (tripName.val().length > 50) {
             event.preventDefault();
-            alert('Your trip name is too long');
+            alert('Choose a shorter name for your trip.');
         }
         if (tripLocation.val().length > 50) {
-            alert('Location name is too long.');
+            alert('Choose a shorter name for the location.');
             event.preventDefault();
         }
     });
