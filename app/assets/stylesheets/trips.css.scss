@@ -187,6 +187,7 @@ form.edit_trip {
   color: $white;
   border-radius: 4px;
   text-align: center;
+  display: block;
   &:hover {
     @include shadow;
     cursor: pointer;
