@@ -10,9 +10,6 @@ form.new_trip {
 .new_trip label, input {
   display: inline-block;
 }
-// .new_trip label {
-//   width: 72px;
-// }
 .new_trip input {
   width: 98%;
   height: 2em;
@@ -225,8 +222,6 @@ form.edit_trip {
 
 /* ------- Show ------- */
 #trip-title {
-  // display: inline-block;
-  // padding: 8px;
   background: $white;
   width: 50%;
   margin: 0 3%;
@@ -260,6 +255,6 @@ form.edit_trip {
   font-size: 18px;
   padding: 8px;
   background: $white;
-  border-radius: 8px;
+  color: $black;
 }
 
