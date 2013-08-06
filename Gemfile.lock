@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/patmood/miro.git
+  revision: 09289069f55663593fc59b0ed4520dbbbd53aa73
+  specs:
+    miro (0.2.3)
+      cocaine
+      oily_png
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -94,9 +102,6 @@ GEM
     metaclass (0.0.1)
     mime-types (1.23)
     mini_portile (0.5.1)
-    miro (0.2.3)
-      cocaine
-      oily_png
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.7.7)
@@ -202,7 +207,7 @@ DEPENDENCIES
   jasmine
   jquery-rails
   koala (~> 1.7.0rc1)
-  miro
+  miro!
   pg
   quiet_assets
   rails (= 3.2.13)
