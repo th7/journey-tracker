@@ -3,9 +3,10 @@ var DeleteButton = {
   deletePhoto: function (event) {
     event.preventDefault();
     $this = $(this)
+    var trip_id = document.URL.match(/trips\/(.*)\//)[1];
     $.ajax({
       type: "DELETE",
-      url: '/trips/' + $this.closest('.photo-info').data('trip-id') + '/photos/' + $this.closest('.photo-info').data('photo-id'),      
+      url: '/trips/' + trip_id + '/photos/' + $this.closest('.photo-info').data('photo-id'),
       beforeSend: function(){
         $this.closest('.single_photo').hide();
       }
@@ -14,7 +15,7 @@ var DeleteButton = {
 
   initialize: function () {
     $('.single_photo').on('click','.delete_button',DeleteButton.deletePhoto);
-  }  
+  }
 };
 
 var EditButton = {
@@ -29,10 +30,11 @@ var EditButton = {
     event.preventDefault();
     $this = $(this);
     var data = $this.serialize();
+    var trip_id = document.URL.match(/trips\/(.*)\//)[1];
 
     $.ajax({
       type: "PUT",
-      url: '/trips/' + $this.find('#photo_trip_id').val() + '/photos/' + $(this).find('#photo_id').val(),
+      url: '/trips/' + trip_id + '/photos/' + $(this).find('#photo_id').val(),
       data: data,
       success: EditButton.onSuccess
     });
