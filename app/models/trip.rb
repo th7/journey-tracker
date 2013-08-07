@@ -14,4 +14,8 @@ class Trip < ActiveRecord::Base
     self.slug = (('a'..'z').to_a  + ('A'..'Z').to_a + (0..9).to_a).shuffle[0,8].join
     create_slug if Trip.find_by_slug(self.slug)
   end
+
+  def to_param
+    self.slug
+  end
 end

@@ -4,15 +4,15 @@ class TripsController < ApplicationController
   def index
     @trips = Trip.all
   end
-  
+
   def show
-    @trip = Trip.find(params[:id])
+    @trip = Trip.find_by_slug(params[:id])
     @photos = @trip.photos.sort {|a,b| a.date <=> b.date}
     session[:current_trip] = @trip.id
   end
 
   def edit
-    @trip = current_user.trips.find_by_id(params[:id])
+    @trip = current_user.trips.find_by_slug(params[:id])
     if @trip
       session[:current_trip] = @trip.id
     else
@@ -22,7 +22,7 @@ class TripsController < ApplicationController
   end
 
   def destroy
-    trip = current_user.trips.find_by_id(params[:id])
+    trip = current_user.trips.find_by_slug(params[:id])
     trip.destroy if trip
     redirect_to user_path(current_user)
   end
@@ -40,9 +40,9 @@ class TripsController < ApplicationController
   def new
     @trip = Trip.new
   end
- 
+
   def update
-    trip = current_user.trips.find_by_id(params[:id])
+    trip = current_user.trips.find_by_slug(params[:id])
     if trip
       trip.update_attributes(params[:trip])
       trip.photos.each do |photo|
