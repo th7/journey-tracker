@@ -23,21 +23,21 @@ describe PhotosController do
     @test_photos = []
     @test_photos << Photo.new(url: '1.jpg', date: Time.now)
     @test_photos << Photo.new(url: '2.png', date: Time.now - 100)
-    @test_photos.each do |p| 
+    @test_photos.each do |p|
       # p.stub(:get_photo_colors)
     end
     @test_photo_params = {url: '3.jpg'}
     @test_trip.photos << @test_photos
   end
-  
+
   describe '#index' do
     pending 'likely do be deleted'
   end
-  
+
   describe '#new' do
     pending 'likely do be deleted'
   end
-  
+
   describe '#create' do
     context 'when user is logged in' do
       before(:each) do
@@ -45,7 +45,7 @@ describe PhotosController do
       end
 
       it 'creates a photo using params' do
-        expect{post :create, trip_id: @test_trip.id, photo: @test_photo_params}.to change{Photo.count}.by(1)
+        expect{post :create, trip_id: @test_trip.slug, photo: @test_photo_params}.to change{Photo.count}.by(1)
       end
     end
 
@@ -55,15 +55,15 @@ describe PhotosController do
       end
 
       it 'doesnt create a photo' do
-        expect{post :create, trip_id: @test_trip.id, photo: @test_photo_params}.not_to change{Trip.count}
+        expect{post :create, trip_id: @test_trip.slug, photo: @test_photo_params}.not_to change{Trip.count}
       end
     end
   end
-  
+
   describe '#show' do
     pending 'likely do be deleted'
   end
-  
+
   describe '#update' do
     before(:each) do
       @to_update = @test_trip.photos.create(@test_photo_params)
@@ -73,7 +73,7 @@ describe PhotosController do
     context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
-        post :update, photo: {id: @to_update.id, trip_id: @test_trip.id, url: @new_url}
+        post :update, photo: {id: @to_update.id, trip_id: @test_trip.id, url: @new_url}, trip_id: @test_trip.slug
       end
 
       it 'updates the correct photo' do
@@ -85,7 +85,7 @@ describe PhotosController do
       before(:each) do
         session.clear
         session[:user_id] = @imposter_user.id
-        post :update, photo: {id: @to_update.id, trip_id: @test_trip.id, url: @new_url}
+        post :update, photo: {id: @to_update.id, trip_id: @test_trip.slug, url: @new_url}
       end
 
       it 'does not update the photo' do
@@ -96,7 +96,7 @@ describe PhotosController do
     context 'when user is not logged in' do
       before(:each) do
         session.clear
-        post :update, photo: {id: @to_update.id, trip_id: @test_trip.id, url: @new_url}
+        post :update, photo: {id: @to_update.id, trip_id: @test_trip.slug, url: @new_url}
       end
 
       it 'does not update the photo' do
@@ -104,7 +104,7 @@ describe PhotosController do
       end
     end
   end
-  
+
   describe '#destroy' do
     before(:each) do
       @to_delete = @test_trip.photos.create(@test_photo_params)
