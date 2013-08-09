@@ -33,7 +33,7 @@ var imgur_uploader = function(){
 
 	    var file = files[numRemaining]
 	    fr = new FileReader;
-	    
+
 	    // Preview image
 	    disp = new FileReader;
 	    disp.onload = function(e) {
@@ -52,7 +52,7 @@ var imgur_uploader = function(){
 
 	    fr.onloadend = function() {
 	      var exif = EXIF.readFromBinaryFile(new BinaryFile(this.result));
-	      console.log(exif); 
+	      console.log(exif);
 	      date_created = (exif.DateTimeDigitized);
 	      console.log(date_created);
 	      lat = gpsFormatConvert(exif.GPSLatitude,exif.GPSLatitudeRef);
@@ -77,7 +77,7 @@ var imgur_uploader = function(){
 	    xhr.send(fd);
 	    xhr.addEventListener("load", transferComplete, false);
 	    function transferComplete(evt) {
-	    	var trip_id = document.URL.match(/trips\/(\d*)/)[1];
+	    	var trip_id = document.URL.match(/trips\/(.*)\//)[1];
 	      $.ajax({
 	        url: '/trips/' + trip_id + '/photos',
 	        type: "post",

@@ -49,7 +49,7 @@ describe TripsController do
       before(:each) do
         session.clear
       end
-      
+
       it 'doesnt show all trips' do
         trips = double(:trips)
         Trip.stub(:all).and_return trips
@@ -63,7 +63,7 @@ describe TripsController do
     context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
-        get :show, id: @test_trip.id
+        get :show, id: @test_trip.slug
       end
 
       it 'assigns a trip' do
@@ -78,9 +78,9 @@ describe TripsController do
     context 'when user is not logged in' do
       before(:each) do
         session.clear
-        get :show, id: @test_trip.id
+        get :show, id: @test_trip.slug
       end
-      
+
       it 'assigns a trip' do
         assigns(:trip).should == @test_trip
       end
@@ -95,7 +95,7 @@ describe TripsController do
     context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
-        get :edit, id: @test_trip.id
+        get :edit, id: @test_trip.slug
       end
 
       it 'assigns the correct trip' do
@@ -107,7 +107,7 @@ describe TripsController do
       before(:each) do
         session.clear
         session[:user_id] = @imposter_user.id
-        get :edit, id: @test_trip.id
+        get :edit, id: @test_trip.slug
       end
 
       it 'does not assign the trip' do
@@ -118,7 +118,7 @@ describe TripsController do
     context 'when user is not logged in' do
       before(:each) do
         session.clear
-        get :edit, id: @test_trip.id
+        get :edit, id: @test_trip.slug
       end
 
       it 'does not assign the trip' do
@@ -135,7 +135,7 @@ describe TripsController do
     context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
-        post :destroy, id: @to_delete.id
+        post :destroy, id: @to_delete.slug
       end
 
       it 'deletes the correct trip' do
@@ -147,7 +147,7 @@ describe TripsController do
       before(:each) do
         session.clear
         session[:user_id] = @imposter_user.id
-        post :destroy, id: @to_delete.id
+        post :destroy, id: @to_delete.slug
       end
 
       it 'does not delete the trip' do
@@ -158,7 +158,7 @@ describe TripsController do
     context 'when user is not logged in' do
       before(:each) do
         session.clear
-        post :destroy, id: @to_delete.id
+        post :destroy, id: @to_delete.slug
       end
 
       it 'does not delete the trip' do
@@ -210,7 +210,7 @@ describe TripsController do
     context 'when user is logged in' do
       before(:each) do
         session[:user_id] = @test_user.id
-        post :update, id: @to_update.id, trip: {name: @new_name} 
+        post :update, id: @to_update.slug, trip: {name: @new_name}
       end
 
       it 'updates the correct trip' do
@@ -222,7 +222,7 @@ describe TripsController do
       before(:each) do
         session.clear
         session[:user_id] = @imposter_user.id
-        post :update, id: @to_update.id, trip: {name: @new_name}
+        post :update, id: @to_update.slug, trip: {name: @new_name}
       end
 
       it 'does not update the trip' do
@@ -233,7 +233,7 @@ describe TripsController do
     context 'when user is not logged in' do
       before(:each) do
         session.clear
-        post :update, id: @to_update.id, trip: {name: @new_name}
+        post :update, id: @to_update.slug, trip: {name: @new_name}
       end
 
       it 'does not update the trip' do
