@@ -50,7 +50,9 @@ describe TripsController do
         session.clear
       end
 
-      it 'doesnt show any trips' do
+      it 'doesnt show all trips' do
+        trips = double(:trips)
+        Trip.stub(:all).and_return trips
         get :index
         assigns(:trips).should == nil
       end
