@@ -29,10 +29,16 @@ li {
 /* ------ Main -------- */
 h1#welcome {
   margin-bottom: 0;
+  text-align: center;
 }
-h3#explanation {
-  margin-bottom: 64px;
+.note {
+  text-align: center;
+  font-size: 18px;
+}
+#explanation {
+  margin: 32px 0;
   font-size: 28px;
+  text-align: center;
 }
 .main-container {
   @include narrow-container;
