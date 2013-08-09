@@ -1,16 +1,8 @@
 <div class="main-container">
   <h1 id="welcome">Welcome to Viagg.io</h1>
-  <% if current_user %>
-    <div class="menu">
-      <h2><%= link_to "Add a Trip!", new_trip_path %></h2>
-      <p><%= link_to "Or check out all trips", trips_path  %></p>
-      <p><%= link_to "Or check out all users", users_path  %></p>
-    </div>
-  <% else %>  
-    <p class="note">(It's Italian for "travel".)</p>
-    <p id="explanation">Tell your travel stories with immersive photos and maps.</p>
-    <a id="sign_in" href="/auth/facebook"><i class="icon-facebook" style="padding-right:20px"></i> Sign in with Facebook </a> 
-    <p class="note">Closed beta. Invite Only.<p>
-    <script>Facebook.initialize();</script>
-  <% end %>
+  <p class="note">(It's Italian for "travel".)</p>
+  <p id="explanation">Tell your travel stories with immersive photos and maps.</p>
+  <a id="sign_in" href="/auth/facebook"><i class="icon-facebook" style="padding-right:20px"></i> Sign in with Facebook </a>
+  <p class="note">Open beta!<p>
+  <script>Facebook.initialize();</script>
 </div>
