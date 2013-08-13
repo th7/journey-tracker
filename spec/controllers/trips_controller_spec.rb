@@ -37,9 +37,9 @@ describe TripsController do
         session[:user_id] = @test_user.id
       end
 
-      it 'shows all trips' do
-        trips = double(:trips)
-        Trip.stub(:all).and_return trips
+      it 'assigns @trips to all this users trips' do
+        trips = @test_user.trips.reload
+        # Trip.stub(:all).and_return trips
         get :index
         assigns(:trips).should == trips
       end
