@@ -5,7 +5,7 @@ var gmap = {
   projection: null,
 
   initialize: function(location) {
-    this.location = location || 'chicago';
+    this.location = location || 'Pacific Ocean';
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.src = "http://maps.googleapis.com/maps/api/js?key=<%= ENV['GMAP_KEY'] %>&sensor=false&callback=gmap.onScriptLoad";
@@ -24,7 +24,12 @@ var gmap = {
   },
 
   onLocationReady: function(geocodedLocations) {
-    gmap.map = gmap.buildMap(geocodedLocations[0].geometry.location);
+    if (geocodedLocations.length === 0) {
+      gmap.geocode('Pacific Ocean');
+      return
+    }
+    var defaultCenter = geocodedLocations[0].geometry.location;
+    gmap.map = gmap.buildMap(defaultCenter);
     gmap.overlay = gmap.buildOverlay();
   },
 
@@ -38,7 +43,7 @@ var gmap = {
         ]
       }
     ];
-    var mapOptions = { 
+    var mapOptions = {
       center: defaultCenter,
       zoom: 8,
       mapTypeId: mapType,
@@ -67,11 +72,11 @@ var gmap = {
       google.maps.event.addListener(gmap.map, 'bounds_changed', ViewPort.update);
       ViewPort.onMapReady();
     };
-    overlay.draw = function() { 
-      if (!this.ready) { 
-        this.ready = true; 
+    overlay.draw = function() {
+      if (!this.ready) {
+        this.ready = true;
         google.maps.event.trigger(this, 'ready');
-      } 
+      }
     };
     return overlay;
   },
@@ -111,7 +116,7 @@ var gmap = {
       var origin = places[0];
       var destination = places[places.length - 1];
       var waypoints = [];
-      
+
       new google.maps.Marker({ position: places[0], map: gmap.map });
 
       for(var i=1; i < places.length - 1; i++) {
