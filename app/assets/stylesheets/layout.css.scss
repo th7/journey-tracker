@@ -57,6 +57,7 @@ nav {
   font-size: large;
   color: $white;
   z-index: 999;
+  -webkit-transform: translateZ(0);
 }
 nav a {
   color: $white;
