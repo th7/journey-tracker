@@ -46,4 +46,5 @@ body {
   -webkit-box-sizing: border-box;
   pointer-events: none;
   z-index: 500;
+  -webkit-transform: translateZ(0);
 }
