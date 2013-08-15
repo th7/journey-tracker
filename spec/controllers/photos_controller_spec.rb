@@ -30,14 +30,6 @@ describe PhotosController do
     @test_trip.photos << @test_photos
   end
 
-  describe '#index' do
-    pending 'likely do be deleted'
-  end
-
-  describe '#new' do
-    pending 'likely do be deleted'
-  end
-
   describe '#create' do
     context 'when user is logged in' do
       before(:each) do
@@ -58,10 +50,6 @@ describe PhotosController do
         expect{post :create, trip_id: @test_trip.slug, photo: @test_photo_params}.not_to change{Trip.count}
       end
     end
-  end
-
-  describe '#show' do
-    pending 'likely do be deleted'
   end
 
   describe '#update' do

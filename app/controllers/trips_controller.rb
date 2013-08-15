@@ -24,7 +24,7 @@ class TripsController < ApplicationController
   def destroy
     trip = current_user.trips.find_by_slug(params[:id])
     trip.destroy if trip
-    redirect_to user_path(current_user)
+    redirect_to trips_path
   end
 
   def create
