@@ -1,9 +1,8 @@
 JourneyTracker::Application.routes.draw do
 
   root :to => 'main#index'
-  resources :users
   resources :trips do
-    resources :photos#, only: [:create, :update, :destroy]
+    resources :photos, only: [:create, :update, :destroy]
   end
   match 'auth/:provider/callback', to: 'sessions#create', :via => :post
   match 'instagram/callback', to: 'trip_instagram_session#create'
