@@ -170,9 +170,6 @@ var ViewPort = {
       }
     }
 
-
-    // $('.line').css('opacity', opacity);
-
     ViewPort.drawLines(data);
     if (prevPhoto || nextPhoto) {
       ViewPort.panBetween(prevPhoto, prevOffset, nextPhoto, nextOffset);
@@ -232,7 +229,6 @@ var ViewPort = {
     var newColor = '#' + newColorR + newColorG + newColorB;
     this.$titleBar.css('background', newColor);
     $('.line').css('stroke', newColor);
-    // $('.photo').css('-moz-box-shadow', '0 0 19px ' + newColor) //wishful thinking
   },
 
   drawLines: function(data) {
