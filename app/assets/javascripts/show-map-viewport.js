@@ -149,7 +149,7 @@ var ViewPort = {
 
       if (img.lat > 0) {
         var imgOffset = img.vertOffset(windowCenter);
-        
+
         if (imgOffset < 0 && imgOffset > prevOffset) {
           prevOffset = imgOffset;
           prevPhoto = img;
@@ -160,7 +160,7 @@ var ViewPort = {
 
         if (img.showLine(windowTop, windowHeight)) {
           var startCoord = img.lineStartCoords(windowTop, windowLeft);
-          
+
           var endCoord = gmap.getPixelPos(img.lat, img.lng);
 
           if (startCoord.x < endCoord.x) {
@@ -187,7 +187,7 @@ var ViewPort = {
     } else if (!nextPhoto && prevPhoto) {
       gmap.pan(prevPhoto.lat, prevPhoto.lng);
       this.$titleBar.css('background', prevPhoto.colors.color4);
-      $('.line').css('stroke', nextPhoto.colors.color4);
+      $('.line').css('stroke', prevPhoto.colors.color4);
     } else {
       var offsetDiff = prevOffset - nextOffset;
       var linearMod = prevOffset / offsetDiff;
@@ -196,7 +196,7 @@ var ViewPort = {
       var prevLat = prevPhoto.lat;
       var nextLat = nextPhoto.lat;
       var latDiff = nextLat - prevLat;
-    
+
       if (Math.abs(latDiff) > 180) {
         latDiff = 360 - Math.abs(latDiff)
       }
@@ -206,7 +206,7 @@ var ViewPort = {
       var prevLng = prevPhoto.lng;
       var nextLng = nextPhoto.lng;
       var lngDiff = nextLng - prevLng;
-  
+
       if (Math.abs(lngDiff) > 180) {
         lngDiff = 360 - Math.abs(lngDiff);
       }
@@ -226,9 +226,9 @@ var ViewPort = {
     var newColorR = Math.round(decColorR).toString(16)
     if (newColorR.length == 1) newColorR = "0" + newColorR;
     var newColorG = Math.round(decColorG).toString(16)
-    if (newColorG.length == 1) newColorG = "0" + newColorG; 
+    if (newColorG.length == 1) newColorG = "0" + newColorG;
     var newColorB = Math.round(decColorB).toString(16)
-    if (newColorB.length == 1) newColorB = "0" + newColorB; 
+    if (newColorB.length == 1) newColorB = "0" + newColorB;
     var newColor = '#' + newColorR + newColorG + newColorB;
     this.$titleBar.css('background', newColor);
     $('.line').css('stroke', newColor);
@@ -264,5 +264,5 @@ var ViewPort = {
       x0 = x1, y0 = y1;
     }
     return path.join("");
-  }  
+  }
 };
