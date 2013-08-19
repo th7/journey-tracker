@@ -1,15 +1,67 @@
 describe('Photo', function() {
   var photo;
+  var elem;
 
   beforeEach(function() {
-    $elem = $('<img data-lat="100" data-lng="200">')
-    $elem.height('50px');
-    $elem.width('100px');
-    photo = new Photo($elem[0]);
+    elem = '<img data-lat="100" data-lng="200" data-colors=' + JSON.stringify({"color1":"#111111","color2":"#222222","color3":"#333333","color4":"#444444","color5":"#555555","color6":"#666666"}) + ' style="height: 50px; width: 100px">'
+    photo = new Photo(elem);
     photo.top = function() {
       return 200;
     };
+
+    photo.left = function() {
+      return 50;
+    }
   });
+
+
+  describe('$elem', function() {
+    it('is a jQuery object of the DOM element', function() {
+      expect(photo.$elem.html()).toEqual($(elem).html())
+    })
+  })
+
+  describe('colors', function() {
+    it('is an object holding six colors', function() {
+      expect(photo.colors).toEqual({"color1":"#111111","color2":"#222222","color3":"#333333","color4":"#444444","color5":"#555555","color6":"#666666"})
+    })
+  })
+
+  describe('lat', function() {
+    it('is is the lat value', function() {
+      expect(photo.lat).toEqual(100)
+    })
+  })
+
+  describe('lng', function() {
+    it('is the lng value', function() {
+      expect(photo.lng).toEqual(200)
+    })
+  })
+
+  describe('coords', function() {
+    it('is an object holding lat and lng values', function() {
+      expect(photo.coords).toEqual({lat: 100, lng: 200})
+    })
+  })
+
+  describe('#intColorR', function() {
+    it('returns the integer representation of the R portion of the photo color', function() {
+      expect(photo.intColorR()).toEqual(parseInt('44', 16))
+    })
+  })
+
+  describe('#intColorG', function() {
+    it('returns the integer representation of the G portion of the photo color', function() {
+      expect(photo.intColorG()).toEqual(parseInt('44', 16))
+    })
+  })
+
+  describe('#intColorB', function() {
+    it('returns the integer representation of the B portion of the photo color', function() {
+      expect(photo.intColorB()).toEqual(parseInt('44', 16))
+    })
+  })
 
   describe('#height', function() {
     it('returns the height', function() {
@@ -23,30 +75,40 @@ describe('Photo', function() {
     });
   });
 
-  describe('#lat', function() {
-    it('holds the latitude', function() {
-      expect(photo.lat).toBe(100);
-    });
-  });
-
-  describe('#lng', function() {
-    it('holds the longitude', function() {
-      expect(photo.lng).toBe(200);
-    });
-  });
-
   describe('#vertCenter', function() {
-    it('returns the offset top of the center of the photo', function() {
+    it('returns the vertical position of the center of the photo in pixels', function() {
       expect(photo.vertCenter()).toBe(225)
     });
   });
+
+  describe('#vertOffset', function() {
+    it('returns the vertical distance from the center of the photo in pixels', function() {
+      expect(photo.vertOffset(500)).toBe(-275)
+    });
+  });
+
+  describe('#lineStartCoords', function() {
+    it('returns an object holding the x and y values of the right center point in pixels', function() {
+      expect(photo.lineStartCoords(500, 0)).toEqual({y: -275, x: 150})
+    });
+  });
+
+  describe('#showLine', function(){
+    it('returns true when within bounds of where a line should be shown', function() {
+      expect(photo.showLine(-900, 800)).toBe(true)
+    })
+
+    it('returns false when outside the bounds of where a line should be shown', function() {
+      expect(photo.showLine(700, 800)).toBe(false)
+    })
+  })
 
   describe('#resize', function() {
     beforeEach(function() {
       $elem = $('<img data-lat="100" data-lng="200">')
       $elem.height('100px');
       $elem.width('100px');
-      p = new Photo($elem);    
+      p = new Photo($elem);
     });
 
     describe('when photo height/width is greater than constraints', function() {
