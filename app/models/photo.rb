@@ -33,9 +33,7 @@ class Photo < ActiveRecord::Base
   end
 
   def exif_date=(date)
-    p date
     self.date = DateTime.strptime(date,"%Y:%m:%d %T").to_i
-    p self.date
   end
 
   def rgb_to_hex(rgb_array)
@@ -79,36 +77,36 @@ def hsv_to_rgb(array)
       r = v
       g = t
       b = p2
- 
+
     when 1
       r = q
       g = v
       b = p2
- 
+
     when 2
       r = p2
       g = v
       b = t
- 
+
     when 3
       r = p2
       g = q
       b = v
- 
+
     when 4
       r = t
       g = p2
       b = v
- 
+
     when 5
       r = v
       g = p2
       b = q
   end
 
-  return [(r*255).round,(g*255).round,(b*255).round] 
-      
-end  
+  return [(r*255).round,(g*255).round,(b*255).round]
+
+end
 
 def rgb_to_hsv(array)
 
@@ -150,7 +148,7 @@ def rgb_to_hsv(array)
 
   return [h, s, v];
 
-end  
+end
 
   private
 
