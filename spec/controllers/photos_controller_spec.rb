@@ -23,19 +23,8 @@ describe PhotosController do
     @test_photos = []
     @test_photos << Photo.new(url: '1.jpg', date: Time.now)
     @test_photos << Photo.new(url: '2.png', date: Time.now - 100)
-    @test_photos.each do |p|
-      # p.stub(:get_photo_colors)
-    end
     @test_photo_params = {url: '3.jpg'}
     @test_trip.photos << @test_photos
-  end
-
-  describe '#index' do
-    pending 'likely do be deleted'
-  end
-
-  describe '#new' do
-    pending 'likely do be deleted'
   end
 
   describe '#create' do
@@ -58,10 +47,6 @@ describe PhotosController do
         expect{post :create, trip_id: @test_trip.slug, photo: @test_photo_params}.not_to change{Trip.count}
       end
     end
-  end
-
-  describe '#show' do
-    pending 'likely do be deleted'
   end
 
   describe '#update' do
