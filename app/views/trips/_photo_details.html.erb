@@ -3,7 +3,7 @@
   <div class='photo_date'><%=photo.display_date%></div>
   <div>
     <% if photo.lat %><i class='icon-map-marker'></i><% end %>
-    <%= link_to "Edit", edit_trip_photo_path(photo.trip), {class: 'edit_button'} %>
+    <%= link_to "Edit", '#', {class: 'edit_button'} %>
     <a href="#" class="delete_button"> <i class="icon-remove-sign"></i></a>
   </div>
 </div>

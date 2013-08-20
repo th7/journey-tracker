@@ -1,12 +1,24 @@
 require 'spec_helper'
 
 describe SessionsController do
-  # describe '#create' do
-    # it 'redirects to root_url' do
-    	# pending 'NOT SURE HOW TO TEST OMNIAUTH'
-      # response.should redirect_to(root_url)
-    # end
-  # end
+  describe '#create' do
+    before do
+      User.delete_all
+      @user = User.new(:name => 'test', :uid => 1, :oauth_token => 1, :provider => 1)
+      @user.save!
+      allow(User).to receive(:create_from_fb_response) { @user }
+    end
+
+    it 'puts user id in the session' do
+      post :create
+      expect(session[:user_id]).to eq @user.id
+    end
+
+    it 'does not redirect' do
+      post :create
+      expect(response.code).to eq '200'
+    end
+  end
 
   describe '#destroy' do
     it 'removes sessions' do
@@ -23,8 +35,10 @@ describe SessionsController do
     end
   end
 
-  describe '#fetch_photos' do
-  	
+  describe '#channel' do
+    it 'does not redirect' do
+      get :channel
+      expect(response.code).to eq '200'
+    end
   end
-
 end
